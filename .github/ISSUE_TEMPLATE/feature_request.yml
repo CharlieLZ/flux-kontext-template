@@ -1,0 +1,32 @@
+name: Feature request
+description: Suggest a focused improvement to the template
+title: "[Feature]: "
+labels:
+  - enhancement
+body:
+  - type: textarea
+    id: problem
+    attributes:
+      label: Problem to solve
+      description: What real workflow or limitation is this addressing?
+      placeholder: Builders need ...
+    validations:
+      required: true
+  - type: textarea
+    id: proposal
+    attributes:
+      label: Proposed solution
+      description: Keep it concrete. Smaller and composable is better than broad platform ideas.
+      placeholder: Add a provider adapter for ...
+    validations:
+      required: true
+  - type: textarea
+    id: alternatives
+    attributes:
+      label: Alternatives considered
+      description: Mention workarounds, deletions, or simpler options.
+  - type: textarea
+    id: impact
+    attributes:
+      label: Scope and tradeoffs
+      description: Call out env vars, migrations, bundle cost, and maintenance burden.
