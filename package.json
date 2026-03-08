@@ -55,7 +55,7 @@
     "zustand": "^5.0.5"
   },
   "devDependencies": {
-    "@biomejs/biome": "1.9.4",
+    "@biomejs/biome": "2.4.6",
     "@eslint/eslintrc": "^3.3.1",
     "@types/node": "^20.17.50",
     "@types/react": "^18.3.22",
