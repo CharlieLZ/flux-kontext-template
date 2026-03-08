@@ -24,7 +24,7 @@ export default function PrivacyPage() {
   return (
     <div className="min-h-screen">
       {/* Header */}
-      <header className="fixed top-0 left-0 right-0 z-50 bg-background/80 backdrop-blur-sm border-b border-border">
+      <header className="fixed top-0 left-0 right-0 z-50 border-b border-border/60 bg-background/78 backdrop-blur-xl">
         <div className="container mx-auto px-4 h-16 flex items-center justify-between">
           <div className="flex items-center space-x-8">
             <Link href="/" className="text-xl md:text-2xl font-bold text-primary">
@@ -42,8 +42,9 @@ export default function PrivacyPage() {
       {/* Main Content */}
       <main className="pt-24 pb-16 px-4">
         <div className="container mx-auto max-w-4xl">
-          <div className="prose prose-lg max-w-none">
-            <h1 className="text-4xl font-bold mb-8">Privacy Policy</h1>
+          <div className="app-surface-card rounded-3xl px-6 py-8 md:px-10">
+            <div className="prose prose-lg max-w-none">
+              <h1 className="text-4xl font-bold mb-8">Privacy Policy</h1>
             
             <div className="text-sm text-muted-foreground mb-8">
               <p>Posted on: January 20, 2025</p>
@@ -120,17 +121,18 @@ export default function PrivacyPage() {
               </p>
             </section>
 
-            <section className="mb-8">
-              <p className="mb-4">
-                By using our AI image generation website, you acknowledge that you have read and understand this Privacy Policy. For any questions or concerns regarding this policy or your personal data, please contact us directly at support@fluxkontext.space.
-              </p>
-            </section>
+              <section className="mb-8">
+                <p className="mb-4">
+                  By using our AI image generation website, you acknowledge that you have read and understand this Privacy Policy. For any questions or concerns regarding this policy or your personal data, please contact us directly at support@fluxkontext.space.
+                </p>
+              </section>
+            </div>
           </div>
         </div>
       </main>
 
       {/* Footer */}
-      <footer className="bg-card border-t border-border">
+      <footer className="border-t border-border/60 bg-[linear-gradient(180deg,rgb(var(--card)/0.9)_0%,rgb(var(--background)/0.96)_100%)]">
         <div className="container mx-auto px-4 py-8">
           <div className="text-center">
             <div className="text-xl font-bold text-primary mb-4">Flux Kontext</div>
