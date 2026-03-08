@@ -1,6 +1,13 @@
 "use client";
 
-import type { ChangeEvent, ClipboardEvent, DragEvent, RefObject } from "react";
+import { useId } from "react";
+import type {
+  CSSProperties,
+  ChangeEvent,
+  ClipboardEvent,
+  DragEvent,
+  RefObject,
+} from "react";
 import {
   Crown,
   Image as ImageIcon,
@@ -34,7 +41,6 @@ interface GeneratorWorkspaceCardProps {
   promptValue: string;
   onPromptChange: (value: string) => void;
   onEnhancePrompt: () => void;
-  onTextareaPaste: (event: ClipboardEvent<any>) => void;
   uploadedImages: string[];
   multiFileInputRef: RefObject<HTMLInputElement>;
   onMultiImageUpload: (event: ChangeEvent<HTMLInputElement>) => void;
@@ -72,7 +78,6 @@ export function GeneratorWorkspaceCard({
   promptValue,
   onPromptChange,
   onEnhancePrompt,
-  onTextareaPaste,
   uploadedImages,
   multiFileInputRef,
   onMultiImageUpload,
@@ -104,43 +109,54 @@ export function GeneratorWorkspaceCard({
   canSubmit,
   onSubmit,
 }: GeneratorWorkspaceCardProps) {
+  const promptId = useId();
+  const imageCountId = useId();
+  const aspectRatioId = useId();
+  const uploadHintId = useId();
   const promptPlaceholder = isEditMode
-    ? "Describe what you want to change in the images..."
-    : "Describe the image you want to create...";
+    ? "Describe what you want to change in the images…"
+    : "Describe the image you want to create…";
 
   return (
-    <Card className="p-3">
-      <div className="space-y-3">
-        <div className="mb-4 grid grid-cols-2 gap-3">
+    <Card
+      className="generator-panel generator-panel--subtle generator-reveal p-5 lg:p-6"
+      style={{ "--generator-delay": "120ms" } as CSSProperties}
+    >
+      <div className="space-y-5">
+        <div className="mb-2 grid grid-cols-1 gap-4 xl:grid-cols-2">
           <div>
             <div className="mb-1 flex items-center justify-between">
-              <Label className="text-sm font-medium text-yellow-400">
+              <Label
+                htmlFor={promptId}
+                className="generator-label text-sm font-medium"
+              >
                 Image Description
               </Label>
               <Button
                 variant="outline"
                 size="sm"
                 onClick={onEnhancePrompt}
-                className="h-6 px-2 text-xs"
+                className="generator-secondary-button h-8 px-3 text-xs"
               >
-                ✨ AI Enhance
+                ✨ Refine Prompt
               </Button>
             </div>
             <Textarea
+              id={promptId}
               placeholder={promptPlaceholder}
               value={promptValue}
               onChange={(event) => onPromptChange(event.target.value)}
-              onPaste={onTextareaPaste}
-              className="h-72 resize-none text-sm text-purple-300"
+              spellCheck={false}
+              className="generator-control min-h-[19rem] resize-none rounded-2xl px-4 py-3 text-sm leading-6"
             />
           </div>
 
           <div>
-            <Label className="mb-1 block text-sm font-medium text-yellow-400">
+            <Label className="generator-label mb-1 block text-sm font-medium">
               Reference Images (Optional)
             </Label>
             <div
-              className="flex h-72 cursor-pointer flex-col justify-center rounded border-2 border-dashed border-border bg-muted/20 p-2 text-center transition-colors hover:border-primary/50"
+              className="generator-dropzone flex min-h-[19rem] cursor-pointer flex-col justify-center rounded-[1.4rem] p-3 text-center"
               onDragOver={onDragOver}
               onDragEnter={onDragEnter}
               onDragLeave={onDragLeave}
@@ -152,6 +168,18 @@ export function GeneratorWorkspaceCard({
                 multiFileInputRef.current?.click();
               }}
               onPaste={onUploadZonePaste}
+              onKeyDown={(event) => {
+                if (event.key === "Enter" || event.key === " ") {
+                  event.preventDefault();
+                  if (multiFileInputRef.current) {
+                    multiFileInputRef.current.value = "";
+                  }
+                  multiFileInputRef.current?.click();
+                }
+              }}
+              role="button"
+              aria-label="Upload reference images"
+              aria-describedby={uploadHintId}
               tabIndex={0}
             >
               <input
@@ -186,18 +214,20 @@ export function GeneratorWorkspaceCard({
                       }
                       multiFileInputRef.current?.click();
                     }}
-                    className="h-6 text-xs"
+                    className="generator-secondary-button h-8 text-xs"
                   >
                     Add More ({uploadedImages.length})
                   </Button>
                 </div>
               ) : (
                 <div>
-                  <ImageIcon className="mx-auto mb-3 h-16 w-16 text-muted-foreground" />
-                  <p className="mb-1 text-sm text-purple-300">
+                  <div className="generator-icon-orb mx-auto mb-4 flex h-16 w-16 items-center justify-center bg-[rgba(103,177,199,0.12)]">
+                    <ImageIcon className="h-8 w-8 text-[rgba(191,229,242,0.92)]" />
+                  </div>
+                  <p className="generator-copy mb-1 text-sm font-medium">
                     Click, drag & drop, or paste images
                   </p>
-                  <p className="text-xs text-purple-300/60">
+                  <p id={uploadHintId} className="generator-muted text-xs">
                     Supports JPG, PNG, WebP (optional)
                   </p>
                 </div>
@@ -206,14 +236,16 @@ export function GeneratorWorkspaceCard({
           </div>
         </div>
 
-        <div className="h-2" />
-
-        <div className="grid grid-cols-2 gap-3">
+        <div className="grid grid-cols-1 gap-3 md:grid-cols-2">
           <div>
-            <Label className="mb-1 block text-sm font-medium text-yellow-400">
+            <Label
+              htmlFor={imageCountId}
+              className="generator-label mb-1 block text-sm font-medium"
+            >
               Images Count
             </Label>
             <select
+              id={imageCountId}
               value={String(numImages)}
               onChange={(event) => {
                 const selectedCount = Number.parseInt(event.target.value, 10);
@@ -221,7 +253,8 @@ export function GeneratorWorkspaceCard({
                   onNumImagesChange(selectedCount);
                 }
               }}
-              className="h-8 w-full rounded border border-border bg-background p-2 text-sm text-purple-300"
+              aria-label="Select images count"
+              className="generator-control h-10 w-full rounded-xl px-3 text-sm"
             >
               {imageCountOptions.map((option) => (
                 <option
@@ -236,16 +269,14 @@ export function GeneratorWorkspaceCard({
             </select>
 
             {!canUseImageCount(numImages) ? (
-              <div className="mt-1 rounded border border-orange-200 bg-orange-50 p-2 text-xs">
+              <div className="generator-note generator-note--warning mt-2 text-xs">
                 <div className="flex items-center justify-between">
-                  <span className="text-orange-700">
-                    {getUpgradeMessage(numImages)}
-                  </span>
+                  <span>{getUpgradeMessage(numImages)}</span>
                   <Button
                     variant="outline"
                     size="sm"
                     onClick={onUpgrade}
-                    className="h-5 px-2 text-xs"
+                    className="generator-secondary-button h-7 px-2 text-xs"
                   >
                     <Crown className="mr-1 h-2 w-2" />
                     Upgrade
@@ -256,13 +287,20 @@ export function GeneratorWorkspaceCard({
           </div>
 
           <div>
-            <Label className="mb-1 block text-sm font-medium text-yellow-400">
+            <Label
+              htmlFor={aspectRatioId}
+              className="generator-label mb-1 block text-sm font-medium"
+            >
               {isEditMode ? "Output Ratio" : "Aspect Ratio"}
             </Label>
             <select
+              id={aspectRatioId}
               value={aspectRatio}
               onChange={(event) => onAspectRatioChange(event.target.value)}
-              className="h-8 w-full rounded border border-border bg-background p-2 text-sm text-purple-300"
+              aria-label={
+                isEditMode ? "Select output ratio" : "Select aspect ratio"
+              }
+              className="generator-control h-10 w-full rounded-xl px-3 text-sm"
             >
               {aspectRatioOptions.map((option) => (
                 <option key={option.value} value={option.value}>
@@ -273,10 +311,10 @@ export function GeneratorWorkspaceCard({
             </select>
 
             {isEditMode ? (
-              <div className="mt-1 rounded border border-blue-200/20 bg-blue-50/10 p-2 text-xs text-yellow-300/70">
+              <div className="generator-note generator-note--info mt-2 text-xs">
                 <div className="flex items-center gap-1">
-                  <Info className="h-3 w-3 text-blue-400" />
-                  <span className="text-blue-300">
+                  <Info className="h-3 w-3 text-[rgba(191,229,242,0.92)]" />
+                  <span>
                     Image editing may preserve original proportions. Output
                     ratio provides guidance but final size depends on input
                     image.
@@ -292,18 +330,19 @@ export function GeneratorWorkspaceCard({
             {shouldShowTurnstile ? (
               <div>
                 <div className="mb-2 flex items-center justify-center md:justify-start">
-                  <Label className="flex items-center gap-1 text-sm font-medium text-yellow-400">
+                  <Label className="generator-label flex items-center gap-1 text-sm font-medium">
                     <Shield className="h-4 w-4" />
                     Security
                   </Label>
                 </div>
                 <div
-                  className="relative flex h-16 items-center justify-center rounded bg-muted/30 p-2"
+                  className="generator-note generator-note--info relative flex min-h-24 items-center justify-center rounded-2xl p-3"
                   ref={turnstileRef}
                 >
                   {isTurnstileVerified ? (
-                    <div className="flex items-center gap-2 py-2 text-center text-sm text-green-600">
-                      <Shield className="h-4 w-4" />✅ Verified!
+                    <div className="flex items-center gap-2 py-2 text-center text-sm text-[rgba(210,235,221,0.96)]">
+                      <Shield className="h-4 w-4" />
+                      Verified
                     </div>
                   ) : (
                     <div className="text-center">
@@ -323,12 +362,12 @@ export function GeneratorWorkspaceCard({
               </div>
             ) : (
               <div>
-                <Label className="mb-2 flex items-center justify-center gap-1 text-sm font-medium text-yellow-400 md:justify-start">
+                <Label className="generator-label mb-2 flex items-center justify-center gap-1 text-sm font-medium md:justify-start">
                   <Shield className="h-4 w-4" />
                   Security
                 </Label>
-                <div className="flex h-16 items-center justify-center rounded bg-muted/30 p-2">
-                  <div className="flex items-center gap-2 py-2 text-center text-sm text-green-600">
+                <div className="generator-note generator-note--success flex min-h-24 items-center justify-center rounded-2xl p-3">
+                  <div className="flex items-center gap-2 py-2 text-center text-sm">
                     <Shield className="h-4 w-4" />
                     {userType === UserType.PREMIUM
                       ? "Premium User"
@@ -345,21 +384,21 @@ export function GeneratorWorkspaceCard({
 
           <div className="col-span-1 flex flex-col justify-center md:col-span-2">
             <div className="flex justify-center md:justify-end md:pr-8">
-              <div className="text-center">
-                <Label className="mb-3 flex items-center justify-center gap-2 text-sm font-medium text-yellow-400">
+              <div className="generator-section-frame w-full max-w-sm p-4 text-center">
+                <Label className="generator-label mb-3 flex items-center justify-center gap-2 text-sm font-medium">
                   <Zap className="h-5 w-5" />
                   Generate Images
                 </Label>
                 <Button
                   onClick={onSubmit}
                   disabled={!canSubmit}
-                  className="h-16 w-full text-base font-semibold md:w-56"
+                  className="generator-primary-button h-16 w-full text-base font-semibold"
                   size="lg"
                 >
                   {isGenerating ? (
                     <div className="flex items-center justify-center gap-2">
                       <Loader2 className="h-5 w-5 animate-spin" />
-                      <span>Generating...</span>
+                      <span>Generating…</span>
                       {countdown > 0 ? (
                         <span className="text-sm opacity-70">
                           ~{countdown}s
@@ -380,7 +419,7 @@ export function GeneratorWorkspaceCard({
                       variant="outline"
                       size="sm"
                       onClick={onUpgrade}
-                      className="text-sm"
+                      className="generator-secondary-button text-sm"
                     >
                       <Crown className="mr-2 h-4 w-4" />
                       {getUpgradeMessage(numImages)}

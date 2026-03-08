@@ -1855,7 +1855,7 @@ export function FluxKontextGenerator() {
   }, []);
 
   return (
-    <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+    <div className="generator-shell mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
       <GeneratorErrorBanner
         error={error}
         isGenerating={isGenerating}
@@ -1895,7 +1895,6 @@ export function FluxKontextGenerator() {
               promptValue={promptValue}
               onPromptChange={handlePromptChange}
               onEnhancePrompt={handleEnhancePrompt}
-              onTextareaPaste={handlePaste}
               uploadedImages={uploadedImages}
               multiFileInputRef={multiFileInputRef}
               onMultiImageUpload={handleMultiImageUpload}

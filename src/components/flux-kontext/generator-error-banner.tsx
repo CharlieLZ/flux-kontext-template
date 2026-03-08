@@ -28,7 +28,11 @@ export function GeneratorErrorBanner({
   }
 
   return (
-    <div className="mb-6 flex items-center gap-2 rounded-lg border border-destructive/20 bg-destructive/10 p-4">
+    <div
+      className="generator-note generator-reveal mb-6 flex items-center gap-2 border-destructive/20 bg-destructive/10 p-4 text-destructive"
+      role="alert"
+      aria-live="polite"
+    >
       <AlertCircle className="h-5 w-5 flex-shrink-0 text-destructive" />
       <span className="flex-1 text-destructive">{error}</span>
       <div className="flex gap-2">
@@ -37,7 +41,7 @@ export function GeneratorErrorBanner({
             variant="outline"
             size="sm"
             onClick={onUpgrade}
-            className="ml-2"
+            className="generator-secondary-button ml-2"
           >
             <Crown className="mr-1 h-3 w-3" />
             Upgrade Now
@@ -49,12 +53,18 @@ export function GeneratorErrorBanner({
             size="sm"
             onClick={onRetry}
             disabled={isGenerating}
+            className="generator-secondary-button"
           >
             <RefreshCw className="mr-1 h-4 w-4" />
             Retry
           </Button>
         ) : null}
-        <Button variant="ghost" size="sm" onClick={onDismiss}>
+        <Button
+          variant="ghost"
+          size="sm"
+          onClick={onDismiss}
+          aria-label="Dismiss error message"
+        >
           <X className="h-4 w-4" />
         </Button>
       </div>

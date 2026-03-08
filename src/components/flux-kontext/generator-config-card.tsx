@@ -1,5 +1,7 @@
 "use client";
 
+import { useId } from "react";
+import type { CSSProperties } from "react";
 import { Settings } from "lucide-react";
 
 import { Badge } from "@/components/ui/badge";
@@ -48,33 +50,39 @@ export function GeneratorConfigCard({
   outputFormat,
   onOutputFormatChange,
 }: GeneratorConfigCardProps) {
+  const modelSelectId = useId();
+  const guidanceScaleId = useId();
+  const safetyToleranceId = useId();
+  const seedId = useId();
+  const outputFormatId = useId();
+
   return (
-    <Card className="p-3">
-      <div className="space-y-3">
-        <div className="mb-4 text-center">
-          <h1 className="mb-1 text-2xl font-bold text-yellow-400 sm:text-3xl">
-            Flux Kontext AI Generator
+    <Card
+      className="generator-panel generator-reveal p-5 lg:p-6"
+      style={{ "--generator-delay": "40ms" } as CSSProperties}
+    >
+      <div className="space-y-6">
+        <div className="text-left">
+          <span className="generator-kicker">Cinematic darkroom workspace</span>
+          <h1 className="generator-heading mt-4 text-3xl font-semibold sm:text-4xl">
+            Flux Kontext Studio
           </h1>
-          <p className="mb-2 text-base text-yellow-300/80">
-            Create and edit professional images with advanced AI technology
+          <p className="generator-subheading mt-3 max-w-2xl text-sm sm:text-base">
+            A refined control surface for image generation, reference-guided
+            editing, and faster iteration without the neon-purple dashboard
+            look.
           </p>
-          <div className="flex flex-wrap justify-center gap-1">
+          <div className="mt-4 flex flex-wrap gap-2">
             <Badge
               variant="outline"
-              className="border-primary/20 bg-primary/10 text-xs text-primary"
+              className="generator-chip generator-chip--warm text-[11px]"
             >
               Character Consistency
             </Badge>
-            <Badge
-              variant="outline"
-              className="border-primary/20 bg-primary/10 text-xs text-primary"
-            >
+            <Badge variant="outline" className="generator-chip text-[11px]">
               Style Transfer
             </Badge>
-            <Badge
-              variant="outline"
-              className="border-primary/20 bg-primary/10 text-xs text-primary"
-            >
+            <Badge variant="outline" className="generator-chip text-[11px]">
               Multi-Image Support
             </Badge>
           </div>
@@ -82,13 +90,16 @@ export function GeneratorConfigCard({
 
         <div>
           <div className="mb-1 flex items-center justify-between">
-            <Label className="text-sm font-medium text-yellow-400">
+            <Label
+              htmlFor={modelSelectId}
+              className="generator-label text-sm font-medium"
+            >
               {isEditMode ? "Image Editing Model" : "Text to Image Model"}
             </Label>
             {currentModelInfo?.recommended ? (
               <Badge
                 variant="outline"
-                className="border-green-200 bg-green-50 text-xs text-green-700"
+                className="generator-chip generator-chip--success text-[11px]"
               >
                 Recommended
               </Badge>
@@ -96,12 +107,18 @@ export function GeneratorConfigCard({
           </div>
 
           <select
+            id={modelSelectId}
             value={selectedModel}
             onChange={(event) => {
               const nextValue = event.target.value as GeneratorModelValue;
               onSelectModel(nextValue === "max-multi" ? "max" : nextValue);
             }}
-            className="w-full rounded border border-border bg-background p-2 text-sm text-purple-300"
+            aria-label={
+              isEditMode
+                ? "Select image editing model"
+                : "Select text to image model"
+            }
+            className="generator-control w-full rounded-xl p-2.5 text-sm"
           >
             {availableContextModels.map((model) => (
               <option
@@ -117,36 +134,36 @@ export function GeneratorConfigCard({
           </select>
 
           {currentModelInfo ? (
-            <div className="mt-2 rounded-lg border border-border bg-muted/20 p-3">
+            <div className="generator-note mt-3 border-white/5 bg-white/[0.025] p-4">
               <div className="grid grid-cols-2 gap-2 text-xs">
                 <div>
-                  <span className="font-medium text-yellow-400">Credits:</span>
-                  <span className="ml-1 text-purple-300">
+                  <span className="generator-label font-medium">Credits:</span>
+                  <span className="generator-copy ml-1">
                     {currentModelInfo.credits}
                   </span>
                 </div>
                 <div>
-                  <span className="font-medium text-yellow-400">Speed:</span>
-                  <span className="ml-1 text-purple-300">
+                  <span className="generator-label font-medium">Speed:</span>
+                  <span className="generator-copy ml-1">
                     {currentModelInfo.speed}
                   </span>
                 </div>
                 <div>
-                  <span className="font-medium text-yellow-400">Quality:</span>
-                  <span className="ml-1 text-purple-300">
+                  <span className="generator-label font-medium">Quality:</span>
+                  <span className="generator-copy ml-1">
                     {currentModelInfo.quality}
                   </span>
                 </div>
                 <div>
-                  <span className="font-medium text-yellow-400">Type:</span>
-                  <span className="ml-1 text-purple-300">
+                  <span className="generator-label font-medium">Type:</span>
+                  <span className="generator-copy ml-1">
                     {isEditMode ? "Editing" : "Generation"}
                   </span>
                 </div>
               </div>
 
               <div className="mt-2">
-                <p className="mb-1 text-xs text-yellow-300/80">
+                <p className="generator-subheading mb-2 text-xs">
                   {currentModelInfo.description}
                 </p>
                 <div className="flex flex-wrap gap-1">
@@ -154,7 +171,7 @@ export function GeneratorConfigCard({
                     <Badge
                       key={index}
                       variant="outline"
-                      className="border-primary/20 bg-primary/5 px-1 py-0 text-xs text-primary"
+                      className="generator-chip px-1.5 py-0 text-[11px]"
                     >
                       {feature}
                     </Badge>
@@ -165,9 +182,9 @@ export function GeneratorConfigCard({
           ) : null}
 
           {currentModelInfo && !currentModelInfo.available ? (
-            <div className="mt-2 rounded border border-orange-200 bg-orange-50 p-2 text-sm">
+            <div className="generator-note generator-note--warning mt-3 text-sm">
               <div className="flex items-center justify-between">
-                <span className="text-orange-700">
+                <span>
                   {userType === UserType.ANONYMOUS
                     ? "Sign up to unlock this model"
                     : "Upgrade Required"}
@@ -177,8 +194,8 @@ export function GeneratorConfigCard({
           ) : null}
 
           {isEditMode && currentModelInfo ? (
-            <div className="mt-2 rounded border border-blue-200 bg-blue-50 p-2 text-sm">
-              <span className="text-xs text-blue-700">
+            <div className="generator-note generator-note--info mt-3 text-sm">
+              <span className="text-xs">
                 Multi-image editing detected. Using experimental multi-image
                 processing.
               </span>
@@ -187,18 +204,22 @@ export function GeneratorConfigCard({
         </div>
 
         <div>
-          <h3 className="mb-2 flex items-center gap-2 text-sm font-medium text-yellow-400">
+          <h3 className="generator-label mb-2 flex items-center gap-2 text-sm font-medium">
             <Settings className="h-4 w-4" />
             Advanced Settings
           </h3>
 
           <div className="grid grid-cols-2 gap-3">
             <div>
-              <Label className="mb-1 block text-xs font-medium text-yellow-400">
+              <Label
+                htmlFor={guidanceScaleId}
+                className="generator-label mb-1 block text-xs font-medium"
+              >
                 Strength: {guidanceScale}
               </Label>
               <div className="space-y-1">
                 <input
+                  id={guidanceScaleId}
                   type="range"
                   min="1"
                   max="10"
@@ -207,9 +228,9 @@ export function GeneratorConfigCard({
                   onChange={(event) =>
                     onGuidanceScaleChange(Number.parseFloat(event.target.value))
                   }
-                  className="slider h-1 w-full cursor-pointer appearance-none rounded-lg bg-muted"
+                  className="generator-range h-1 w-full cursor-pointer appearance-none rounded-full bg-white/10"
                 />
-                <div className="flex justify-between text-xs text-yellow-300/60">
+                <div className="generator-muted flex justify-between text-xs">
                   <span>Creative</span>
                   <span>Strict</span>
                 </div>
@@ -217,11 +238,15 @@ export function GeneratorConfigCard({
             </div>
 
             <div>
-              <Label className="mb-1 block text-xs font-medium text-yellow-400">
+              <Label
+                htmlFor={safetyToleranceId}
+                className="generator-label mb-1 block text-xs font-medium"
+              >
                 Safety: {safetyTolerance}
               </Label>
               <div className="space-y-1">
                 <input
+                  id={safetyToleranceId}
                   type="range"
                   min="1"
                   max="5"
@@ -230,9 +255,9 @@ export function GeneratorConfigCard({
                   onChange={(event) =>
                     onSafetyToleranceChange(event.target.value)
                   }
-                  className="h-1 w-full cursor-pointer appearance-none rounded-lg bg-muted"
+                  className="generator-range h-1 w-full cursor-pointer appearance-none rounded-full bg-white/10"
                 />
-                <div className="flex justify-between text-xs text-yellow-300/60">
+                <div className="generator-muted flex justify-between text-xs">
                   <span>Strict</span>
                   <span>Permissive</span>
                 </div>
@@ -240,14 +265,20 @@ export function GeneratorConfigCard({
             </div>
 
             <div>
-              <Label className="mb-1 block text-xs font-medium text-yellow-400">
+              <Label
+                htmlFor={seedId}
+                className="generator-label mb-1 block text-xs font-medium"
+              >
                 Seed
               </Label>
               <div className="flex gap-1">
                 <Input
+                  id={seedId}
                   type="number"
                   placeholder="Random"
                   value={seed || ""}
+                  inputMode="numeric"
+                  autoComplete="off"
                   onChange={(event) =>
                     onSeedChange(
                       event.target.value
@@ -255,14 +286,15 @@ export function GeneratorConfigCard({
                         : undefined,
                     )
                   }
-                  className="h-7 flex-1 text-xs text-purple-300"
+                  className="generator-control h-9 flex-1 text-xs"
                 />
                 <Button
                   variant="outline"
                   size="sm"
                   onClick={onRandomizeSeed}
+                  aria-label="Generate random seed"
                   title="Generate random seed"
-                  className="h-7 w-7 p-0"
+                  className="generator-secondary-button h-9 w-9 p-0"
                 >
                   🎲
                 </Button>
@@ -270,13 +302,18 @@ export function GeneratorConfigCard({
             </div>
 
             <div>
-              <Label className="mb-1 block text-xs font-medium text-yellow-400">
+              <Label
+                htmlFor={outputFormatId}
+                className="generator-label mb-1 block text-xs font-medium"
+              >
                 Format
               </Label>
               <select
+                id={outputFormatId}
                 value={outputFormat}
                 onChange={(event) => onOutputFormatChange(event.target.value)}
-                className="h-7 w-full rounded border border-border bg-background p-1 text-xs text-purple-300"
+                aria-label="Select output format"
+                className="generator-control h-9 w-full rounded-xl px-3 text-xs"
               >
                 <option value="jpeg">JPEG</option>
                 <option value="png">PNG</option>
