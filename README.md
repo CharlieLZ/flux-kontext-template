@@ -1,449 +1,518 @@
-# 🎨 FluxKontext.space - AI图像生成平台
+# Flux Kontext Template
 
-Flux Kontext Template is an open-source Next.js starter for AI image-generation
-products, with auth, payments, localization, storage, and Fal integration
-built in.
+An open-source Next.js starter for AI image-generation products.
 
-这是一个面向 AI 图像产品的 Next.js 开源模板，目标不是“功能越堆越多”，而是帮你
-更快起一个可上线、可收费、可继续维护的基础盘。
+一句人话：
+这不是“炫技 demo”，而是一套能让你把 AI 图像产品更快搭起来的基础盘。
+它已经把登录、积分、支付、图片生成、对象存储、多语言这些高频脏活先铺好了。
 
-## 📋 项目概览
+如果把做网站比作开店：
+- `Next.js` 是门店主体
+- `Supabase` 是账本和会员系统
+- `NextAuth` 是门禁
+- `fal / KIE / WaveSpeed` 是后厨出图引擎
+- `Stripe / Creem` 是收银台
+- `Cloudflare R2` 是仓库
 
-**FluxKontext.space** 是一个基于Next.js 15的现代化AI图像生成平台，集成了Cloudflare Turnstile安全验证、Stripe支付系统、Supabase数据库和多语言支持。
+你不需要从地基开始浇。
+你只需要决定：这家店卖什么、给谁卖、定价多少、视觉长什么样。
 
-### 🏗️ 技术栈
-- **前端框架**: Next.js 15 + React 18 + TypeScript
-- **UI组件**: Shadcn/ui + Radix UI + Tailwind CSS
-- **数据库**: Supabase (PostgreSQL)
-- **支付系统**: Stripe
-- **安全验证**: Cloudflare Turnstile
-- **AI服务**: Fal.ai (Flux模型)
-- **部署平台**: Vercel
+## 1. 这仓库适合谁
 
-### 📊 项目统计
-- **总代码文件**: 153个文件
-- **主要语言**: TypeScript (95%), JavaScript (5%)
-- **代码行数**: 约50,000+行
-- **支持语言**: 12种语言 (中文、英文、日文、韩文等)
+适合：
+- 想做 AI 图像生成站的人
+- 想做 AI 图片编辑站的人
+- 想要“可登录、可收费、可上线”的模板，而不是只会本地跑的玩具项目的人
+- 想基于 `fal`，同时保留以后切 `KIE / WaveSpeed` 能力的人
 
----
+不太适合：
+- 完全不想碰环境变量、不想注册第三方服务的人
+- 只想写一个纯静态落地页的人
 
-## 📁 项目文件结构详解
+## 2. 你能得到什么
 
-### 🔧 根目录配置文件
+开箱就有：
+- `Next.js 15 + React 18 + TypeScript`
+- Google 登录
+- 积分系统
+- AI 图像生成 / 编辑入口
+- `fal / KIE / WaveSpeed` provider 适配层
+- Stripe / Creem 支付接入位
+- Supabase 数据库
+- Cloudflare Turnstile 防滥用
+- Cloudflare R2 文件存储
+- 多语言页面骨架
+- 基础 SEO、Analytics、部署脚手架
 
-```
-fluxkontext.space/
-├── 📄 package.json              # 项目依赖和脚本配置
-├── 📄 next.config.js            # Next.js配置 (99行)
-├── 📄 middleware.ts             # 中间件路由保护 (149行)
-├── 📄 tsconfig.json             # TypeScript配置
-├── 📄 tailwind.config.ts        # Tailwind CSS配置 (102行)
-├── 📄 vercel.json               # Vercel部署配置 (107行)
-├── 📄 env.example               # 环境变量模板 (99行)
-├── 📄 .cursorrules              # Cursor编辑器规则 (184行)
-├── 📄 biome.json                # 代码格式化配置
-├── 📄 eslint.config.mjs         # ESLint配置
-└── 📄 components.json           # Shadcn组件配置
-```
+## 3. 先看最短上手版
 
-### 🎯 核心源码目录 (`src/`)
+如果你就想先把项目跑起来，看这一段就够。
 
-#### 📱 应用路由 (`src/app/`)
+### 3.1 准备环境
 
-**主要页面和布局**
-```
-src/app/
-├── 📄 layout.tsx                # 全局布局组件 (90行)
-├── 📄 page.tsx                  # 首页 (32行)
-├── 📄 not-found.tsx             # 404页面 (37行)
-├── 📄 globals.css               # 全局样式 (363行)
-├── 📄 ClientBody.tsx            # 客户端body组件 (32行)
-└── 📄 sitemap.ts                # SEO站点地图 (91行)
-```
+你本机至少需要：
+- Node.js `20+`
+- npm
+- Git
 
-**功能页面目录**
-```
-├── 📁 auth/                     # 用户认证
-│   ├── signin/                  # 登录页面
-│   └── signup/                  # 注册页面
-├── 📁 dashboard/                # 用户仪表板
-├── 📁 generate/                 # 图像生成页面
-├── 📁 pricing/                  # 定价页面
-├── 📁 admin/                    # 管理员页面
-├── 📁 features/                 # 功能介绍页面
-├── 📁 resources/                # 资源页面
-├── 📁 privacy/                  # 隐私政策
-├── 📁 terms/                    # 服务条款
-└── 📁 refund/                   # 退款政策
+### 3.2 拉代码并安装依赖
+
+```bash
+git clone https://github.com/CharlieLZ/flux-kontext-template.git
+cd flux-kontext-template
+npm ci
 ```
 
-**多语言支持目录**
-```
-├── 📁 zh/                       # 中文版本
-├── 📁 en/ (默认)                # 英文版本
-├── 📁 ja/                       # 日文版本
-├── 📁 ko/                       # 韩文版本
-├── 📁 de/                       # 德文版本
-├── 📁 fr/                       # 法文版本
-├── 📁 es/                       # 西班牙文版本
-├── 📁 it/                       # 意大利文版本
-├── 📁 nl/                       # 荷兰文版本
-├── 📁 pl/                       # 波兰文版本
-├── 📁 pt/                       # 葡萄牙文版本
-├── 📁 ru/                       # 俄文版本
-├── 📁 tr/                       # 土耳其文版本
-├── 📁 ar/                       # 阿拉伯文版本
-├── 📁 hi/                       # 印地文版本
-└── 📁 bn/                       # 孟加拉文版本
+### 3.3 复制环境变量模板
+
+```bash
+cp env.example .env.local
 ```
 
-#### 🔌 API路由 (`src/app/api/`)
+### 3.4 至少填这几个变量
 
-```
-src/app/api/
-├── 📁 auth/                     # 认证相关API
-├── 📁 generate/                 # 图像生成API
-├── 📁 payment/                  # 支付相关API
-├── 📁 user/                     # 用户管理API
-├── 📁 admin/                    # 管理员API
-├── 📁 verify-turnstile/         # Turnstile验证API
-│   └── route.ts                 # 安全验证路由 (203行)
-└── 📁 webhook/                  # Webhook处理
-```
+如果你想让站点“真正能登录、能生成”，最少先填：
 
-#### 🧩 React组件 (`src/components/`)
-
-**核心业务组件**
-```
-src/components/
-├── 📄 FluxKontextGenerator.tsx  # 🎯 主图像生成组件 (2987行) ⭐
-├── 📄 StandardTurnstile.tsx     # 🛡️ 安全验证组件 (515行) ⭐
-├── 📄 Navigation.tsx            # 导航栏组件 (339行)
-├── 📄 PricingContent.tsx        # 定价页面内容 (403行)
-├── 📄 SignUpContent.tsx         # 注册页面内容 (354行)
-├── 📄 SignInContent.tsx         # 登录页面内容 (310行)
-└── 📄 CreditDisplay.tsx         # 积分显示组件 (255行)
+```env
+FAL_KEY=""
+NEXT_PUBLIC_SUPABASE_URL=""
+NEXT_PUBLIC_SUPABASE_ANON_KEY=""
+SUPABASE_SERVICE_ROLE_KEY=""
+DATABASE_URL=""
+NEXTAUTH_URL="http://localhost:3000"
+NEXTAUTH_SECRET=""
+GOOGLE_ID=""
+GOOGLE_SECRET=""
 ```
 
-**功能性组件**
-```
-├── 📄 StructuredData.tsx        # SEO结构化数据 (388行)
-├── 📄 ApiDocumentation.tsx      # API文档组件 (577行)
-├── 📄 ResourcesContent.tsx      # 资源页面内容 (382行)
-├── 📄 SmartImagePreview.tsx     # 智能图片预览 (215行)
-├── 📄 UpgradePrompt.tsx         # 升级提示组件 (220行)
-├── 📄 GoogleOneTap.tsx          # Google一键登录 (186行)
-├── 📄 TwitterShowcase.tsx       # Twitter展示组件 (177行)
-└── 📄 Analytics.tsx             # 分析统计组件 (126行)
+### 3.5 启动开发环境
+
+```bash
+npm run dev
 ```
 
-**UI基础组件**
-```
-├── 📄 HomeContent.tsx           # 首页内容 (115行)
-├── 📄 HomeContentSimple.tsx     # 简化首页内容 (140行)
-├── 📄 Footer.tsx                # 页脚组件 (137行)
-├── 📄 Logo.tsx                  # Logo组件 (112行)
-├── 📄 LanguageSwitcher.tsx      # 语言切换器 (127行)
-├── 📄 KeyFeatures.tsx           # 关键功能展示 (89行)
-├── 📄 HowToSteps.tsx            # 使用步骤说明 (107行)
-└── 📄 FAQ.tsx                   # 常见问题 (85行)
+打开：
+
+```text
+http://localhost:3000
 ```
 
-**UI组件库 (`src/components/ui/`)**
-```
-├── 📁 ui/                       # Shadcn UI组件
-│   ├── button.tsx               # 按钮组件
-│   ├── input.tsx                # 输入框组件
-│   ├── textarea.tsx             # 文本域组件
-│   ├── card.tsx                 # 卡片组件
-│   ├── dialog.tsx               # 对话框组件
-│   ├── progress.tsx             # 进度条组件
-│   └── [其他UI组件...]
+### 3.6 做一次基础检查
+
+```bash
+npm run lint
+npm run build
 ```
 
-**提供者组件 (`src/components/providers/`)**
-```
-├── 📁 providers/                # React Context提供者
-└── 📁 animations/               # 动画组件
-```
+如果这两步都过，说明这套站点骨架是完整的。
 
-#### 🔧 工具库 (`src/lib/`)
+## 4. 这项目到底怎么工作
 
-**核心业务逻辑**
-```
-src/lib/
-├── 📄 flux-kontext.ts           # 🎯 AI图像生成核心逻辑 (848行) ⭐
-├── 📄 payment-security.ts       # 🔐 支付安全处理 (540行) ⭐
-├── 📄 auth.ts                   # 🔑 认证逻辑 (346行) ⭐
-├── 📄 database.ts               # 🗄️ 数据库操作 (794行) ⭐
-├── 📄 payment.ts                # 💳 支付处理 (550行) ⭐
-├── 📄 user-tiers.ts             # 👤 用户等级管理 (249行)
-├── 📄 auth-supabase.ts          # Supabase认证 (90行)
-├── 📄 stripe-client.ts          # Stripe客户端 (52行)
-└── 📄 utils.ts                  # 通用工具函数 (7行)
-```
+先讲大图，不讲代码细枝末节。
 
-**服务模块 (`src/lib/services/`)**
-```
-├── 📁 services/                 # 外部服务集成
-├── 📁 content-safety/           # 内容安全检查
-├── 📁 i18n/                     # 国际化配置
-├── 📁 content/                  # 内容管理
-├── 📁 seo/                      # SEO优化
-├── 📁 payment/                  # 支付相关
-├── 📁 supabase/                 # Supabase配置
-├── 📁 config/                   # 配置文件
-├── 📁 tasks/                    # 任务处理
-├── 📁 utils/                    # 工具函数
-└── 📁 types/                    # 类型定义
-```
+### 4.1 用户看到的路径
 
-#### 🎣 React Hooks (`src/hooks/`)
+1. 用户打开首页或 `/generate`
+2. 用户登录
+3. 用户输入 prompt，或者上传参考图
+4. 前端把请求发到 `/api/flux-kontext`
+5. 服务端检查：
+   - 有没有登录
+   - 有没有积分
+   - 是否需要 Turnstile
+   - 参数是否合法
+6. 服务端把请求交给统一的 provider facade
+7. 当前 provider 再去调用 `fal / KIE / WaveSpeed`
+8. 返回结果后，图片可选保存到 R2
+9. 前端展示结果，并允许继续编辑或下载
 
-```
-src/hooks/
-├── 📄 useAuth.ts                # 认证状态管理
-├── 📄 useCredits.ts             # 积分管理
-├── 📄 useImageGeneration.ts     # 图像生成状态
-└── [其他自定义hooks...]
-```
+### 4.2 你真正要改的地方在哪
 
-#### 📝 类型定义 (`src/types/`)
+最常改的是这些：
 
-```
-src/types/
-├── 📄 auth.ts                   # 认证相关类型
-├── 📄 payment.ts                # 支付相关类型
-├── 📄 database.ts               # 数据库类型
-├── 📄 api.ts                    # API响应类型
-└── [其他类型定义...]
-```
+- 页面和视觉：
+  - `src/app/`
+  - `src/components/`
+- 生成器 UI：
+  - `src/components/FluxKontextGenerator.tsx`
+  - `src/components/flux-kontext/`
+- 服务端生成入口：
+  - `src/app/api/flux-kontext/route.ts`
+- provider 适配层：
+  - `src/lib/flux-kontext.ts`
+  - `src/lib/image-generation/providers/`
+- 用户和积分逻辑：
+  - `src/lib/user-tiers.ts`
+  - `src/api/user/*`
 
-### 📁 静态资源 (`public/`)
+## 5. 项目结构怎么读
 
-```
-public/
-├── 📁 images/                   # 图片资源
-├── 📁 icons/                    # 图标文件
-├── 📄 favicon.ico               # 网站图标
-├── 📄 robots.txt                # 搜索引擎爬虫规则
-└── 📄 manifest.json             # PWA配置
+```text
+src/
+├── app/                         # 页面和 API 路由入口
+├── components/                  # React 组件
+│   ├── flux-kontext/            # 生成器拆分后的子模块
+│   └── ui/                      # 基础 UI 组件
+├── lib/
+│   ├── flux-kontext.ts          # 统一生成服务门面
+│   ├── image-generation/        # provider 适配层
+│   │   └── providers/
+│   │       ├── fal-provider.ts
+│   │       ├── kie-provider.ts
+│   │       └── wavespeed-provider.ts
+│   ├── payment/                 # 支付相关
+│   ├── services/                # R2 / 内容安全等服务
+│   └── user-tiers.ts            # 用户等级与限制
+└── hooks/                       # 自定义 hooks
 ```
 
-### 🔧 脚本目录 (`scripts/`)
+## 6. 环境变量怎么理解
 
-```
-scripts/
-├── 📄 quick-setup.js            # 快速设置脚本
-├── 📄 check-config.js           # 配置检查脚本
-├── 📄 check-supabase.js         # Supabase连接检查
-├── 📄 performance-check.js      # 性能检查脚本
-├── 📄 check-seo.js              # SEO检查脚本
-└── 📄 test-api.js               # API测试脚本
-```
+很多新手卡在这，不是不会写代码，是不知道“每个钥匙是开哪扇门的”。
 
----
+把环境变量想成一串钥匙。
 
-## 🔐 安全验证系统分析
+### 6.1 必需钥匙
 
-### 🛡️ 核心安全文件
+这些不填，项目核心功能跑不起来：
 
-#### 1. **StandardTurnstile.tsx** (515行)
-```typescript
-// 🎯 主要功能
-- Cloudflare Turnstile集成
-- 自动重试机制
-- 主题适配 (light/dark/auto)
-- 响应式尺寸支持
-- 异步脚本加载
-- 详细的错误处理和日志记录
+- `FAL_KEY`
+  作用：默认 AI 生成 provider 的 API key
 
-// 🔧 核心方法
-- loadTurnstileScript(): 动态加载验证脚本
-- renderTurnstile(): 渲染验证组件
-- handleRetry(): 重试机制
-- verifyToken(): Token验证
-```
+- `NEXT_PUBLIC_SUPABASE_URL`
+- `NEXT_PUBLIC_SUPABASE_ANON_KEY`
+- `SUPABASE_SERVICE_ROLE_KEY`
+- `DATABASE_URL`
+  作用：数据库和用户数据
 
-#### 2. **verify-turnstile API路由** (203行)
-```typescript
-// 🎯 主要功能
-- 服务器端Token验证
-- Cloudflare API集成
-- 错误处理和日志记录
-- 安全响应处理
+- `NEXTAUTH_URL`
+- `NEXTAUTH_SECRET`
+  作用：登录态和 cookie 安全
 
-// 🔧 验证流程
-1. 接收客户端Token
-2. 调用Cloudflare验证API
-3. 验证响应处理
-4. 返回验证结果
-```
+- `GOOGLE_ID`
+- `GOOGLE_SECRET`
+  作用：Google 登录
 
-#### 3. **payment-security.ts** (540行)
-```typescript
-// 🎯 主要功能
-- 支付安全验证
-- 用户权限检查
-- 积分系统安全
-- 防刷机制
+### 6.2 重要但可后补
 
-// 🔧 安全措施
-- Token验证集成
-- 用户等级检查
-- 支付状态验证
-- 异常行为检测
+- `R2_*`
+  作用：把图片存到 Cloudflare R2
+  不填会怎样：
+  页面能开，某些生成后存储链路会降级或报提示
+
+- `STRIPE_*`
+  作用：收费
+  不填会怎样：
+  不能收款，但不影响你先做产品原型
+
+- `NEXT_PUBLIC_ENABLE_TURNSTILE`
+- `NEXT_PUBLIC_TURNSTILE_SITE_KEY`
+- `TURNSTILE_SECRET_KEY`
+  作用：防刷、防滥用
+
+### 6.3 provider 选择
+
+```env
+IMAGE_GENERATION_PROVIDER="fal"
 ```
 
----
+可选值：
+- `fal`
+- `kie`
+- `wavespeed`
 
-## 📊 文件重要性评估
+建议新手先用：
 
-### ⭐ **核心文件 (不可删除)**
+```env
+IMAGE_GENERATION_PROVIDER="fal"
+```
 
-1. **FluxKontextGenerator.tsx** (2987行)
-   - 🎯 **作用**: 主图像生成组件，整个应用的核心功能
-   - 🔧 **功能**: AI图像生成、用户交互、状态管理
-   - ❌ **删除影响**: 应用核心功能完全失效
+原因很简单：
+- 这仓库默认主路径已经按 `fal` 打磨过
+- `KIE / WaveSpeed` 更适合你后面要接 webhook、任务队列时再打开
 
-2. **StandardTurnstile.tsx** (515行)
-   - 🎯 **作用**: 安全验证组件，防止滥用和攻击
-   - 🔧 **功能**: Cloudflare Turnstile集成、安全验证
-   - ❌ **删除影响**: 安全防护失效，可能遭受攻击
+## 7. 三种上手路径
 
-3. **flux-kontext.ts** (848行)
-   - 🎯 **作用**: AI图像生成核心逻辑
-   - 🔧 **功能**: Fal.ai API集成、图像处理
-   - ❌ **删除影响**: 图像生成功能完全失效
+### 路线 A：最快把站点跑起来
 
-4. **payment-security.ts** (540行)
-   - 🎯 **作用**: 支付安全处理
-   - 🔧 **功能**: 支付验证、安全检查
-   - ❌ **删除影响**: 支付系统安全风险
+适合：
+- 先想看到页面
+- 先不急着收钱
 
-5. **database.ts** (794行)
-   - 🎯 **作用**: 数据库操作核心
-   - 🔧 **功能**: Supabase集成、数据CRUD
-   - ❌ **删除影响**: 数据存储功能失效
+你只做这些：
+1. 配 `Supabase`
+2. 配 `Google OAuth`
+3. 配 `FAL_KEY`
+4. `npm run dev`
 
-### 🟡 **重要文件 (谨慎删除)**
+### 路线 B：做一个能收钱的产品
 
-1. **Navigation.tsx** (339行)
-   - 🎯 **作用**: 网站导航栏
-   - 🔧 **功能**: 页面导航、用户菜单
-   - ⚠️ **删除影响**: 用户体验下降
+适合：
+- 你已经准备上线
 
-2. **PricingContent.tsx** (403行)
-   - 🎯 **作用**: 定价页面内容
-   - 🔧 **功能**: 价格展示、套餐选择
-   - ⚠️ **删除影响**: 无法展示定价信息
+你要再补：
+1. `Stripe` 或 `Creem`
+2. `R2`
+3. `Turnstile`
+4. 正式域名
+5. 生产环境变量
 
-3. **StructuredData.tsx** (388行)
-   - 🎯 **作用**: SEO结构化数据
-   - 🔧 **功能**: 搜索引擎优化
-   - ⚠️ **删除影响**: SEO效果下降
+### 路线 C：做自己的 provider 平台
 
-### 🟢 **可选文件 (可以删除)**
+适合：
+- 你想在 `fal / KIE / WaveSpeed` 之间切换
 
-1. **TwitterShowcase.tsx** (177行)
-   - 🎯 **作用**: Twitter展示组件
-   - 🔧 **功能**: 社交媒体展示
-   - ✅ **删除影响**: 轻微，主要功能不受影响
+你要看：
+- `src/lib/flux-kontext.ts`
+- `src/lib/image-generation/types.ts`
+- `src/lib/image-generation/providers/`
 
-2. **FAQ.tsx** (85行)
-   - 🎯 **作用**: 常见问题页面
-   - 🔧 **功能**: 用户帮助信息
-   - ✅ **删除影响**: 轻微，可用其他方式提供帮助
+## 8. 本地开发怎么做
 
-3. **HowToSteps.tsx** (107行)
-   - 🎯 **作用**: 使用步骤说明
-   - 🔧 **功能**: 用户指导
-   - ✅ **删除影响**: 轻微，可简化用户引导
+### 8.1 常用命令
 
-### 🔴 **冗余文件 (建议删除)**
+```bash
+npm run dev
+```
 
-1. **HomeContentSimple.tsx** (140行)
-   - 🎯 **问题**: 与HomeContent.tsx功能重复
-   - 🔧 **建议**: 合并到HomeContent.tsx或删除
-   - ✅ **删除收益**: 减少代码冗余
+开发模式，默认端口 `3000`
 
-2. **GoogleOneTapTrigger.tsx** (61行)
-   - 🎯 **问题**: 功能可能已集成到GoogleOneTap.tsx
-   - 🔧 **建议**: 检查是否还在使用，未使用则删除
-   - ✅ **删除收益**: 减少维护成本
+```bash
+npm run dev:clean
+```
 
----
+先清 3000-3010 端口，再启动开发环境。
+适合“端口被占了，我懒得自己查”的时候。
 
-## 🚀 优化建议
+```bash
+npm run lint
+```
 
-### 📈 **性能优化**
+跑 ESLint + TypeScript 类型检查。
 
-1. **代码分割**
-   - 将FluxKontextGenerator.tsx (2987行) 拆分为更小的组件
-   - 使用React.lazy()进行懒加载
-   - 减少首屏加载时间
+```bash
+npm run build
+```
 
-2. **组件优化**
-   - 合并功能相似的组件
-   - 删除未使用的组件
-   - 优化重复渲染
+生产构建检查。
 
-### 🧹 **代码清理**
+```bash
+npm run start
+```
 
-1. **删除冗余文件**
-   ```
-   建议删除:
-   - HomeContentSimple.tsx (如果未使用)
-   - GoogleOneTapTrigger.tsx (如果已集成)
-   - 未使用的多语言目录
-   ```
+跑生产模式。
 
-2. **合并相似功能**
-   ```
-   建议合并:
-   - SignInContent.tsx + SignUpContent.tsx
-   - HomeContent.tsx + HomeContentSimple.tsx
-   ```
+```bash
+npm run check
+```
 
-### 🔧 **架构优化**
+检查配置是否缺项。
 
-1. **模块化改进**
-   - 将大型文件拆分为功能模块
-   - 提取公共逻辑到hooks
-   - 优化import/export结构
+```bash
+npm run check:supabase
+```
 
-2. **类型安全**
-   - 完善TypeScript类型定义
-   - 减少any类型使用
-   - 增强类型检查
+检查 Supabase 连通性。
 
----
+### 8.2 一个稳的本地自检顺序
 
-## 🎯 总结
+```bash
+npm ci
+cp env.example .env.local
+npm run check
+npm run lint
+npm run build
+npm run dev
+```
 
-FluxKontext.space是一个功能完整的AI图像生成平台，具有：
+## 9. 第三方服务怎么配
 
-### ✅ **优势**
-- 完整的用户认证和支付系统
-- 强大的安全验证机制
-- 多语言支持
-- 现代化的技术栈
-- 详细的SEO优化
+### 9.1 Supabase
 
-### ⚠️ **需要改进**
-- 部分组件过于庞大，需要拆分
-- 存在一些冗余文件
-- 可以进一步优化性能
+你可以把 Supabase 理解成“数据库 + 账号系统 + 后台面板”。
 
-### 🎯 **核心价值**
-项目的核心价值在于FluxKontextGenerator.tsx和相关的AI图像生成功能，配合完整的用户管理和支付系统，形成了一个商业化的AI服务平台。
+操作步骤：
+1. 去 Supabase 创建项目
+2. 拿到：
+   - `NEXT_PUBLIC_SUPABASE_URL`
+   - `NEXT_PUBLIC_SUPABASE_ANON_KEY`
+   - `SUPABASE_SERVICE_ROLE_KEY`
+3. 在数据库面板里拿 `DATABASE_URL`
+4. 写入 `.env.local`
 
----
+### 9.2 Google 登录
 
-## 📞 技术支持
+你可以把 Google OAuth 理解成“让用户用 Google 直接刷脸进门”。
 
-如需技术支持或有任何问题，请查看：
-- 📄 PAYMENT_SECURITY_GUIDE.md - 支付安全指南
-- 📄 env.example - 环境变量配置示例
-- 📁 scripts/ - 各种检查和设置脚本
+操作步骤：
+1. 去 Google Cloud Console
+2. 创建 OAuth Client
+3. 回调地址本地填：
+
+```text
+http://localhost:3000/api/auth/callback/google
+```
+
+4. 把 `GOOGLE_ID` 和 `GOOGLE_SECRET` 写入 `.env.local`
+
+### 9.3 fal
+
+最简单的一条出图路。
+
+步骤：
+1. 去 `https://fal.ai/dashboard`
+2. 创建 API key
+3. 写入：
+
+```env
+FAL_KEY=""
+IMAGE_GENERATION_PROVIDER="fal"
+```
+
+### 9.4 KIE
+
+适合后面做任务型生成或 webhook。
+
+步骤：
+1. 拿 `KIE_API_KEY`
+2. 如需 webhook，再配 `KIE_WEBHOOK_SIGNING_SECRET`
+3. 把 provider 改成：
+
+```env
+IMAGE_GENERATION_PROVIDER="kie"
+```
+
+### 9.5 WaveSpeed
+
+和 KIE 类似，更偏任务式接口。
+
+步骤：
+1. 拿 `WAVESPEED_API_KEY`
+2. 如需 webhook，再配 `WAVESPEED_WEBHOOK_SECRET`
+3. 把 provider 改成：
+
+```env
+IMAGE_GENERATION_PROVIDER="wavespeed"
+```
+
+## 10. 新手最容易踩的坑
+
+### 坑 1：页面能开，但生成不工作
+
+通常是：
+- `FAL_KEY` 没填
+- provider 选了 `kie / wavespeed`，但对应 key 没填
+
+### 坑 2：能打开站，但登录失败
+
+通常是：
+- `NEXTAUTH_URL` 错
+- `NEXTAUTH_SECRET` 太短
+- `GOOGLE_ID / GOOGLE_SECRET` 没配好
+- Google OAuth 回调地址没填对
+
+### 坑 3：能登录，但数据库报错
+
+通常是：
+- `DATABASE_URL` 错
+- Supabase service role key 错
+
+### 坑 4：构建时看到 R2 提示
+
+如果日志里出现：
+
+```text
+R2 storage not configured - missing environment variables
+```
+
+这不一定表示整个项目坏了。
+它的意思通常是：
+- 页面能跑
+- 但对象存储这条链路还没配
+
+### 坑 5：你照着别的仓库习惯想用 pnpm
+
+这仓库当前是：
+- `package-lock.json`
+- `npm ci`
+
+所以默认请用 `npm`。
+不要一上来混着 `npm` 和 `pnpm` 用，不然锁文件会打架。
+
+## 11. 这仓库当前的开发规则
+
+为了不把代码越改越乱，建议坚持下面这套流程：
+
+1. `master` 只做同步，不直接开发
+2. 每次都从最新 `origin/master` 切新分支
+3. 最好配一个独立 worktree
+4. 一个分支只做一个主题
+5. 本地先跑 `npm run lint` 和 `npm run build`
+6. 推远端后开 PR
+7. 等 GitHub checks
+8. 自己看一遍本地或 Preview
+9. 没问题再合并
+10. 合并后删远端分支和本地 worktree
+
+## 12. 如果你想继续扩展，优先级怎么排
+
+最稳的顺序通常是：
+
+1. 先跑通登录、生成、支付三件套
+2. 再做 UI 优化
+3. 再做 provider 扩展
+4. 最后再做内容安全和更多自动化
+
+不要反过来。
+
+大白话讲：
+先把店开起来，再装修，再扩仓库，再装更多安保系统。
+顺序反了，你会很累。
+
+## 13. 对代码结构的硬建议
+
+别一味加文件，也别一味把所有东西塞回一个文件。
+
+最好的状态是：
+- 页面只负责编排
+- API route 只做入口校验和 orchestrate
+- provider 细节放 adapter
+- 支付逻辑单独放 service
+- 大组件继续往子模块拆
+
+一句话：
+前台、后厨、收银台、仓库要分房间，不要堆在一张桌子上。
+
+## 14. 许可证
+
+本仓库使用 [MIT License](./LICENSE)。
+
+这意味着：
+- 你可以商用
+- 你可以修改
+- 你可以二次分发
+- 但你需要保留原始许可证声明
+
+如果你打算基于这个模板做收费产品，MIT 对你是友好的。
+
+## 15. 最后给新手一句建议
+
+先别急着做“最强版本”。
+
+最靠谱的路线永远是：
+- 先跑起来
+- 再跑通一条完整业务链
+- 再做视觉
+- 再做扩展
+
+不要一开始就想同时做：
+- 多 provider
+- 多支付
+- 多语言
+- 多角色
+- 多主题
+- 多套内容安全
+
+那样最容易把自己绕进去。
+
+先让产品像一辆能开动的车，再考虑换轮毂、贴膜和改涡轮。
