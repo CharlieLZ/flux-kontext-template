@@ -1,11 +1,9 @@
 import { MetadataRoute } from 'next'
+import { DEFAULT_LOCALE, SUPPORTED_LOCALES } from '@/lib/content/locale'
 import { siteConfig } from '@/lib/site-config'
 
 export default function sitemap(): MetadataRoute.Sitemap {
   const baseUrl = siteConfig.siteUrl
-  
-  // 支持的语言列表
-  const languages = ['en', 'de', 'es', 'zh', 'fr', 'it', 'ja', 'ko', 'nl', 'pl', 'pt', 'ru', 'tr', 'ar', 'hi', 'bn']
   
   // 核心页面路径
   const corePages = [
@@ -36,8 +34,8 @@ export default function sitemap(): MetadataRoute.Sitemap {
     // 为首页生成hreflang配置
     if (page.path === '/') {
       const languagesMap: Record<string, string> = {}
-      languages.forEach(lang => {
-        if (lang === 'en') {
+      SUPPORTED_LOCALES.forEach(lang => {
+        if (lang === DEFAULT_LOCALE) {
           languagesMap[lang] = baseUrl
         } else {
           languagesMap[lang] = `${baseUrl}/${lang}`
@@ -65,10 +63,10 @@ export default function sitemap(): MetadataRoute.Sitemap {
   })
   
   // 生成多语言首页版本（除英语外的15种语言）
-  languages.filter(lang => lang !== 'en').forEach(lang => {
+  SUPPORTED_LOCALES.filter(lang => lang !== DEFAULT_LOCALE).forEach(lang => {
     const languagesMap: Record<string, string> = {}
-    languages.forEach(l => {
-      if (l === 'en') {
+    SUPPORTED_LOCALES.forEach(l => {
+      if (l === DEFAULT_LOCALE) {
         languagesMap[l] = baseUrl
       } else {
         languagesMap[l] = `${baseUrl}/${l}`

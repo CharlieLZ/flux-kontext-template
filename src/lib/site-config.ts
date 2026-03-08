@@ -1,11 +1,67 @@
-const FALLBACK_SITE_URL = "https://fluxkontext.space";
-const FALLBACK_API_BASE_URL = "https://api.fluxkontext.space";
-const FALLBACK_SUPPORT_EMAIL = "support@fluxkontext.space";
-const FALLBACK_GITHUB_REPO_URL =
-  "https://github.com/fluxkontext/fluxkontext.space";
-const FALLBACK_X_URL = "https://x.com/fluxkontext";
-const FALLBACK_TWITTER_URL = "https://twitter.com/fluxkontext";
-const FALLBACK_PINTEREST_URL = "https://pinterest.com/fluxkontext";
+const PLACEHOLDER_SITE_URL = "https://your-domain.example";
+const PLACEHOLDER_GITHUB_REPO_URL = "https://github.com/your-org/your-repo";
+const PLACEHOLDER_X_URL = "https://x.com/your-brand";
+const PLACEHOLDER_TWITTER_URL = "https://twitter.com/your-brand";
+const PLACEHOLDER_PINTEREST_URL = "https://pinterest.com/your-brand";
+
+function stripWww(hostname: string) {
+  return hostname.replace(/^www\./, "");
+}
+
+function resolveDefaultSiteUrl() {
+  const vercelUrl =
+    process.env.NEXT_PUBLIC_SITE_URL ||
+    process.env.VERCEL_PROJECT_PRODUCTION_URL ||
+    process.env.VERCEL_URL;
+
+  if (vercelUrl) {
+    const formatted = vercelUrl.startsWith("http") ? vercelUrl : `https://${vercelUrl}`;
+    return normalizePublicUrl(formatted, PLACEHOLDER_SITE_URL);
+  }
+
+  if (process.env.NODE_ENV !== "production") {
+    return "http://localhost:3000";
+  }
+
+  return PLACEHOLDER_SITE_URL;
+}
+
+function resolveDefaultApiBaseUrl(siteUrl: string) {
+  try {
+    const url = new URL(siteUrl);
+    const hostname = stripWww(url.hostname);
+
+    if (
+      hostname === "localhost" ||
+      hostname === "127.0.0.1" ||
+      hostname.endsWith(".localhost")
+    ) {
+      return normalizePublicUrl(siteUrl, siteUrl);
+    }
+
+    return normalizePublicUrl(`https://api.${hostname}`, `https://api.${hostname}`);
+  } catch {
+    return normalizePublicUrl("https://api.your-domain.example", "https://api.your-domain.example");
+  }
+}
+
+function resolveDefaultSupportEmail(siteUrl: string) {
+  try {
+    const hostname = stripWww(new URL(siteUrl).hostname);
+
+    if (
+      hostname === "localhost" ||
+      hostname === "127.0.0.1" ||
+      hostname.endsWith(".localhost")
+    ) {
+      return "support@your-domain.example";
+    }
+
+    return `support@${hostname}`;
+  } catch {
+    return "support@your-domain.example";
+  }
+}
 
 function normalizePublicUrl(input: string | undefined, fallback: string) {
   const value = input?.trim() || fallback;
@@ -30,32 +86,35 @@ function normalizeEmail(input: string | undefined, fallback: string) {
 
 export const siteConfig = {
   projectName: process.env.NEXT_PUBLIC_PROJECT_NAME?.trim() || "Flux Kontext",
-  siteUrl: normalizePublicUrl(process.env.NEXT_PUBLIC_SITE_URL, FALLBACK_SITE_URL),
+  siteUrl: normalizePublicUrl(
+    process.env.NEXT_PUBLIC_SITE_URL,
+    resolveDefaultSiteUrl(),
+  ),
   apiBaseUrl: normalizePublicUrl(
     process.env.NEXT_PUBLIC_API_BASE_URL,
-    FALLBACK_API_BASE_URL,
+    resolveDefaultApiBaseUrl(resolveDefaultSiteUrl()),
   ),
   assetBaseUrl: normalizePublicUrl(
     process.env.NEXT_PUBLIC_CDN_URL,
-    process.env.NEXT_PUBLIC_SITE_URL || FALLBACK_SITE_URL,
+    process.env.NEXT_PUBLIC_SITE_URL || resolveDefaultSiteUrl(),
   ),
   supportEmail: normalizeEmail(
     process.env.NEXT_PUBLIC_SUPPORT_EMAIL,
-    FALLBACK_SUPPORT_EMAIL,
+    resolveDefaultSupportEmail(resolveDefaultSiteUrl()),
   ),
   githubRepoUrl: normalizePublicUrl(
     process.env.NEXT_PUBLIC_GITHUB_REPO_URL,
-    FALLBACK_GITHUB_REPO_URL,
+    PLACEHOLDER_GITHUB_REPO_URL,
   ),
   socialLinks: {
-    x: normalizePublicUrl(process.env.NEXT_PUBLIC_X_URL, FALLBACK_X_URL),
+    x: normalizePublicUrl(process.env.NEXT_PUBLIC_X_URL, PLACEHOLDER_X_URL),
     twitter: normalizePublicUrl(
       process.env.NEXT_PUBLIC_TWITTER_URL,
-      FALLBACK_TWITTER_URL,
+      PLACEHOLDER_TWITTER_URL,
     ),
     pinterest: normalizePublicUrl(
       process.env.NEXT_PUBLIC_PINTEREST_URL,
-      FALLBACK_PINTEREST_URL,
+      PLACEHOLDER_PINTEREST_URL,
     ),
   },
 } as const;

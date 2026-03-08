@@ -67,9 +67,13 @@
           "type": "header",
           "key": "x-forwarded-proto",
           "value": "http"
+        },
+        {
+          "type": "host",
+          "value": "(?<host>.*)"
         }
       ],
-      "destination": "https://fluxkontext.space/$1",
+      "destination": "https://:host/$1",
       "statusCode": 301
     },
     {
@@ -82,10 +86,10 @@
       "has": [
         {
           "type": "host",
-          "value": "www.fluxkontext.space"
+          "value": "www\\.(?<apex>.*)"
         }
       ],
-      "destination": "https://fluxkontext.space/$1",
+      "destination": "https://:apex/$1",
       "statusCode": 301
     },
     {
