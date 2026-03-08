@@ -6,6 +6,23 @@ import { consumeCreditsForImageGeneration, checkUserCredits } from '@/lib/servic
 import { prisma } from '@/lib/database';
 import { checkPromptSafety, checkImageSafety } from '@/lib/content-safety/safe-mode';
 
+const verboseLogging =
+  process.env.ENABLE_VERBOSE_LOGS === 'true' &&
+  process.env.NODE_ENV !== 'production';
+
+function verboseLog(message: string, payload?: unknown) {
+  if (!verboseLogging) {
+    return;
+  }
+
+  if (typeof payload === 'undefined') {
+    console.log(message);
+    return;
+  }
+
+  console.log(message, payload);
+}
+
 // Turnstile验证函数 - 优化版本
 async function verifyTurnstileToken(token: string, clientIP: string): Promise<boolean> {
   const secretKey = process.env.TURNSTILE_SECRET_KEY;
@@ -14,7 +31,7 @@ async function verifyTurnstileToken(token: string, clientIP: string): Promise<bo
     return false;
   }
 
-  console.log(`🔑 Starting Turnstile token verification (first 10 chars): ${token.substring(0, 10)}...`);
+  verboseLog('🔑 Starting Turnstile token verification');
 
   // 添加重试机制和更宽松的验证
   const maxRetries = 3; // 增加重试次数
@@ -29,9 +46,9 @@ async function verifyTurnstileToken(token: string, clientIP: string): Promise<bo
       // 只有在IP不是unknown时才添加
       if (clientIP && clientIP !== "unknown" && clientIP !== "127.0.0.1") {
         formData.append("remoteip", clientIP);
-        console.log(`🌐 Adding client IP: ${clientIP} (attempt ${attempt}/${maxRetries})`);
+        verboseLog(`🌐 Adding client IP to Turnstile verification (attempt ${attempt}/${maxRetries})`);
       } else {
-        console.log(`🌐 Skipping IP verification (IP: ${clientIP}) (attempt ${attempt}/${maxRetries})`);
+        verboseLog(`🌐 Skipping IP verification (attempt ${attempt}/${maxRetries})`);
       }
 
       console.log(`🚀 Sending Turnstile verification request... (attempt ${attempt}/${maxRetries})`);
@@ -154,9 +171,9 @@ export async function POST(request: NextRequest) {
     // 包装主要逻辑在Promise中
     const mainLogic = async () => {
       const body = await request.json();
-      console.log('📝 Request body received:', {
+      verboseLog('📝 Request body received:', {
         action: body.action,
-        prompt: body.prompt?.substring(0, 100) + '...',
+        promptLength: typeof body.prompt === 'string' ? body.prompt.length : 0,
         hasImages: !!(body.image_url || body.image_urls),
         timestamp: new Date().toISOString()
       });
@@ -309,7 +326,7 @@ export async function POST(request: NextRequest) {
         }
         
         if (requiresVerification) {
-          console.log(`🔍 Checking Turnstile token: ${body.turnstile_token ? 'present' : 'missing'}`);
+          verboseLog(`🔍 Checking Turnstile token: ${body.turnstile_token ? 'present' : 'missing'}`);
           
           if (!body.turnstile_token) {
             console.warn('❌ Turnstile verification failed: missing token');
@@ -329,8 +346,7 @@ export async function POST(request: NextRequest) {
                           request.headers.get("x-real-ip") || 
                           "unknown";
 
-          console.log(`🌐 Client IP: ${clientIP}`);
-          console.log(`🔑 Turnstile token (first 10 chars): ${body.turnstile_token.substring(0, 10)}...`);
+          verboseLog(`🌐 Turnstile verification IP detected: ${clientIP !== 'unknown'}`);
 
           try {
             const isValidToken = await verifyTurnstileToken(body.turnstile_token, clientIP);
@@ -348,8 +364,7 @@ export async function POST(request: NextRequest) {
                 { status: 400 }
               );
             }
-
-            console.log("✅ Turnstile verification passed, client IP:", clientIP);
+            verboseLog("✅ Turnstile verification passed");
           } catch (turnstileError) {
             console.error('❌ Turnstile verification error:', turnstileError);
             
@@ -392,9 +407,9 @@ export async function POST(request: NextRequest) {
 
       try {
         // 🎯 Calling FluxKontextService.${body.action} with parameters:
-        console.log(`🎯 Calling FluxKontextService.${body.action} with parameters:`, {
+        verboseLog(`🎯 Calling FluxKontextService.${body.action} with parameters:`, {
           action: body.action,
-          prompt: body.prompt?.substring(0, 100) + '...',
+          promptLength: typeof body.prompt === 'string' ? body.prompt.length : 0,
           hasImageUrl: !!body.image_url,
           hasImageUrls: !!body.image_urls,
           imageUrlsCount: body.image_urls?.length || 0,
@@ -407,19 +422,19 @@ export async function POST(request: NextRequest) {
         });
 
         // 🔧 添加详细的FAL API调用日志
-        console.log('📡 ===== 开始FAL API调用 =====')
-        console.log('📋 完整请求参数:', JSON.stringify({
+        verboseLog('📡 ===== 开始FAL API调用 =====')
+        verboseLog('📋 Sanitized request parameters:', {
           action: body.action,
-          prompt: body.prompt,
-          image_url: body.image_url,
-          image_urls: body.image_urls,
+          promptLength: typeof body.prompt === 'string' ? body.prompt.length : 0,
+          hasImageUrl: !!body.image_url,
+          imageUrlsCount: body.image_urls?.length || 0,
           aspect_ratio: body.aspect_ratio,
           guidance_scale: body.guidance_scale,
           num_images: body.num_images,
           safety_tolerance: body.safety_tolerance,
           output_format: body.output_format,
           seed: body.seed
-        }, null, 2))
+        })
 
         // 根据action类型调用相应的API
         switch (body.action) {
@@ -567,9 +582,7 @@ export async function POST(request: NextRequest) {
           hasImages: !!result?.images,
           imagesCount: result?.images?.length || 0,
           hasError: !!result?.error,
-          errorMessage: result?.error || 'No error',
-          // 🔧 添加完整result对象用于调试
-          fullResult: JSON.stringify(result, null, 2).substring(0, 2000) + (JSON.stringify(result).length > 2000 ? '...' : '')
+          errorMessage: result?.error || 'No error'
         })
 
         // 🔧 增强结果验证和错误处理
@@ -648,19 +661,18 @@ export async function POST(request: NextRequest) {
         console.log(`✅ FAL API调用成功: ${result.images.length} 张图像生成完成`);
         
         // 🔧 详细检查生成的图片信息
-        result.images.forEach((img: any, index: number) => {
-          console.log(`🖼️ 图像 ${index + 1} 详情:`, {
-            hasUrl: !!img.url,
-            url: img.url?.substring(0, 100) + '...',
-            urlLength: img.url?.length || 0,
-            width: img.width,
-            height: img.height,
-            contentType: img.content_type,
-            fileSize: img.file_size,
-            // 🔧 添加完整图像对象用于调试
-            fullImageObject: JSON.stringify(img, null, 2)
+        if (verboseLogging) {
+          result.images.forEach((img: any, index: number) => {
+            console.log(`🖼️ 图像 ${index + 1} 详情:`, {
+              hasUrl: !!img.url,
+              urlLength: img.url?.length || 0,
+              width: img.width,
+              height: img.height,
+              contentType: img.content_type,
+              fileSize: img.file_size
+            })
           })
-        })
+        }
         
         // 🔧 检查生成的图片是否有效（检测黑色图片等问题）
         const validImages = [];
@@ -669,7 +681,7 @@ export async function POST(request: NextRequest) {
           let isValid = true;
           let invalidReason = '';
 
-          console.log(`🔍 验证图像 ${i + 1}...`)
+          verboseLog(`🔍 验证图像 ${i + 1}...`)
 
           // 基本URL检查
           if (!image.url || typeof image.url !== 'string') {
@@ -681,7 +693,7 @@ export async function POST(request: NextRequest) {
             invalidReason = 'URL does not start with http';
             console.warn(`⚠️ 图像 ${i + 1} URL格式错误:`, image.url)
           } else {
-            console.log(`✅ 图像 ${i + 1} URL有效:`, image.url.substring(0, 50) + '...')
+            verboseLog(`✅ 图像 ${i + 1} URL有效`)
           }
 
           if (isValid) {
@@ -697,7 +709,7 @@ export async function POST(request: NextRequest) {
           const errorDetails = {
             originalCount: result.images.length,
             action: body.action,
-            prompt: body.prompt?.substring(0, 100),
+            promptLength: typeof body.prompt === 'string' ? body.prompt.length : 0,
             hasImages: !!(body.image_url || body.image_urls),
             timestamp: new Date().toISOString()
           };
@@ -793,8 +805,7 @@ export async function POST(request: NextRequest) {
               const image = result.images[index];
               
               try {
-                console.log(`📤 Converting image ${index + 1}/${result.images.length} to R2...`);
-                console.log(`📋 Source FAL URL: ${image.url}`);
+                verboseLog(`📤 Converting image ${index + 1}/${result.images.length} to R2...`);
                 
                 const { FluxKontextService } = await import('@/lib/flux-kontext');
                 const r2Url = await FluxKontextService.saveGeneratedImageToR2(
@@ -802,12 +813,11 @@ export async function POST(request: NextRequest) {
                   `${body.prompt} (Image ${index + 1})`
                 );
                 
-                console.log(`✅ Image ${index + 1} converted to R2 successfully:`);
-                console.log(`📋 R2 URL: ${r2Url}`);
+                verboseLog(`✅ Image ${index + 1} converted to R2 successfully`);
                 
                 // 🔍 验证R2 URL可访问性
                 try {
-                  console.log(`🔍 Verifying R2 URL accessibility: ${r2Url}`);
+                  verboseLog(`🔍 Verifying R2 URL accessibility`);
                   const verifyResponse = await fetch(r2Url, {
                     method: 'HEAD',
                     headers: {
@@ -816,14 +826,12 @@ export async function POST(request: NextRequest) {
                     signal: AbortSignal.timeout(10000) // 10秒超时
                   });
 
-                  console.log(`📋 R2 URL verification result:`, {
-                    url: r2Url.substring(0, 80) + '...',
+                  verboseLog(`📋 R2 URL verification result:`, {
                     status: verifyResponse.status,
                     statusText: verifyResponse.statusText,
                     contentType: verifyResponse.headers.get('content-type'),
                     contentLength: verifyResponse.headers.get('content-length'),
-                    accessible: verifyResponse.ok,
-                    headers: Object.fromEntries(verifyResponse.headers.entries())
+                    accessible: verifyResponse.ok
                   });
 
                   if (!verifyResponse.ok) {
@@ -833,7 +841,6 @@ export async function POST(request: NextRequest) {
                   }
                 } catch (verifyError) {
                   console.error(`❌ R2 URL verification failed:`, {
-                    url: r2Url.substring(0, 80) + '...',
                     error: verifyError instanceof Error ? verifyError.message : verifyError
                   });
                 }
@@ -856,7 +863,7 @@ export async function POST(request: NextRequest) {
               } catch (r2Error) {
                 console.warn(`⚠️ Failed to convert image ${index + 1} to R2:`, {
                   error: r2Error instanceof Error ? r2Error.message : r2Error,
-                  sourceUrl: image.url?.substring(0, 50) + '...'
+                  hasSourceUrl: !!image.url
                 });
                 
                 // 如果R2转换失败，返回原始FAL URL
@@ -1032,6 +1039,14 @@ export async function POST(request: NextRequest) {
 // 处理文件上传
 export async function PUT(request: NextRequest) {
   try {
+    const session = await getServerSession(authOptions);
+    if (!session?.user?.email) {
+      return NextResponse.json(
+        { error: 'Authentication required' },
+        { status: 401 }
+      );
+    }
+
     const formData = await request.formData();
     const file = formData.get('file') as File;
 
@@ -1078,4 +1093,4 @@ export async function PUT(request: NextRequest) {
       { status: 500 }
     );
   }
-} 
+}

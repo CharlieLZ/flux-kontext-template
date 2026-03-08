@@ -24,6 +24,13 @@ function rateLimit(ip: string, limit: number = 10, windowMs: number = 60000): bo
 
 export function middleware(request: NextRequest) {
   const { pathname } = request.nextUrl
+  const debugRoutesEnabled =
+    process.env.ENABLE_DEBUG_ROUTES === 'true' &&
+    process.env.NODE_ENV !== 'production'
+
+  if (pathname.startsWith('/api/debug/') && !debugRoutesEnabled) {
+    return NextResponse.json({ error: 'Not found' }, { status: 404 })
+  }
   
   // 强制HTTPS重定向 (生产环境)
   if (process.env.NODE_ENV === 'production') {
@@ -146,4 +153,4 @@ export const config = {
     // 暂时禁用middleware，只匹配API路由进行测试
     '/api/(.*)',
   ],
-} 
+}

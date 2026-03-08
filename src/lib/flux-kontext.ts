@@ -6,24 +6,21 @@ if (process.env.FAL_KEY) {
   fal.config({
     credentials: process.env.FAL_KEY
   });
-  console.log(`✅ FAL client configured with key: ${process.env.FAL_KEY.substring(0, 10)}...`);
+  console.log("✅ FAL client configured");
   
   // 🔍 验证FAL客户端配置
   try {
     const keyLength = process.env.FAL_KEY.length;
-    const keyPrefix = process.env.FAL_KEY.substring(0, 4);
     console.log(`🔍 FAL key validation:`, {
       keyLength,
-      keyPrefix,
       isValidLength: keyLength > 20,
-      hasValidPrefix: keyPrefix.includes('fal') || keyPrefix.includes('key')
+      hasExpectedPrefix: process.env.FAL_KEY.startsWith('fal_') || process.env.FAL_KEY.startsWith('key_')
     });
   } catch (keyError) {
     console.error('❌ FAL key validation error:', keyError);
   }
 } else {
   console.error('❌ FAL_KEY environment variable not found');
-  console.error('🔍 Available environment variables:', Object.keys(process.env).filter(key => key.includes('FAL')));
 }
 
 // 定义API端点常量 - 🔧 根据FAL API官方文档完全修复端点
@@ -936,4 +933,4 @@ export class FluxKontextService {
         return "landscape_4_3"; // 默认横向4:3
     }
   }
-} 
+}
