@@ -1,5 +1,12 @@
 # 🎨 FluxKontext.space - AI图像生成平台
 
+Flux Kontext Template is an open-source Next.js starter for AI image-generation
+products, with auth, payments, localization, storage, and Fal integration
+built in.
+
+这是一个面向 AI 图像产品的 Next.js 开源模板，目标不是“功能越堆越多”，而是帮你
+更快起一个可上线、可收费、可继续维护的基础盘。
+
 ## 📋 项目概览
 
 **FluxKontext.space** 是一个基于Next.js 15的现代化AI图像生成平台，集成了Cloudflare Turnstile安全验证、Stripe支付系统、Supabase数据库和多语言支持。
@@ -439,4 +446,4 @@ FluxKontext.space是一个功能完整的AI图像生成平台，具有：
 如需技术支持或有任何问题，请查看：
 - 📄 PAYMENT_SECURITY_GUIDE.md - 支付安全指南
 - 📄 env.example - 环境变量配置示例
-- 📁 scripts/ - 各种检查和设置脚本 
+- 📁 scripts/ - 各种检查和设置脚本
