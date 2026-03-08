@@ -1,27 +1,11 @@
-import { fal } from "@fal-ai/client";
+import {
+  getFalQueueResult,
+  getFalQueueStatus,
+  submitFalQueue,
+  subscribeToFal,
+  uploadToFalStorage,
+} from "@/lib/fal-client";
 import { r2Storage } from "@/lib/services/r2-storage";
-
-// 配置FAL客户端
-if (process.env.FAL_KEY) {
-  fal.config({
-    credentials: process.env.FAL_KEY
-  });
-  console.log("✅ FAL client configured");
-  
-  // 🔍 验证FAL客户端配置
-  try {
-    const keyLength = process.env.FAL_KEY.length;
-    console.log(`🔍 FAL key validation:`, {
-      keyLength,
-      isValidLength: keyLength > 20,
-      hasExpectedPrefix: process.env.FAL_KEY.startsWith('fal_') || process.env.FAL_KEY.startsWith('key_')
-    });
-  } catch (keyError) {
-    console.error('❌ FAL key validation error:', keyError);
-  }
-} else {
-  console.error('❌ FAL_KEY environment variable not found');
-}
 
 // 定义API端点常量 - 🔧 根据FAL API官方文档完全修复端点
 export const FLUX_ENDPOINTS = {
@@ -121,7 +105,7 @@ export class FluxKontextService {
 
       console.log(`📡 Calling fal.subscribe for endpoint: ${FLUX_ENDPOINTS.KONTEXT_PRO}`);
       
-      const result = await fal.subscribe(FLUX_ENDPOINTS.KONTEXT_PRO, {
+      const result = await subscribeToFal(FLUX_ENDPOINTS.KONTEXT_PRO, {
         input: kontextInput, // 🔧 使用清理后的输入参数
         logs: true,
         onQueueUpdate: (update) => {
@@ -229,7 +213,7 @@ export class FluxKontextService {
         cleanedInput: JSON.stringify(kontextInput).substring(0, 300) + '...'
       });
 
-      const result = await fal.subscribe(FLUX_ENDPOINTS.KONTEXT_MAX, {
+      const result = await subscribeToFal(FLUX_ENDPOINTS.KONTEXT_MAX, {
         input: kontextInput, // 🔧 使用清理后的输入参数
         logs: true,
         onQueueUpdate: (update) => {
@@ -284,7 +268,7 @@ export class FluxKontextService {
         cleanedInput: JSON.stringify(kontextInput).substring(0, 300) + '...'
       });
 
-      const result = await fal.subscribe(FLUX_ENDPOINTS.KONTEXT_MAX_MULTI, {
+      const result = await subscribeToFal(FLUX_ENDPOINTS.KONTEXT_MAX_MULTI, {
         input: kontextInput, // 🔧 使用清理后的输入参数
         logs: true,
         onQueueUpdate: (update) => {
@@ -341,7 +325,7 @@ export class FluxKontextService {
 
       console.log(`📡 Calling fal.subscribe for endpoint: ${FLUX_ENDPOINTS.FLUX_MAX_TEXT_TO_IMAGE}`);
       
-      const result = await fal.subscribe(FLUX_ENDPOINTS.FLUX_MAX_TEXT_TO_IMAGE, {
+      const result = await subscribeToFal(FLUX_ENDPOINTS.FLUX_MAX_TEXT_TO_IMAGE, {
         input: fluxInput,
         logs: true,
         onQueueUpdate: (update) => {
@@ -449,7 +433,7 @@ export class FluxKontextService {
         cleanedInput: JSON.stringify(kontextInput).substring(0, 300) + '...'
       });
 
-      const result = await fal.subscribe(FLUX_ENDPOINTS.KONTEXT_PRO_MULTI, {
+      const result = await subscribeToFal(FLUX_ENDPOINTS.KONTEXT_PRO_MULTI, {
         input: kontextInput, // 🔧 使用清理后的输入参数
         logs: true,
         onQueueUpdate: (update) => {
@@ -506,7 +490,7 @@ export class FluxKontextService {
 
       console.log(`📡 Calling fal.subscribe for endpoint: ${FLUX_ENDPOINTS.FLUX_PRO_TEXT_TO_IMAGE}`);
       
-      const result = await fal.subscribe(FLUX_ENDPOINTS.FLUX_PRO_TEXT_TO_IMAGE, {
+      const result = await subscribeToFal(FLUX_ENDPOINTS.FLUX_PRO_TEXT_TO_IMAGE, {
         input: fluxInput,
         logs: true,
         onQueueUpdate: (update) => {
@@ -597,7 +581,7 @@ export class FluxKontextService {
       
       try {
         console.log("📤 Uploading to FAL storage (primary):", file.name);
-        falUrl = await fal.storage.upload(file);
+        falUrl = await uploadToFalStorage(file);
         console.log("✅ FAL upload successful:", falUrl);
       } catch (falError) {
         console.error("❌ FAL upload failed:", falError);
@@ -681,7 +665,7 @@ export class FluxKontextService {
    */
   static async submitToQueue(endpoint: string, input: any): Promise<{ request_id: string }> {
     try {
-      const result = await fal.queue.submit(endpoint, {
+      const result = await submitFalQueue(endpoint, {
         input,
         webhookUrl: process.env.NEXT_PUBLIC_SITE_URL + "/api/webhooks/fal"
       });
@@ -697,7 +681,7 @@ export class FluxKontextService {
    */
   static async checkQueueStatus(endpoint: string, requestId: string): Promise<any> {
     try {
-      const status = await fal.queue.status(endpoint, {
+      const status = await getFalQueueStatus(endpoint, {
         requestId,
         logs: true,
       });
@@ -713,7 +697,7 @@ export class FluxKontextService {
    */
   static async getQueueResult(endpoint: string, requestId: string): Promise<FluxKontextResult> {
     try {
-      const result = await fal.queue.result(endpoint, {
+      const result = await getFalQueueResult(endpoint, {
         requestId
       });
       return result.data as FluxKontextResult;
@@ -749,7 +733,7 @@ export class FluxKontextService {
         endpoint: FLUX_ENDPOINTS.FLUX_SCHNELL
       });
 
-      const result = await fal.subscribe(FLUX_ENDPOINTS.FLUX_SCHNELL, {
+      const result = await subscribeToFal(FLUX_ENDPOINTS.FLUX_SCHNELL, {
         input: schnellInput,
         logs: true,
         onQueueUpdate: (update) => {
@@ -791,7 +775,7 @@ export class FluxKontextService {
         endpoint: FLUX_ENDPOINTS.FLUX_GENERAL
       });
 
-      const result = await fal.subscribe(FLUX_ENDPOINTS.FLUX_GENERAL, {
+      const result = await subscribeToFal(FLUX_ENDPOINTS.FLUX_GENERAL, {
         input: fluxInput,
         logs: true,
         onQueueUpdate: (update) => {
@@ -839,7 +823,7 @@ export class FluxKontextService {
         loras: realismInput.loras
       });
       
-      const result = await fal.subscribe(FLUX_ENDPOINTS.FLUX_GENERAL, {
+      const result = await subscribeToFal(FLUX_ENDPOINTS.FLUX_GENERAL, {
         input: realismInput,
         logs: true,
         onQueueUpdate: (update) => {
@@ -887,7 +871,7 @@ export class FluxKontextService {
         loras: animeInput.loras
       });
       
-      const result = await fal.subscribe(FLUX_ENDPOINTS.FLUX_GENERAL, {
+      const result = await subscribeToFal(FLUX_ENDPOINTS.FLUX_GENERAL, {
         input: animeInput,
         logs: true,
         onQueueUpdate: (update) => {
