@@ -224,7 +224,19 @@ export async function validatePrice(request: PriceValidationRequest): Promise<Pr
 
 // 🔐 生成验证哈希
 export function generateValidationHash(data: any): string {
-  const secret = process.env.PAYMENT_VALIDATION_SECRET || 'default-secret-key'
+  const secret = process.env.PAYMENT_VALIDATION_SECRET?.trim()
+  if (!secret) {
+    if (process.env.NODE_ENV !== 'production') {
+      console.warn('PAYMENT_VALIDATION_SECRET is not set; using a development-only fallback secret.')
+      return crypto
+        .createHmac('sha256', 'development-only-payment-validation-secret')
+        .update(JSON.stringify(data))
+        .digest('hex')
+    }
+
+    throw new Error('PAYMENT_VALIDATION_SECRET must be configured in production')
+  }
+
   const payload = JSON.stringify(data)
   return crypto.createHmac('sha256', secret).update(payload).digest('hex')
 }
@@ -232,6 +244,10 @@ export function generateValidationHash(data: any): string {
 // 🔍 验证哈希
 export function verifyValidationHash(data: any, hash: string): boolean {
   const expectedHash = generateValidationHash(data)
+  if (expectedHash.length !== hash.length) {
+    return false
+  }
+
   return crypto.timingSafeEqual(Buffer.from(expectedHash), Buffer.from(hash))
 }
 
@@ -537,4 +553,4 @@ export async function performSecurityChecks(request: PriceValidationRequest): Pr
       warnings: []
     }
   }
-} 
+}
