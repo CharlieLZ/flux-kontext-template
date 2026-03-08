@@ -6,6 +6,11 @@ An open-source Next.js starter for AI image-generation products.
 这不是“炫技 demo”，而是一套能让你把 AI 图像产品更快搭起来的基础盘。
 它已经把登录、积分、支付、图片生成、对象存储、多语言这些高频脏活先铺好了。
 
+许可证先说在前面：
+- 当前仓库就是标准 [MIT License](./LICENSE)
+- 可以商用、可以修改、可以二次分发
+- 但你要保留原始许可证声明
+
 如果把做网站比作开店：
 - `Next.js` 是门店主体
 - `Supabase` 是账本和会员系统
@@ -37,12 +42,71 @@ An open-source Next.js starter for AI image-generation products.
 - 积分系统
 - AI 图像生成 / 编辑入口
 - `fal / KIE / WaveSpeed` provider 适配层
-- Stripe / Creem 支付接入位
+- `Stripe / Creem` 支付接入
 - Supabase 数据库
 - Cloudflare Turnstile 防滥用
 - Cloudflare R2 文件存储
 - 多语言页面骨架
 - 基础 SEO、Analytics、部署脚手架
+
+## 2.1 支付和数据库现状
+
+### 支付现在到底支持几个
+
+当前**真正接好的支付提供商是 2 个**：
+- `Stripe`
+- `Creem`
+
+另外有个容易误会的点：
+- 仓库里有个通用 webhook 路由提到了 `paypal`
+- 但它现在还是预留分支，不是完整生产接入
+- 所以最终口径按 **2 个已支持支付** 来算，不按 3 个写
+
+大白话：
+- 真正在营业的收银台有两台：`Stripe` 和 `Creem`
+- `PayPal` 现在更像“柜台上留了个插座”，不是已经通电的机器
+
+### 数据库现在到底是什么
+
+当前数据库主方案是：
+- `Supabase PostgreSQL`
+
+再拆开说：
+- 认证：`Supabase Auth` + `NextAuth`
+- 业务数据：`Supabase PostgreSQL`
+- 代码访问层：自己写的一层 **Prisma 风格适配器**
+
+关键提醒：
+- [src/lib/database.ts](./src/lib/database.ts) 里导出了一个叫 `prisma` 的对象
+- 但它**不是 Prisma ORM**
+- 它只是“长得像 Prisma”的 Supabase 适配层
+
+这点一定要记住，不然后面很容易误判成：
+- “是不是少装了 Prisma”
+- “是不是还缺 `schema.prisma`”
+
+答案是：
+- 不是
+- 这仓库当前主路就是 `Supabase`
+
+### 数据库里大概有哪些核心表
+
+初始化 SQL 在：
+- [setup-database.sql](./scripts/setup-database.sql)
+
+核心表主要是：
+- `users`
+- `orders`
+- `credit_transactions`
+- `subscriptions`
+- `payment_configs`
+
+可以把它理解成：
+- `users` 是会员表
+- `orders` 是订单表
+- `credit_transactions` 是积分流水
+- `subscriptions` 是订阅关系
+- `payment_configs` 是收银台配置表
 
 ## 3. 先看最短上手版
 
@@ -184,6 +248,10 @@ src/
 - `SUPABASE_SERVICE_ROLE_KEY`
 - `DATABASE_URL`
   作用：数据库和用户数据
+
+补一句容易误解的：
+- 运行时主要还是通过 `Supabase client / admin client` 在读写数据
+- `DATABASE_URL` 仍然建议配好，因为数据库工具链、连通性检查和排错都可能用到它
 
 - `NEXTAUTH_URL`
 - `NEXTAUTH_SECRET`
@@ -339,6 +407,16 @@ npm run dev
    - `SUPABASE_SERVICE_ROLE_KEY`
 3. 在数据库面板里拿 `DATABASE_URL`
 4. 写入 `.env.local`
+5. 在 SQL 编辑器里执行：
+   - [setup-database.sql](./scripts/setup-database.sql)
+
+如果你漏了第 5 步，最常见结果就是：
+- 页面能开
+- 登录表面上像成功了
+- 但用户、订单、积分流水这些业务表其实没建好
+
+大白话：
+门店门锁装好了，但账本和收银小票机还没搬进来。
 
 ### 9.2 Google 登录
 
@@ -394,6 +472,34 @@ IMAGE_GENERATION_PROVIDER="kie"
 ```env
 IMAGE_GENERATION_PROVIDER="wavespeed"
 ```
+
+### 9.6 支付怎么配
+
+当前真实已支持支付：
+- `Stripe`
+- `Creem`
+
+环境变量开关是：
+
+```env
+NEXT_PUBLIC_ENABLE_STRIPE="true"
+NEXT_PUBLIC_ENABLE_CREEM="false"
+NEXT_PUBLIC_DEFAULT_PAYMENT_PROVIDER="stripe"
+```
+
+主要代码位置：
+- [stripe.ts](./src/lib/payment/stripe.ts)
+- [creem.ts](./src/lib/payment/creem.ts)
+- [payment router](./src/lib/payment/router.ts)
+- [payment config service](./src/lib/services/payment-config.ts)
+
+最简单的建议：
+- 先把 `Stripe` 跑通
+- 之后如果你确实需要双支付，再把 `Creem` 打开
+
+再强调一次：
+- [webhooks/payments route](./src/app/api/webhooks/payments/route.ts) 里虽然提到了 `paypal`
+- 但现在只是预留，不算完整支持
 
 ## 10. 新手最容易踩的坑
 
@@ -494,6 +600,11 @@ R2 storage not configured - missing environment variables
 - 但你需要保留原始许可证声明
 
 如果你打算基于这个模板做收费产品，MIT 对你是友好的。
+
+当前检查结果：
+- [LICENSE](./LICENSE) 是标准 MIT 文本
+- 没有发现“文件名写 MIT，但正文不是标准 MIT”的问题
+- README 和 LICENSE 的口径现在是一致的
 
 ## 15. 最后给新手一句建议
 
