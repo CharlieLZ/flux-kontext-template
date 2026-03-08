@@ -8,11 +8,11 @@ export function verboseLog(message: string, payload?: unknown) {
   }
 
   if (typeof payload === 'undefined') {
-    console.log(message)
+    console.log('[flux-kontext]', message)
     return
   }
 
-  console.log(message, payload)
+  console.log('[flux-kontext]', message, payload)
 }
 
 export function getRequiredCredits(action: string): number {
