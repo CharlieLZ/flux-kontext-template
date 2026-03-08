@@ -2,7 +2,7 @@
 
 ## 概述
 
-本指南将帮你配置 `api.fluxkontext.space` 子域名，让API文档中的端点能够正常工作。
+本指南将帮你配置 `api.your-domain.example` 子域名，让API文档中的端点能够正常工作。
 
 ## 🚀 方案1：Vercel子域名（推荐）
 
@@ -20,14 +20,14 @@
 
 1. 进入Vercel项目设置
 2. 点击"Domains"
-3. 添加 `api.fluxkontext.space`
+3. 添加 `api.your-domain.example`
 4. 等待DNS验证通过
 
 ### 步骤3：验证配置
 
 ```bash
 # 测试API端点
-curl -X POST "https://api.fluxkontext.space/api/v1/flux/text-to-image/pro" \
+curl -X POST "https://api.your-domain.example/api/v1/flux/text-to-image/pro" \
   -H "Content-Type: application/json" \
   -d '{"prompt": "test"}'
 ```
@@ -43,8 +43,8 @@ export default {
     const url = new URL(request.url);
     
     // 将api子域名请求代理到主域名
-    if (url.hostname === 'api.fluxkontext.space') {
-      const targetUrl = `https://fluxkontext.space${url.pathname}${url.search}`;
+    if (url.hostname === 'api.your-domain.example') {
+      const targetUrl = `https://your-domain.example${url.pathname}${url.search}`;
       
       // 复制请求头
       const headers = new Headers(request.headers);
@@ -78,7 +78,7 @@ export default {
 1. 登录Cloudflare Dashboard
 2. 进入Workers & Pages
 3. 创建新Worker，粘贴上述代码
-4. 配置路由：`api.fluxkontext.space/*`
+4. 配置路由：`api.your-domain.example/*`
 5. 部署Worker
 
 ## 🎯 方案3：简单重定向（最简单）
@@ -88,9 +88,9 @@ export default {
 ### Cloudflare页面规则
 
 ```
-URL模式: api.fluxkontext.space/*
+URL模式: api.your-domain.example/*
 设置: 转发URL (301重定向)
-目标: https://fluxkontext.space/$1
+目标: https://your-domain.example/$1
 ```
 
 ### Nginx配置（如果使用自己的服务器）
@@ -98,10 +98,10 @@ URL模式: api.fluxkontext.space/*
 ```nginx
 server {
     listen 80;
-    server_name api.fluxkontext.space;
+    server_name api.your-domain.example;
     
     location / {
-        return 301 https://fluxkontext.space$request_uri;
+        return 301 https://your-domain.example$request_uri;
     }
 }
 ```
@@ -115,7 +115,7 @@ server {
 npm run test:api
 
 # 或手动测试
-curl -X POST "https://api.fluxkontext.space/api/v1/flux/text-to-image/pro" \
+curl -X POST "https://api.your-domain.example/api/v1/flux/text-to-image/pro" \
   -H "Content-Type: application/json" \
   -H "Authorization: Bearer your-api-key" \
   -d '{
@@ -132,17 +132,17 @@ curl -X POST "https://api.fluxkontext.space/api/v1/flux/text-to-image/pro" \
 
 ```bash
 # 检查DNS记录
-nslookup api.fluxkontext.space
+nslookup api.your-domain.example
 
 # 检查HTTPS证书
-curl -I https://api.fluxkontext.space
+curl -I https://api.your-domain.example
 ```
 
 ### 检查路由重写
 
 ```bash
 # 测试路由重写是否正常
-curl -v https://api.fluxkontext.space/api/v1/flux/text-to-image/pro
+curl -v https://api.your-domain.example/api/v1/flux/text-to-image/pro
 ```
 
 ## 🔍 故障排除
@@ -158,13 +158,13 @@ curl -v https://api.fluxkontext.space/api/v1/flux/text-to-image/pro
 
 ```bash
 # 检查域名解析
-dig api.fluxkontext.space
+dig api.your-domain.example
 
 # 测试连接
-telnet api.fluxkontext.space 443
+telnet api.your-domain.example 443
 
 # 检查SSL证书
-openssl s_client -connect api.fluxkontext.space:443
+openssl s_client -connect api.your-domain.example:443
 ```
 
 ## 💡 最佳实践

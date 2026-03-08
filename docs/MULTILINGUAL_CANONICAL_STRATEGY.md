@@ -8,7 +8,7 @@
    ```typescript
    // ❌ 问题1: layout.tsx中的配置
    alternates: {
-     canonical: new URL(process.env.NEXT_PUBLIC_SITE_URL || 'https://fluxkontext.space').origin,
+     canonical: new URL(process.env.NEXT_PUBLIC_SITE_URL || 'https://your-domain.example').origin,
      languages: {
        'en-US': '/en-US',  // ❌ 只配置了en-US，缺少其他13种语言
      },
@@ -44,30 +44,30 @@
 #### **URL结构策略**
 ```
 默认语言 (英语):
-https://fluxkontext.space/           → 首页
-https://fluxkontext.space/generate   → 生成页面
-https://fluxkontext.space/pricing    → 定价页面
+https://your-domain.example/           → 首页
+https://your-domain.example/generate   → 生成页面
+https://your-domain.example/pricing    → 定价页面
 
 其他语言:
-https://fluxkontext.space/zh/        → 中文首页
-https://fluxkontext.space/zh/generate → 中文生成页面
-https://fluxkontext.space/de/pricing  → 德语定价页面
+https://your-domain.example/zh/        → 中文首页
+https://your-domain.example/zh/generate → 中文生成页面
+https://your-domain.example/de/pricing  → 德语定价页面
 ```
 
 #### **Canonical + hreflang策略**
 ```html
 <!-- 英语页面 (默认) -->
-<link rel="canonical" href="https://fluxkontext.space/generate" />
-<link rel="alternate" hreflang="en" href="https://fluxkontext.space/generate" />
-<link rel="alternate" hreflang="zh" href="https://fluxkontext.space/zh/generate" />
-<link rel="alternate" hreflang="de" href="https://fluxkontext.space/de/generate" />
-<link rel="alternate" hreflang="x-default" href="https://fluxkontext.space/generate" />
+<link rel="canonical" href="https://your-domain.example/generate" />
+<link rel="alternate" hreflang="en" href="https://your-domain.example/generate" />
+<link rel="alternate" hreflang="zh" href="https://your-domain.example/zh/generate" />
+<link rel="alternate" hreflang="de" href="https://your-domain.example/de/generate" />
+<link rel="alternate" hreflang="x-default" href="https://your-domain.example/generate" />
 
 <!-- 中文页面 -->
-<link rel="canonical" href="https://fluxkontext.space/zh/generate" />
-<link rel="alternate" hreflang="en" href="https://fluxkontext.space/generate" />
-<link rel="alternate" hreflang="zh" href="https://fluxkontext.space/zh/generate" />
-<link rel="alternate" hreflang="x-default" href="https://fluxkontext.space/generate" />
+<link rel="canonical" href="https://your-domain.example/zh/generate" />
+<link rel="alternate" hreflang="en" href="https://your-domain.example/generate" />
+<link rel="alternate" hreflang="zh" href="https://your-domain.example/zh/generate" />
+<link rel="alternate" hreflang="x-default" href="https://your-domain.example/generate" />
 ```
 
 ### 2️⃣ **技术实现方案**
@@ -89,7 +89,7 @@ interface MetadataConfig {
 
 export function generateMultilingualMetadata(config: MetadataConfig): Metadata {
   const { title, description, keywords, path, locale = DEFAULT_LOCALE, images } = config
-  const baseUrl = process.env.NEXT_PUBLIC_SITE_URL || 'https://fluxkontext.space'
+  const baseUrl = process.env.NEXT_PUBLIC_SITE_URL || 'https://your-domain.example'
   
   // 生成当前页面的canonical URL
   const canonicalPath = locale === DEFAULT_LOCALE ? path : `/${locale}${path}`
@@ -240,10 +240,10 @@ canonical: locale === 'en' ? '/generate' : '/zh/generate'
 ```xml
 <!-- 每个页面包含所有语言版本 -->
 <url>
-  <loc>https://fluxkontext.space/generate</loc>
-  <xhtml:link rel="alternate" hreflang="en" href="https://fluxkontext.space/generate"/>
-  <xhtml:link rel="alternate" hreflang="zh" href="https://fluxkontext.space/zh/generate"/>
-  <xhtml:link rel="alternate" hreflang="x-default" href="https://fluxkontext.space/generate"/>
+  <loc>https://your-domain.example/generate</loc>
+  <xhtml:link rel="alternate" hreflang="en" href="https://your-domain.example/generate"/>
+  <xhtml:link rel="alternate" hreflang="zh" href="https://your-domain.example/zh/generate"/>
+  <xhtml:link rel="alternate" hreflang="x-default" href="https://your-domain.example/generate"/>
 </url>
 ```
 

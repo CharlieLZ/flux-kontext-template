@@ -312,7 +312,7 @@ export function PricingContent() {
 ### **1. 环境变量**
 ```bash
 # 认证配置
-NEXTAUTH_URL=https://fluxkontext.space
+NEXTAUTH_URL=https://your-domain.example
 NEXTAUTH_SECRET=your-secret-key
 AUTH_GOOGLE_ID=your-google-client-id
 AUTH_GOOGLE_SECRET=your-google-client-secret
@@ -367,7 +367,7 @@ export function middleware(request: NextRequest) {
 // vercel.json
 {
   "env": {
-    "NEXTAUTH_URL": "https://fluxkontext.space",
+    "NEXTAUTH_URL": "https://your-domain.example",
     "NODE_ENV": "production"
   },
   "functions": {

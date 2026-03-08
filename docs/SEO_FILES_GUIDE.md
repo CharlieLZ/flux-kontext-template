@@ -36,7 +36,7 @@ Disallow: /api/
 Disallow: /auth/
 
 # 网站地图位置
-Sitemap: https://fluxkontext.space/sitemap.xml
+Sitemap: https://your-domain.example/sitemap.xml
 ```
 
 ### 🗺️ **sitemap.xml - 网站结构地图**
@@ -60,13 +60,13 @@ Sitemap: https://fluxkontext.space/sitemap.xml
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <url>
-    <loc>https://fluxkontext.space/</loc>
+    <loc>https://your-domain.example/</loc>
     <lastmod>2025-01-31</lastmod>
     <changefreq>daily</changefreq>
     <priority>1.0</priority>
   </url>
   <url>
-    <loc>https://fluxkontext.space/generate</loc>
+    <loc>https://your-domain.example/generate</loc>
     <lastmod>2025-01-31</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.9</priority>
@@ -201,10 +201,10 @@ multilingualPages.forEach(page => {
 #### **llms.txt效果验证**
 ```bash
 # 使用curl测试llms.txt可访问性
-curl https://fluxkontext.space/llms.txt
+curl https://your-domain.example/llms.txt
 
 # 检查AI爬虫是否能正确访问
-curl -H "User-Agent: GPTBot" https://fluxkontext.space/llms.txt
+curl -H "User-Agent: GPTBot" https://your-domain.example/llms.txt
 ```
 
 ## 🚀 **最佳实践建议**

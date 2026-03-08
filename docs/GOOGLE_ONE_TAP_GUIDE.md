@@ -153,7 +153,7 @@ cookies: {
       sameSite: 'lax',        // 🔧 设置为lax而非strict
       path: '/',
       secure: true,           // 🔒 HTTPS环境必须为true
-      domain: 'fluxkontext.space' // 🌐 明确指定域名
+      domain: 'your-domain.example' // 🌐 明确指定域名
     }
   }
 }

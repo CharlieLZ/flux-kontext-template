@@ -1,16 +1,16 @@
 # 🚀 Worker 直接代理 FAL.AI 完整指南
 
-## 🎯 目标：api.fluxkontext.space 直接代理到 FAL.AI
+## 🎯 目标：api.your-domain.example 直接代理到 FAL.AI
 
 ### 💡 **为什么直接代理到 FAL.AI？**
 
 ```bash
 # 传统方式：
-用户 → api.fluxkontext.space → fluxkontext.space → FAL.AI
+用户 → api.your-domain.example → your-domain.example → FAL.AI
 延迟：100ms + 200ms + 300ms = 600ms
 
 # Worker直接代理：
-用户 → api.fluxkontext.space (Worker) → FAL.AI
+用户 → api.your-domain.example (Worker) → FAL.AI
 延迟：100ms + 300ms = 400ms
 
 # 优势：
@@ -32,8 +32,8 @@ export default {
   async fetch(request, env, ctx) {
     const url = new URL(request.url);
     
-    // 🎯 只处理 api.fluxkontext.space 的请求
-    if (url.hostname !== 'api.fluxkontext.space') {
+    // 🎯 只处理 api.your-domain.example 的请求
+    if (url.hostname !== 'api.your-domain.example') {
       return new Response('Not Found', { status: 404 });
     }
     
@@ -234,7 +234,7 @@ Value: your_fal_api_key_here
 Type: Secret (加密存储)
 
 # 3. 可选的其他变量
-ALLOWED_ORIGINS=https://fluxkontext.space,https://www.fluxkontext.space
+ALLOWED_ORIGINS=https://your-domain.example,https://www.your-domain.example
 RATE_LIMIT_PER_MINUTE=60
 ENABLE_LOGGING=true
 ```
@@ -284,7 +284,7 @@ FAL_KEY: your_fal_api_key_here
 ### 4. 配置域名和 DNS
 
 ```bash
-# 添加自定义域名: api.fluxkontext.space
+# 添加自定义域名: api.your-domain.example
 # 配置 DNS CNAME 记录
 ```
 
@@ -292,7 +292,7 @@ FAL_KEY: your_fal_api_key_here
 
 ```bash
 # 测试 API 代理
-curl -X POST "https://api.fluxkontext.space/api/v1/flux/text-to-image/pro" \
+curl -X POST "https://api.your-domain.example/api/v1/flux/text-to-image/pro" \
   -H "Content-Type: application/json" \
   -d '{
     "prompt": "A beautiful sunset over mountains",
