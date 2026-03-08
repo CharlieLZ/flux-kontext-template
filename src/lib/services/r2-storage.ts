@@ -8,6 +8,37 @@ interface R2Config {
   bucketName: string
 }
 
+const MIME_EXTENSION_MAP: Record<string, string> = {
+  'image/jpeg': 'jpg',
+  'image/png': 'png',
+  'image/webp': 'webp',
+  'image/gif': 'gif',
+  'video/mp4': 'mp4',
+  'video/webm': 'webm',
+  'video/quicktime': 'mov',
+  'audio/mpeg': 'mp3',
+  'audio/wav': 'wav',
+  'audio/ogg': 'ogg',
+  'audio/mp3': 'mp3',
+  'application/pdf': 'pdf',
+  'text/plain': 'txt',
+  'application/json': 'json'
+}
+
+function sanitizeMetadataValue(value: string, maxLength: number = 120): string {
+  return value.replace(/[^a-zA-Z0-9._ -]/g, '_').slice(0, maxLength)
+}
+
+function getSafeExtension(contentType: string, originalName?: string): string {
+  const mapped = MIME_EXTENSION_MAP[contentType]
+  if (mapped) {
+    return mapped
+  }
+
+  const fallback = originalName?.split('.').pop()?.toLowerCase()?.replace(/[^a-z0-9]/g, '')
+  return fallback || 'bin'
+}
+
 // 并发控制队列 - 增强版本
 class ConcurrencyQueue {
   private queue: Array<() => Promise<any>> = []
@@ -208,8 +239,8 @@ class R2StorageService {
     
     // 生成唯一文件名
     const timestamp = Date.now();
-    const randomString = Math.random().toString(36).substring(2, 15);
-    const extension = file.name.split('.').pop() || 'jpg';
+    const randomString = crypto.randomUUID().replace(/-/g, '').slice(0, 12);
+    const extension = getSafeExtension(file.type, file.name);
     const fileName = `flux-kontext-${timestamp}-${randomString}.${extension}`;
     
     console.log(`📋 Generated R2 filename: ${fileName}`);
@@ -223,7 +254,7 @@ class R2StorageService {
         ContentType: file.type || 'image/jpeg',
         CacheControl: 'public, max-age=31536000', // 1年缓存
         Metadata: {
-          'original-name': file.name,
+          'original-name': sanitizeMetadataValue(file.name),
           'upload-timestamp': timestamp.toString(),
           'source': 'user-upload'
         }
@@ -432,4 +463,4 @@ class R2StorageService {
 }
 
 // 导出单例实例
-export const r2Storage = new R2StorageService() 
+export const r2Storage = new R2StorageService()

@@ -1,5 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server'
+import { getServerSession } from 'next-auth'
 import { r2Storage } from '@/lib/services/r2-storage'
+import { authOptions } from '@/lib/auth'
 
 // 支持的文件类型配置
 const SUPPORTED_TYPES = {
@@ -17,8 +19,24 @@ const SIZE_LIMITS = {
   document: 5
 }
 
+const MEDIA_TYPES = new Set(Object.keys(SUPPORTED_TYPES))
+
+function sanitizeSegment(value: string, fallback: string): string {
+  const normalized = value.trim().toLowerCase().replace(/[^a-z0-9-]/g, '-')
+  const collapsed = normalized.replace(/-+/g, '-').replace(/^-|-$/g, '')
+  return collapsed || fallback
+}
+
 export async function POST(request: NextRequest) {
   try {
+    const session = await getServerSession(authOptions)
+    if (!session?.user?.email) {
+      return NextResponse.json({
+        success: false,
+        error: '请先登录后再上传文件'
+      }, { status: 401 })
+    }
+
     // 检查R2是否启用
     if (process.env.NEXT_PUBLIC_ENABLE_R2 !== 'true') {
       return NextResponse.json({
@@ -29,8 +47,10 @@ export async function POST(request: NextRequest) {
 
     const formData = await request.formData()
     const file = formData.get('file') as File
-    const mediaType = formData.get('mediaType') as string || 'image'
-    const purpose = formData.get('purpose') as string || 'general' // 用途：character, music, video, general
+    const requestedMediaType = (formData.get('mediaType') as string) || 'image'
+    const requestedPurpose = (formData.get('purpose') as string) || 'general'
+    const mediaType = MEDIA_TYPES.has(requestedMediaType) ? requestedMediaType : 'image'
+    const purpose = sanitizeSegment(requestedPurpose, 'general')
 
     if (!file) {
       return NextResponse.json({
@@ -57,15 +77,6 @@ export async function POST(request: NextRequest) {
       }, { status: 400 })
     }
 
-    // 生成文件路径
-    const timestamp = Date.now()
-    const randomId = Math.random().toString(36).substring(2, 8)
-    const extension = file.name.split('.').pop()
-    const fileName = `${purpose}_${timestamp}_${randomId}.${extension}`
-    
-    // 根据用途和媒体类型生成路径
-    const filePath = `${mediaType}s/${purpose}/${fileName}`
-
     // 上传到R2
     const uploadResult = await r2Storage.uploadFile(file)
 
@@ -73,12 +84,10 @@ export async function POST(request: NextRequest) {
       success: true,
       data: {
         url: uploadResult,
-        key: filePath,
-        filename: fileName,
         size: file.size,
         contentType: file.type,
-        mediaType: mediaType,
-        purpose: purpose
+        mediaType,
+        purpose
       }
     })
 
@@ -101,4 +110,4 @@ export async function GET() {
     supportedTypes: SUPPORTED_TYPES,
     sizeLimits: SIZE_LIMITS
   })
-} 
+}

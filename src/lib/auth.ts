@@ -10,6 +10,35 @@ import { User } from "@/lib/types/user"
 import { createClient } from '@supabase/supabase-js'
 
 const providers: any[] = []
+const isProduction = process.env.NODE_ENV === 'production'
+
+function getCookieDomain(): string | undefined {
+  if (!isProduction) {
+    return undefined
+  }
+
+  const explicitDomain = process.env.NEXTAUTH_COOKIE_DOMAIN?.trim()
+  if (explicitDomain) {
+    return explicitDomain
+  }
+
+  const siteUrl =
+    process.env.NEXTAUTH_URL ||
+    process.env.NEXT_PUBLIC_SITE_URL ||
+    process.env.NEXT_PUBLIC_WEB_URL
+
+  if (!siteUrl) {
+    return undefined
+  }
+
+  try {
+    return new URL(siteUrl).hostname
+  } catch {
+    return undefined
+  }
+}
+
+const cookieDomain = getCookieDomain()
 
 // Google Auth (如果配置了)
 if (
@@ -133,8 +162,8 @@ export const authOptions: NextAuthOptions = {
         httpOnly: true,
         sameSite: 'lax',        // 🔧 设置为lax而非strict，支持第三方登录
         path: '/',
-        secure: process.env.NODE_ENV === 'production',
-        domain: process.env.NODE_ENV === 'production' ? 'fluxkontext.space' : undefined, // 🌐 明确指定域名
+        secure: isProduction,
+        domain: cookieDomain,
       },
     },
     callbackUrl: {
@@ -142,8 +171,8 @@ export const authOptions: NextAuthOptions = {
       options: {
         sameSite: 'lax',        // 🔧 支持跨站点回调
         path: '/',
-        secure: process.env.NODE_ENV === 'production',
-        domain: process.env.NODE_ENV === 'production' ? 'fluxkontext.space' : undefined,
+        secure: isProduction,
+        domain: cookieDomain,
       },
     },
     csrfToken: {
@@ -152,8 +181,8 @@ export const authOptions: NextAuthOptions = {
         httpOnly: true,
         sameSite: 'lax',        // 🔧 支持CSRF保护但允许第三方登录
         path: '/',
-        secure: process.env.NODE_ENV === 'production',
-        domain: process.env.NODE_ENV === 'production' ? 'fluxkontext.space' : undefined,
+        secure: isProduction,
+        domain: cookieDomain,
       },
     },
     // 🔧 添加状态Cookie配置以支持Google One Tap
@@ -163,9 +192,9 @@ export const authOptions: NextAuthOptions = {
         httpOnly: true,
         sameSite: 'lax',
         path: '/',
-        secure: process.env.NODE_ENV === 'production',
+        secure: isProduction,
         maxAge: 900, // 15分钟
-        domain: process.env.NODE_ENV === 'production' ? 'fluxkontext.space' : undefined,
+        domain: cookieDomain,
       },
     },
     pkceCodeVerifier: {
@@ -174,9 +203,9 @@ export const authOptions: NextAuthOptions = {
         httpOnly: true,
         sameSite: 'lax',
         path: '/',
-        secure: process.env.NODE_ENV === 'production',
+        secure: isProduction,
         maxAge: 900, // 15分钟
-        domain: process.env.NODE_ENV === 'production' ? 'fluxkontext.space' : undefined,
+        domain: cookieDomain,
       },
     },
   },
@@ -343,4 +372,4 @@ async function detectUserLocation(): Promise<string> {
     console.error("地理位置检测失败:", error)
     return "US"
   }
-} 
+}
