@@ -5,6 +5,7 @@ import { authOptions } from '@/lib/auth';
 import { consumeCreditsForImageGeneration, checkUserCredits } from '@/lib/services/credits';
 import { prisma } from '@/lib/database';
 import { checkPromptSafety, checkImageSafety } from '@/lib/content-safety/safe-mode';
+import { isFluxKontextAction } from '@/lib/image-generation/utils';
 import {
   getClientIpFromHeaders,
   getRequiredCredits,
@@ -241,9 +242,16 @@ export async function POST(request: NextRequest) {
           seed: body.seed
         });
 
-        // 🔧 添加详细的FAL API调用日志
-        verboseLog('📡 ===== 开始FAL API调用 =====')
+        if (!isFluxKontextAction(body.action)) {
+          throw new Error(`Unsupported action: ${body.action}`);
+        }
+
+        const providerName = FluxKontextService.getProviderName()
+
+        // 🔧 添加详细的 provider 调用日志
+        verboseLog('📡 ===== 开始图像 provider 调用 =====')
         verboseLog('📋 Sanitized request parameters:', {
+          provider: providerName,
           action: body.action,
           promptLength: typeof body.prompt === 'string' ? body.prompt.length : 0,
           hasImageUrl: !!body.image_url,
@@ -256,146 +264,21 @@ export async function POST(request: NextRequest) {
           seed: body.seed
         })
 
-        // 根据action类型调用相应的API
-        switch (body.action) {
-          case 'text-to-image-pro':
-            console.log('🎨 调用 textToImagePro')
-            result = await FluxKontextService.textToImagePro({
-              prompt: body.prompt,
-              aspect_ratio: body.aspect_ratio,
-              guidance_scale: body.guidance_scale,
-              num_images: body.num_images,
-              safety_tolerance: body.safety_tolerance,
-              output_format: body.output_format,
-              seed: body.seed
-            });
-            break;
-          case 'text-to-image-max':
-            console.log('🎨 调用 textToImageMax')
-            result = await FluxKontextService.textToImageMax({
-              prompt: body.prompt,
-              aspect_ratio: body.aspect_ratio,
-              guidance_scale: body.guidance_scale,
-              num_images: body.num_images,
-              safety_tolerance: body.safety_tolerance,
-              output_format: body.output_format,
-              seed: body.seed
-            });
-            break;
-          case 'text-to-image-schnell':
-            console.log('🎨 调用 textToImageSchnell')
-            result = await FluxKontextService.textToImageSchnell({
-              prompt: body.prompt,
-              aspect_ratio: body.aspect_ratio,
-              guidance_scale: body.guidance_scale,
-              num_images: body.num_images,
-              safety_tolerance: body.safety_tolerance,
-              output_format: body.output_format,
-              seed: body.seed
-            });
-            break;
-          case 'text-to-image-dev':
-            console.log('🎨 调用 textToImageDev')
-            result = await FluxKontextService.textToImageDev({
-              prompt: body.prompt,
-              aspect_ratio: body.aspect_ratio,
-              guidance_scale: body.guidance_scale,
-              num_images: body.num_images,
-              safety_tolerance: body.safety_tolerance,
-              output_format: body.output_format,
-              seed: body.seed
-            });
-            break;
-          case 'text-to-image-realism':
-            console.log('🎨 调用 textToImageRealism')
-            result = await FluxKontextService.textToImageRealism({
-              prompt: body.prompt,
-              aspect_ratio: body.aspect_ratio,
-              guidance_scale: body.guidance_scale,
-              num_images: body.num_images,
-              safety_tolerance: body.safety_tolerance,
-              output_format: body.output_format,
-              seed: body.seed
-            });
-            break;
-          case 'text-to-image-anime':
-            console.log('🎨 调用 textToImageAnime')
-            result = await FluxKontextService.textToImageAnime({
-              prompt: body.prompt,
-              aspect_ratio: body.aspect_ratio,
-              guidance_scale: body.guidance_scale,
-              num_images: body.num_images,
-              safety_tolerance: body.safety_tolerance,
-              output_format: body.output_format,
-              seed: body.seed
-            });
-            break;
-          case 'edit-image-pro':
-            console.log('✏️ 调用 editImagePro')
-            if (!body.image_url) {
-              throw new Error('image_url is required for edit-image-pro action');
-            }
-            result = await FluxKontextService.editImagePro({
-              prompt: body.prompt,
-              image_url: body.image_url,
-              guidance_scale: body.guidance_scale,
-              num_images: body.num_images,
-              safety_tolerance: body.safety_tolerance,
-              output_format: body.output_format,
-              seed: body.seed
-            });
-            break;
-          case 'edit-image-max':
-            console.log('✏️ 调用 editImageMax')
-            if (!body.image_url) {
-              throw new Error('image_url is required for edit-image-max action');
-            }
-            result = await FluxKontextService.editImageMax({
-              prompt: body.prompt,
-              image_url: body.image_url,
-              guidance_scale: body.guidance_scale,
-              num_images: body.num_images,
-              safety_tolerance: body.safety_tolerance,
-              output_format: body.output_format,
-              seed: body.seed
-            });
-            break;
-          case 'edit-multi-image-pro':
-            console.log('✏️ 调用 editMultiImagePro')
-            if (!body.image_urls || !Array.isArray(body.image_urls)) {
-              throw new Error('image_urls array is required for edit-multi-image-pro action');
-            }
-            result = await FluxKontextService.editMultiImagePro({
-              prompt: body.prompt,
-              image_urls: body.image_urls,
-              guidance_scale: body.guidance_scale,
-              num_images: body.num_images,
-              safety_tolerance: body.safety_tolerance,
-              output_format: body.output_format,
-              seed: body.seed
-            });
-            break;
-          case 'edit-multi-image-max':
-            console.log('✏️ 调用 editMultiImageMax')
-            if (!body.image_urls || !Array.isArray(body.image_urls)) {
-              throw new Error('image_urls array is required for edit-multi-image-max action');
-            }
-            result = await FluxKontextService.editMultiImageMax({
-              prompt: body.prompt,
-              image_urls: body.image_urls,
-              guidance_scale: body.guidance_scale,
-              num_images: body.num_images,
-              safety_tolerance: body.safety_tolerance,
-              output_format: body.output_format,
-              seed: body.seed
-            });
-            break;
-          default:
-            throw new Error(`Unsupported action: ${body.action}`);
-        }
+        result = await FluxKontextService.generateAction(body.action, {
+          prompt: body.prompt,
+          image_url: body.image_url,
+          image_urls: body.image_urls,
+          aspect_ratio: body.aspect_ratio,
+          guidance_scale: body.guidance_scale,
+          num_images: body.num_images,
+          safety_tolerance: body.safety_tolerance,
+          output_format: body.output_format,
+          seed: body.seed,
+        });
 
-        console.log('📨 ===== FAL API响应接收 =====')
-        console.log('📊 FAL API原始响应分析:', {
+        console.log('📨 ===== Provider 响应接收 =====')
+        console.log('📊 Provider 原始响应分析:', {
+          provider: providerName,
           hasResult: !!result,
           resultType: typeof result,
           resultKeys: result ? Object.keys(result) : [],
@@ -407,15 +290,15 @@ export async function POST(request: NextRequest) {
 
         // 🔧 增强结果验证和错误处理
         if (!result) {
-          console.error('❌ FAL API返回空结果')
-          throw new Error('FAL API returned null or undefined result');
+          console.error('❌ Provider 返回空结果')
+          throw new Error('Image provider returned null or undefined result');
         }
 
         // 🔧 检查是否有错误信息（使用类型断言处理可能的错误字段）
         const resultWithError = result as any;
         if (resultWithError.error) {
-          console.error('❌ FAL API返回错误:', resultWithError.error)
-          throw new Error(`FAL API error: ${resultWithError.error}`);
+          console.error('❌ Provider 返回错误:', resultWithError.error)
+          throw new Error(`Provider error: ${resultWithError.error}`);
         }
 
         // 🔧 检查images字段的各种可能位置
@@ -456,7 +339,7 @@ export async function POST(request: NextRequest) {
           
           if (!foundImages) {
             // 🔧 增强错误信息，特别针对图生图模式
-            let errorMessage = 'No images generated - FAL API returned empty or invalid images array.';
+            let errorMessage = 'No images generated - provider returned empty or invalid images array.';
             
             if (body.image_url || body.image_urls) {
               errorMessage += ' This may indicate an issue with image editing parameters or input image format.';
@@ -465,7 +348,7 @@ export async function POST(request: NextRequest) {
                 errorMessage += ` Note: aspect_ratio (${body.aspect_ratio}) in image editing mode may cause conflicts.`;
               }
             } else {
-              errorMessage += ' This may indicate a service issue, invalid parameters, or content policy violation.';
+              errorMessage += ' This may indicate a provider issue, invalid parameters, or content policy violation.';
             }
             
             console.error('❌ 未找到有效图像:', {
@@ -478,7 +361,7 @@ export async function POST(request: NextRequest) {
           }
         }
 
-        console.log(`✅ FAL API调用成功: ${result.images.length} 张图像生成完成`);
+        console.log(`✅ ${providerName} 调用成功: ${result.images.length} 张图像生成完成`);
         
         // 🔧 详细检查生成的图片信息
         if (process.env.ENABLE_VERBOSE_LOGS === 'true' && process.env.NODE_ENV !== 'production') {
@@ -739,6 +622,7 @@ export async function POST(request: NextRequest) {
 
         const responseData: any = {
           success: true,
+          provider: providerName,
           data: processedResult,
           credits_remaining: creditResult.user?.creditsAfter || 0,
           safety_check: {
