@@ -43,7 +43,7 @@
     "dotenv": "^16.5.0",
     "framer-motion": "^12.14.0",
     "google-auth-library": "^9.15.1",
-    "lucide-react": "^0.475.0",
+    "lucide-react": "^0.577.0",
     "next": "^15.5.12",
     "next-auth": "^4.24.13",
     "react": "^18.3.1",
