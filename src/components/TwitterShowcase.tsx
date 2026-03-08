@@ -91,7 +91,7 @@ export function TwitterShowcase() {
   }, [])
 
   return (
-    <section className="py-8 px-4 bg-background">
+    <section className="px-4 py-8 bg-background">
       <div className="container mx-auto">
         {/* 标题区域 - 简化布局，更好居中 */}
         <div className="text-center mb-8">
@@ -105,7 +105,7 @@ export function TwitterShowcase() {
                 variant="outline"
                 size="sm"
                 onClick={() => scroll('left')}
-                className="w-10 h-10 p-0 border-2 border-white/20 bg-black/20 text-white hover:bg-primary/20 hover:border-primary/50 backdrop-blur-sm"
+                className="app-floating-panel h-10 w-10 p-0 text-foreground hover:border-primary/40 hover:bg-primary/10"
               >
                 <svg className="w-4 h-4" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
                   <path d="M15 18L9 12L15 6" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
@@ -115,7 +115,7 @@ export function TwitterShowcase() {
                 variant="outline"
                 size="sm"
                 onClick={() => scroll('right')}
-                className="w-10 h-10 p-0 border-2 border-white/20 bg-black/20 text-white hover:bg-primary/20 hover:border-primary/50 backdrop-blur-sm"
+                className="app-floating-panel h-10 w-10 p-0 text-foreground hover:border-primary/40 hover:bg-primary/10"
               >
                 <svg className="w-4 h-4" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
                   <path d="M9 18L15 12L9 6" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
@@ -149,7 +149,7 @@ export function TwitterShowcase() {
             {twitterEmbeds.map((embed) => (
               <div 
                 key={embed.id} 
-                className="flex-none w-80 bg-card/10 border border-border/20 rounded-lg p-4"
+                className="app-surface-card flex-none w-80 rounded-2xl p-4"
                 style={{ minHeight: '500px' }} // 固定最小高度，避免空白
               >
                 <div 

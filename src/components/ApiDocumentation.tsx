@@ -180,28 +180,28 @@ export function ApiDocumentation() {
             
             {/* Quick Stats */}
             <div className="grid grid-cols-2 md:grid-cols-4 gap-4 max-w-2xl mx-auto">
-              <div className="bg-card border rounded-lg p-4">
+              <div className="app-surface-card rounded-2xl p-4">
                 <div className="flex items-center justify-center mb-2">
                   <DollarSign className="app-icon-token--success w-5 h-5" />
                 </div>
                 <div className="text-sm font-medium">$0.05</div>
                 <div className="text-xs text-muted-foreground">Starting Price</div>
               </div>
-              <div className="bg-card border rounded-lg p-4">
+              <div className="app-surface-card rounded-2xl p-4">
                 <div className="flex items-center justify-center mb-2">
                   <Clock className="app-icon-token w-5 h-5" />
                 </div>
                 <div className="text-sm font-medium">~10s</div>
                 <div className="text-xs text-muted-foreground">Avg Response</div>
               </div>
-              <div className="bg-card border rounded-lg p-4">
+              <div className="app-surface-card rounded-2xl p-4">
                 <div className="flex items-center justify-center mb-2">
                   <Shield className="app-icon-token--accent w-5 h-5" />
                 </div>
                 <div className="text-sm font-medium">99.9%</div>
                 <div className="text-xs text-muted-foreground">Uptime</div>
               </div>
-              <div className="bg-card border rounded-lg p-4">
+              <div className="app-surface-card rounded-2xl p-4">
                 <div className="flex items-center justify-center mb-2">
                   <Globe className="app-icon-token--warning w-5 h-5" />
                 </div>
@@ -213,7 +213,7 @@ export function ApiDocumentation() {
 
           {/* Navigation Menu */}
           <div className="flex justify-center mb-12">
-            <div className="flex flex-wrap gap-2 bg-muted/20 rounded-lg p-2">
+            <div className="app-floating-panel flex flex-wrap gap-2 rounded-xl p-2">
               <button
                 onClick={() => scrollToSection('overview')}
                 className="px-4 py-2 rounded-md text-sm font-medium transition-all duration-200 hover:bg-primary hover:text-primary-foreground"
@@ -332,7 +332,7 @@ export function ApiDocumentation() {
                   </div>
                 </div>
                 
-                <div className="bg-muted/20 rounded-lg p-4">
+                <div className="app-floating-panel rounded-xl p-4">
                   <code className="text-sm">
                     {endpoint.method} {endpoint.endpoint}
                   </code>
@@ -460,13 +460,13 @@ export function ApiDocumentation() {
             </div>
 
             {/* Pricing Table */}
-            <div className="bg-card border rounded-lg overflow-hidden">
+            <div className="app-surface-card overflow-hidden rounded-2xl">
               <div className="p-6 border-b border-border">
                 <h3 className="font-semibold">Model Pricing</h3>
               </div>
               <div className="overflow-x-auto">
                 <table className="w-full">
-                  <thead className="bg-muted/20">
+                  <thead className="bg-background/50">
                     <tr>
                       <th className="text-left p-4 font-medium">Model</th>
                       <th className="text-left p-4 font-medium">Price per Request</th>
@@ -497,14 +497,14 @@ export function ApiDocumentation() {
           <div id="authentication" className="space-y-6 mb-16">
             <h2 className="text-2xl font-bold mb-6">Authentication</h2>
             
-            <div className="bg-card border rounded-lg p-6">
+            <div className="app-surface-card rounded-2xl p-6">
               <h3 className="font-semibold mb-4">API Key Authentication</h3>
               <p className="text-muted-foreground mb-4">
                 All API requests require authentication using your API key. Include your API key in the Authorization header.
               </p>
               
-              <div className="bg-gray-900 rounded-lg p-4 mb-4">
-                <code className="text-gray-300 text-sm">
+              <div className="app-code-surface mb-4 rounded-xl p-4">
+                <code className="text-sm text-slate-200">
                   Authorization: Bearer YOUR_API_KEY
                 </code>
               </div>

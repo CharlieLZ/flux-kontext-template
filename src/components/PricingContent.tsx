@@ -153,7 +153,7 @@ function PricingMainContent() {
 
           {/* Plan Type Toggle */}
           <div className="flex justify-center mb-8">
-            <div className="flex bg-muted/20 rounded-lg p-1">
+            <div className="app-floating-panel flex rounded-xl p-1">
               <button
                 onClick={() => setActiveTab("subscription")}
                 className={`px-6 py-2 rounded-md text-sm font-medium transition-all duration-200 hover:scale-105 active:scale-95 ${
@@ -216,7 +216,7 @@ function PricingMainContent() {
               {pricingPlans.map((plan) => (
                 <div
                   key={plan.id}
-                  className={`relative bg-card border rounded-lg p-6 ${
+                  className={`app-surface-card rounded-2xl p-6 ${
                     plan.isPopular
                       ? 'border-primary shadow-lg shadow-primary/20'
                       : 'border-border hover:border-primary/50'
@@ -292,7 +292,7 @@ function PricingMainContent() {
               {creditPacks.map((pack) => (
                 <div
                   key={pack.id}
-                  className={`relative bg-card border rounded-lg p-6 ${
+                  className={`app-surface-card rounded-2xl p-6 ${
                     pack.isPopular
                       ? 'border-primary shadow-lg shadow-primary/20'
                       : 'border-border hover:border-primary/50'
@@ -307,7 +307,7 @@ function PricingMainContent() {
                   )}
 
                   <div className="text-center mb-6">
-                    <div className="w-16 h-16 bg-primary/10 rounded-full flex items-center justify-center mx-auto mb-4">
+                    <div className="app-icon-surface mx-auto mb-4 flex h-16 w-16 items-center justify-center rounded-full">
                       <CreditCard className="w-8 h-8 text-primary" />
                     </div>
                     <h3 className="text-xl font-bold text-foreground mb-2">{pack.name}</h3>
@@ -360,7 +360,7 @@ function PricingMainContent() {
             </h2>
             <div className="space-y-6">
               {pricingFAQs.map((faq, index) => (
-                <div key={index} className="bg-card border border-border rounded-lg p-6">
+                <div key={index} className="app-surface-card rounded-2xl p-6">
                   <h3 className="text-lg font-semibold text-foreground mb-3">
                     {faq.question}
                   </h3>

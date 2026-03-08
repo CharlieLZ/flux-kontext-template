@@ -419,6 +419,51 @@
     transform: translateY(-2px);
   }
 
+  .app-floating-panel {
+    border: 1px solid rgb(var(--border) / 0.72);
+    background: linear-gradient(
+      180deg,
+      rgb(var(--card) / 0.84) 0%,
+      rgb(var(--background) / 0.76) 100%
+    );
+    backdrop-filter: blur(18px);
+    box-shadow:
+      0 20px 44px rgb(0 0 0 / 0.18),
+      inset 0 1px 0 rgb(255 255 255 / 0.04);
+  }
+
+  .app-section-shell {
+    border-top: 1px solid rgb(var(--border) / 0.32);
+    border-bottom: 1px solid rgb(var(--border) / 0.32);
+    background: linear-gradient(
+      180deg,
+      rgb(var(--primary) / 0.05) 0%,
+      rgb(var(--background) / 0.1) 52%,
+      rgb(var(--accent) / 0.04) 100%
+    );
+  }
+
+  .app-icon-surface {
+    border: 1px solid rgb(var(--primary) / 0.2);
+    background: linear-gradient(
+      135deg,
+      rgb(var(--primary) / 0.14) 0%,
+      rgb(var(--accent) / 0.08) 100%
+    );
+    color: rgb(var(--primary) / 0.98);
+    box-shadow: inset 0 1px 0 rgb(255 255 255 / 0.04);
+  }
+
+  .app-icon-surface--accent {
+    border-color: rgb(var(--accent) / 0.2);
+    background: linear-gradient(
+      135deg,
+      rgb(var(--accent) / 0.16) 0%,
+      rgb(var(--primary) / 0.08) 100%
+    );
+    color: rgb(var(--accent-foreground) / 0.98);
+  }
+
   .app-code-surface {
     border: 1px solid rgb(var(--border) / 0.8);
     background: linear-gradient(

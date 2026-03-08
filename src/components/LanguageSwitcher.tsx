@@ -78,7 +78,7 @@ export function LanguageSwitcher({ variant = "dropdown", className = "" }: Langu
       
       {/* 下拉菜单 */}
       {isOpen && (
-        <div className="absolute top-full right-0 mt-2 w-40 bg-background border border-border rounded-lg shadow-lg py-2 z-[9999]">
+        <div className="app-floating-panel absolute top-full right-0 z-[9999] mt-2 w-40 rounded-xl py-2">
           {SUPPORTED_LOCALES.map((locale) => (
             <button
               key={locale}

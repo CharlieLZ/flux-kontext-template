@@ -51,7 +51,7 @@ export function Navigation() {
   }
 
   return (
-    <header className="fixed top-0 left-0 right-0 z-50 bg-background/80 backdrop-blur-sm border-b border-border">
+    <header className="fixed top-0 left-0 right-0 z-50 border-b border-border/60 bg-background/78 backdrop-blur-xl">
       <div className="container mx-auto px-4 h-16 flex items-center">
         {/* 左侧：Logo */}
         <div className="flex-shrink-0">
@@ -82,7 +82,7 @@ export function Navigation() {
                   
                   {/* Resources下拉菜单内容 */}
                   {isResourcesMenuOpen && (
-                    <div className="absolute top-full left-0 mt-2 w-56 bg-background border border-border rounded-lg shadow-lg py-2 z-[9999]">
+                    <div className="app-floating-panel absolute top-full left-0 z-[9999] mt-2 w-56 rounded-xl py-2">
                       {link.subItems?.map((subItem) => (
                         <Link
                           key={subItem.href}
@@ -135,7 +135,7 @@ export function Navigation() {
                     className="w-8 h-8 rounded-full"
                   />
                 ) : (
-                  <div className="w-8 h-8 rounded-full bg-primary/10 flex items-center justify-center">
+                  <div className="app-icon-surface flex h-8 w-8 items-center justify-center rounded-full">
                     <User className="w-4 h-4 text-primary" />
                   </div>
                 )}
@@ -145,7 +145,7 @@ export function Navigation() {
               
               {/* 用户下拉菜单 */}
               {isUserMenuOpen && (
-                <div className="absolute top-full right-0 mt-2 w-48 bg-background border border-border rounded-lg shadow-lg py-2 z-[9999]">
+                <div className="app-floating-panel absolute top-full right-0 z-[9999] mt-2 w-48 rounded-xl py-2">
                   <Link
                     href="/dashboard"
                     className="block px-4 py-2 text-sm transition-colors hover:bg-accent"
@@ -206,7 +206,7 @@ export function Navigation() {
 
       {/* 移动端菜单 */}
       {isMobileMenuOpen && (
-        <div className="md:hidden bg-background/95 backdrop-blur-sm border-b border-border">
+        <div className="md:hidden border-b border-border/60 bg-background/92 backdrop-blur-xl">
           <div className="container mx-auto px-4 py-4 space-y-4">
             {/* 移动端导航链接 */}
             {navLinks.map((link) => (
@@ -272,7 +272,7 @@ export function Navigation() {
               ) : session ? (
                 // 移动端已登录状态
                 <>
-                  <div className="flex items-center space-x-3 p-3 bg-accent rounded-lg">
+                  <div className="app-floating-panel flex items-center space-x-3 rounded-xl p-3">
                     {session.user?.image ? (
                       <img 
                         src={session.user.image} 
@@ -280,7 +280,7 @@ export function Navigation() {
                         className="w-10 h-10 rounded-full"
                       />
                     ) : (
-                      <div className="w-10 h-10 rounded-full bg-primary/10 flex items-center justify-center">
+                      <div className="app-icon-surface flex h-10 w-10 items-center justify-center rounded-full">
                         <User className="w-5 h-5 text-primary" />
                       </div>
                     )}

@@ -162,7 +162,7 @@ export function ResourcesContent() {
               </Button>
             </Link>
             <Link href="/resources/api" prefetch={true}>
-              <Button variant="outline" size="lg">
+              <Button variant="outline" size="lg" className="border-primary/20 bg-background/60 backdrop-blur-sm">
                 <Code className="w-5 h-5 mr-2" />
                 API Documentation
               </Button>
@@ -172,20 +172,20 @@ export function ResourcesContent() {
       </section>
 
       {/* Featured Resources */}
-      <section className="py-16 px-4 bg-muted/30">
+      <section className="app-section-shell px-4 py-16">
         <div className="container mx-auto max-w-6xl">
           <h2 className="text-3xl md:text-4xl font-bold text-center mb-12">
             Featured Resources
           </h2>
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
             {featuredResources.map((resource, index) => (
-              <div key={index} className="bg-card border rounded-lg overflow-hidden hover:shadow-lg transition-shadow">
-                <div className="aspect-video bg-muted/50 flex items-center justify-center">
+              <div key={index} className="app-surface-card app-surface-card--interactive overflow-hidden rounded-2xl">
+                <div className="aspect-video flex items-center justify-center bg-background/50">
                   <Camera className="w-12 h-12 text-muted-foreground" />
                 </div>
                 <div className="p-6">
                   <div className="flex items-center gap-2 mb-3">
-                    <span className="text-xs bg-primary/10 text-primary px-2 py-1 rounded-full">
+                    <span className="app-tint-badge rounded-full px-2 py-1 text-xs">
                       {resource.level}
                     </span>
                     <span className="text-xs text-muted-foreground">
@@ -215,9 +215,9 @@ export function ResourcesContent() {
           </h2>
           <div className="space-y-12">
             {resourceCategories.map((category) => (
-              <div key={category.id} className="bg-card border rounded-lg p-8">
+              <div key={category.id} className="app-surface-card rounded-3xl p-8">
                 <div className="flex items-center mb-6">
-                  <div className="w-12 h-12 bg-primary/10 rounded-lg flex items-center justify-center mr-4">
+                  <div className="app-icon-surface mr-4 flex h-12 w-12 items-center justify-center rounded-xl">
                     <category.icon className="w-6 h-6 text-primary" />
                   </div>
                   <div>
@@ -227,9 +227,9 @@ export function ResourcesContent() {
                 </div>
                 <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
                   {category.resources.map((resource, index) => (
-                    <div key={index} className="bg-background border rounded-lg p-6 hover:shadow-md transition-shadow">
+                    <div key={index} className="app-surface-card app-surface-card--interactive rounded-2xl p-6">
                       <div className="flex items-center justify-between mb-3">
-                        <span className="text-xs bg-secondary text-secondary-foreground px-2 py-1 rounded-full">
+                        <span className="rounded-full bg-secondary px-2 py-1 text-xs text-secondary-foreground">
                           {resource.type}
                         </span>
                         <span className="text-xs text-muted-foreground">
@@ -256,14 +256,14 @@ export function ResourcesContent() {
       </section>
 
       {/* Quick Start Guide */}
-      <section className="py-16 px-4 bg-muted/30">
+      <section className="app-section-shell px-4 py-16">
         <div className="container mx-auto max-w-4xl">
           <h2 className="text-3xl md:text-4xl font-bold text-center mb-12">
             Quick Start Guide
           </h2>
           <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
             <div className="text-center">
-              <div className="w-16 h-16 bg-primary/10 rounded-full flex items-center justify-center mx-auto mb-4">
+              <div className="app-icon-surface mx-auto mb-4 flex h-16 w-16 items-center justify-center rounded-full">
                 <span className="text-2xl font-bold text-primary">1</span>
               </div>
               <h3 className="font-semibold mb-2">Sign Up</h3>
@@ -272,7 +272,7 @@ export function ResourcesContent() {
               </p>
             </div>
             <div className="text-center">
-              <div className="w-16 h-16 bg-primary/10 rounded-full flex items-center justify-center mx-auto mb-4">
+              <div className="app-icon-surface mx-auto mb-4 flex h-16 w-16 items-center justify-center rounded-full">
                 <span className="text-2xl font-bold text-primary">2</span>
               </div>
               <h3 className="font-semibold mb-2">Learn Basics</h3>
@@ -281,7 +281,7 @@ export function ResourcesContent() {
               </p>
             </div>
             <div className="text-center">
-              <div className="w-16 h-16 bg-primary/10 rounded-full flex items-center justify-center mx-auto mb-4">
+              <div className="app-icon-surface mx-auto mb-4 flex h-16 w-16 items-center justify-center rounded-full">
                 <span className="text-2xl font-bold text-primary">3</span>
               </div>
               <h3 className="font-semibold mb-2">Start Creating</h3>
@@ -290,7 +290,7 @@ export function ResourcesContent() {
               </p>
             </div>
             <div className="text-center">
-              <div className="w-16 h-16 bg-primary/10 rounded-full flex items-center justify-center mx-auto mb-4">
+              <div className="app-icon-surface mx-auto mb-4 flex h-16 w-16 items-center justify-center rounded-full">
                 <span className="text-2xl font-bold text-primary">4</span>
               </div>
               <h3 className="font-semibold mb-2">Join Community</h3>
@@ -314,7 +314,7 @@ export function ResourcesContent() {
             </p>
           </div>
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-            <div className="text-center p-6 bg-card border rounded-lg">
+            <div className="app-surface-card app-surface-card--interactive rounded-2xl p-6 text-center">
               <MessageCircle className="w-12 h-12 text-primary mx-auto mb-4" />
               <h3 className="text-xl font-semibold mb-3">Discord Server</h3>
               <p className="text-muted-foreground mb-4">
@@ -325,7 +325,7 @@ export function ResourcesContent() {
                 Join Discord
               </Button>
             </div>
-            <div className="text-center p-6 bg-card border rounded-lg">
+            <div className="app-surface-card app-surface-card--interactive rounded-2xl p-6 text-center">
               <Youtube className="w-12 h-12 text-primary mx-auto mb-4" />
               <h3 className="text-xl font-semibold mb-3">YouTube Channel</h3>
               <p className="text-muted-foreground mb-4">
@@ -336,7 +336,7 @@ export function ResourcesContent() {
                 Subscribe
               </Button>
             </div>
-            <div className="text-center p-6 bg-card border rounded-lg">
+            <div className="app-surface-card app-surface-card--interactive rounded-2xl p-6 text-center">
               <Github className="w-12 h-12 text-primary mx-auto mb-4" />
               <h3 className="text-xl font-semibold mb-3">GitHub</h3>
               <p className="text-muted-foreground mb-4">

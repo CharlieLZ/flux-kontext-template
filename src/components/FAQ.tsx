@@ -49,7 +49,7 @@ const faqItems: FAQItem[] = [
 
 export function FAQ() {
   return (
-    <section className="py-16 px-4 bg-muted/10">
+    <section className="app-section-shell px-4 py-16">
       <div className="container mx-auto max-w-4xl">
         <FAQSchema faqs={home.faq.items} />
         
@@ -67,7 +67,7 @@ export function FAQ() {
             <AccordionItem
               key={`faq-${item.question.slice(0, 20).replace(/\s+/g, '-')}`}
               value={`item-${index}`}
-              className="bg-card border border-border rounded-lg px-6 data-[state=open]:border-primary/50"
+              className="app-surface-card app-surface-card--interactive rounded-2xl px-6 data-[state=open]:border-primary/50"
             >
               <AccordionTrigger className="text-left hover:no-underline hover:text-primary py-6">
                 <span className="text-lg font-semibold">{item.question}</span>

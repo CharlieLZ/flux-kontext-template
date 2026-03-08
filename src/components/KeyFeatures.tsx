@@ -56,15 +56,15 @@ export function KeyFeatures() {
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
           {features.map((feature, index) => (
             <div key={`feature-${feature.title.replace(/\s+/g, '-').toLowerCase()}`} className="group">
-              <div className="bg-card border border-border rounded-lg p-6 h-full hover:border-primary/50 transition-all duration-300 hover:scale-105">
+              <div className="app-surface-card app-surface-card--interactive h-full rounded-2xl p-6">
                 <div className="mb-4">
-                  <div className="w-12 h-12 bg-primary/10 rounded-lg flex items-center justify-center mb-4">
+                  <div className="app-icon-surface mb-4 flex h-12 w-12 items-center justify-center rounded-xl">
                     <img
                       src={feature.icon}
                       alt={`${feature.title} - Flux Kontext AI Feature Icon`}
                       className="w-6 h-6 filter brightness-0 invert opacity-80"
                       style={{
-                        filter: 'brightness(0) saturate(100%) invert(78%) sepia(15%) saturate(684%) hue-rotate(22deg) brightness(96%) contrast(89%)'
+                        filter: 'brightness(0) saturate(100%) invert(54%) sepia(91%) saturate(2046%) hue-rotate(191deg) brightness(101%) contrast(103%)'
                       }}
                       loading="lazy"
                       width="24"

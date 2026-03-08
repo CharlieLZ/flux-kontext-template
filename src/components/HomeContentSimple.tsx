@@ -20,7 +20,7 @@ export function HomeContentSimple({ dictionary }: HomeContentSimpleProps) {
         <div className="container mx-auto max-w-5xl text-center">
           <div className="hero-gradient absolute inset-0 pointer-events-none" />
           <div className="relative z-10">
-            <div className="inline-block px-4 py-2 bg-primary/10 border border-primary/20 rounded-full text-primary text-sm mb-6">
+            <div className="app-tint-badge mb-6 inline-block rounded-full px-4 py-2 text-sm">
               {dictionary.hero.badge}
             </div>
             <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl xl:text-7xl font-bold mb-6 leading-tight">
@@ -48,7 +48,7 @@ export function HomeContentSimple({ dictionary }: HomeContentSimpleProps) {
                 <Button 
                   variant="outline" 
                   size="lg" 
-                  className="hover:scale-105 active:scale-95 transition-all duration-200 px-6 md:px-8 py-3 md:py-4 text-base md:text-lg"
+                  className="border-primary/20 bg-background/60 px-6 py-3 text-base backdrop-blur-sm transition-all duration-200 hover:scale-105 active:scale-95 md:px-8 md:py-4 md:text-lg"
                 >
                   {dictionary.hero.cta.secondary}
                 </Button>
@@ -71,8 +71,8 @@ export function HomeContentSimple({ dictionary }: HomeContentSimpleProps) {
           </div>
           <div className="grid md:grid-cols-3 gap-8">
             {dictionary.features.items.map((feature, index) => (
-              <div key={index} className="text-center p-6 rounded-lg border bg-card">
-                <div className="w-12 h-12 bg-primary/10 rounded-lg flex items-center justify-center mx-auto mb-4">
+              <div key={index} className="app-surface-card app-surface-card--interactive rounded-2xl p-6 text-center">
+                <div className="app-icon-surface mx-auto mb-4 flex h-12 w-12 items-center justify-center rounded-xl">
                   <svg className="w-6 h-6 text-primary" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
                     <path d="M12 2L2 7V10C2 16 6 20.5 12 22C18 20.5 22 16 22 10V7L12 2Z" fill="currentColor"/>
                   </svg>
@@ -86,7 +86,7 @@ export function HomeContentSimple({ dictionary }: HomeContentSimpleProps) {
       </section>
 
       {/* FAQ Section */}
-      <section className="py-16 px-4 bg-muted/50">
+      <section className="app-section-shell px-4 py-16">
         <div className="container mx-auto max-w-4xl">
           <div className="text-center mb-12">
             <h2 className="text-3xl md:text-4xl font-bold mb-4">
@@ -98,7 +98,7 @@ export function HomeContentSimple({ dictionary }: HomeContentSimpleProps) {
           </div>
           <div className="space-y-6">
             {dictionary.faq.items.map((item, index) => (
-              <div key={index} className="bg-background rounded-lg p-6 border">
+              <div key={index} className="app-surface-card rounded-2xl p-6">
                 <h3 className="text-lg font-semibold mb-2">{item.question}</h3>
                 <p className="text-muted-foreground">{item.answer}</p>
               </div>
@@ -109,21 +109,23 @@ export function HomeContentSimple({ dictionary }: HomeContentSimpleProps) {
 
       {/* CTA Section */}
       <section className="py-16 px-4">
-        <div className="container mx-auto max-w-4xl text-center">
-          <h2 className="text-3xl md:text-4xl font-bold mb-4">
-            {dictionary.cta.title}
-          </h2>
-          <p className="text-lg text-muted-foreground mb-8">
-            {dictionary.cta.subtitle}
-          </p>
-          <Link href="/generate">
-            <Button 
-              size="lg" 
-              className="bg-primary text-primary-foreground hover:bg-primary/90 hover:scale-105 active:scale-95 transition-all duration-200 px-8 py-4 text-lg"
-            >
-              {dictionary.cta.button}
-            </Button>
-          </Link>
+        <div className="container mx-auto max-w-4xl">
+          <div className="app-cta-panel rounded-3xl px-6 py-12 text-center md:px-10">
+            <h2 className="mb-4 text-3xl font-bold md:text-4xl">
+              {dictionary.cta.title}
+            </h2>
+            <p className="mb-8 text-lg text-muted-foreground">
+              {dictionary.cta.subtitle}
+            </p>
+            <Link href="/generate">
+              <Button 
+                size="lg" 
+                className="bg-primary px-8 py-4 text-lg text-primary-foreground transition-all duration-200 hover:scale-105 hover:bg-primary/90 active:scale-95"
+              >
+                {dictionary.cta.button}
+              </Button>
+            </Link>
+          </div>
         </div>
       </section>
 
