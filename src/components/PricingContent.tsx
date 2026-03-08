@@ -246,7 +246,7 @@ function PricingMainContent() {
                   <div className="space-y-3 mb-6">
                     {plan.features.map((feature, index) => (
                       <div key={`${plan.id}-feature-${index}`} className="flex items-center space-x-3">
-                        <Check className="h-4 w-4 text-[hsl(var(--success))] flex-shrink-0" />
+                        <Check className="h-4 w-4 text-success flex-shrink-0" />
                         <span className="text-sm text-muted-foreground">{feature}</span>
                       </div>
                     ))}
@@ -323,7 +323,7 @@ function PricingMainContent() {
                   <div className="space-y-3 mb-6">
                     {pack.features.map((feature, index) => (
                       <div key={`${pack.id}-feature-${index}`} className="flex items-center space-x-3">
-                        <Check className="h-4 w-4 text-[hsl(var(--success))] flex-shrink-0" />
+                        <Check className="h-4 w-4 text-success flex-shrink-0" />
                         <span className="text-sm text-muted-foreground">{feature}</span>
                       </div>
                     ))}

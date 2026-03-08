@@ -192,8 +192,8 @@ export function UsageLimit({ current, limit, period, userType }: UsageLimitProps
           <div 
             className={`h-2 rounded-full transition-all ${
               isOverLimit ? 'bg-destructive' : 
-              isNearLimit ? 'bg-[hsl(var(--warning))]' : 
-              'bg-[hsl(var(--success))]'
+              isNearLimit ? 'bg-warning' : 
+              'bg-success'
             }`}
             style={{ width: `${Math.min(percentage, 100)}%` }}
           />
@@ -207,7 +207,7 @@ export function UsageLimit({ current, limit, period, userType }: UsageLimitProps
       )}
       
       {isNearLimit && !isOverLimit && (
-        <div className="mb-2 text-sm text-[hsl(var(--warning))]">
+        <div className="mb-2 text-sm text-warning">
           即将达到使用限制，建议升级账户
         </div>
       )}

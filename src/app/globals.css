@@ -732,7 +732,7 @@
   }
 
   .generator-range {
-    accent-color: hsl(var(--accent));
+    accent-color: rgb(var(--accent));
   }
 
   .generator-chip {

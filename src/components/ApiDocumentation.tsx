@@ -326,7 +326,7 @@ export function ApiDocumentation() {
                     </p>
                   </div>
                   <div className="text-right">
-                    <div className="text-sm font-medium text-[hsl(var(--success))]">
+                    <div className="text-sm font-medium text-success">
                       {endpoint.pricing}
                     </div>
                   </div>
@@ -477,13 +477,13 @@ export function ApiDocumentation() {
                   <tbody>
                     <tr className="border-t border-border">
                       <td className="p-4 font-medium">Flux Kontext Pro</td>
-                      <td className="p-4 font-mono font-medium text-[hsl(var(--success))]">$0.05</td>
+                      <td className="p-4 font-mono font-medium text-success">$0.05</td>
                       <td className="p-4">High Quality</td>
                       <td className="p-4 text-muted-foreground">General purpose, fast generation</td>
                     </tr>
                     <tr className="border-t border-border">
                       <td className="p-4 font-medium">Flux Kontext Max</td>
-                      <td className="p-4 font-mono font-medium text-[hsl(var(--success))]">$0.08</td>
+                      <td className="p-4 font-mono font-medium text-success">$0.08</td>
                       <td className="p-4">Ultra High Quality</td>
                       <td className="p-4 text-muted-foreground">Professional, detailed images</td>
                     </tr>
