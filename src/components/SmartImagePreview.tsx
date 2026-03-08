@@ -11,58 +11,48 @@ interface SmartImagePreviewProps {
   onRemove: () => void
 }
 
+function getUrlType(url: string): 'blob' | 'http' | 'data' | 'unknown' {
+  if (url.startsWith('blob:')) return 'blob'
+  if (url.startsWith('http://') || url.startsWith('https://')) return 'http'
+  if (url.startsWith('data:')) return 'data'
+  return 'unknown'
+}
+
+function generateFallbackUrls(originalUrl: string): string[] {
+  const urls = [originalUrl]
+  const urlType = getUrlType(originalUrl)
+
+  if (urlType === 'blob' || urlType === 'data') {
+    return urls
+  }
+
+  if (originalUrl.includes('r2.dev')) {
+    const urlParts = originalUrl.split('/')
+    const fileName = urlParts.slice(-2).join('/')
+    const accountIdMatch = originalUrl.match(/pub-([a-f0-9]+)\.r2\.dev/)
+
+    if (accountIdMatch) {
+      const accountId = accountIdMatch[1]
+      urls.push(`https://pub-${accountId.replace(/(.{8})(.{4})(.{4})(.{4})(.{12})/, '$1-$2-$3-$4-$5')}.r2.dev/${fileName}`)
+      if (process.env.R2_BUCKET_NAME) {
+        urls.push(`https://${process.env.R2_BUCKET_NAME}.${accountId}.r2.cloudflarestorage.com/${fileName}`)
+      }
+    }
+  }
+
+  if (originalUrl.includes('fal.media') || originalUrl.includes('fal.ai')) {
+    urls.push(originalUrl.replace('fal.media', 'storage.fal.ai'))
+    urls.push(originalUrl.replace('storage.fal.ai', 'fal.media'))
+  }
+
+  return [...new Set(urls)]
+}
+
 export function SmartImagePreview({ url, alt, index, onRemove }: SmartImagePreviewProps) {
   const [currentUrl, setCurrentUrl] = useState(url)
   const [isLoading, setIsLoading] = useState(true)
   const [hasError, setHasError] = useState(false)
   const [retryCount, setRetryCount] = useState(0)
-
-  // 🔧 检查URL类型
-  const getUrlType = (url: string): 'blob' | 'http' | 'data' | 'unknown' => {
-    if (url.startsWith('blob:')) return 'blob'
-    if (url.startsWith('http://') || url.startsWith('https://')) return 'http'
-    if (url.startsWith('data:')) return 'data'
-    return 'unknown'
-  }
-
-  // 生成备用URL列表
-  const generateFallbackUrls = (originalUrl: string): string[] => {
-    const urls = [originalUrl]
-    const urlType = getUrlType(originalUrl)
-    
-    // 🔧 对于blob URL，不生成备用URL，因为它们是本地的
-    if (urlType === 'blob' || urlType === 'data') {
-      return urls
-    }
-    
-    // 如果是R2 URL，尝试不同的格式
-    if (originalUrl.includes('r2.dev')) {
-      // 提取文件路径
-      const urlParts = originalUrl.split('/')
-      const fileName = urlParts.slice(-2).join('/') // 保留目录结构
-      
-      // 尝试不同的R2 URL格式
-      const accountIdMatch = originalUrl.match(/pub-([a-f0-9]+)\.r2\.dev/)
-      if (accountIdMatch) {
-        const accountId = accountIdMatch[1]
-        // 添加带连字符的格式
-        urls.push(`https://pub-${accountId.replace(/(.{8})(.{4})(.{4})(.{4})(.{12})/, '$1-$2-$3-$4-$5')}.r2.dev/${fileName}`)
-        // 添加直接访问格式（如果有bucket名称）
-        if (process.env.R2_BUCKET_NAME) {
-          urls.push(`https://${process.env.R2_BUCKET_NAME}.${accountId}.r2.cloudflarestorage.com/${fileName}`)
-        }
-      }
-    }
-    
-    // 🔧 对于FAL URL，添加备用格式
-    if (originalUrl.includes('fal.media') || originalUrl.includes('fal.ai')) {
-      // FAL URL通常比较稳定，但可以尝试不同的子域名
-      urls.push(originalUrl.replace('fal.media', 'storage.fal.ai'))
-      urls.push(originalUrl.replace('storage.fal.ai', 'fal.media'))
-    }
-    
-    return [...new Set(urls)] // 去重
-  }
 
   const handleImageError = useCallback(async () => {
     const urlType = getUrlType(currentUrl)
@@ -105,7 +95,6 @@ export function SmartImagePreview({ url, alt, index, onRemove }: SmartImagePrevi
   // 🔧 当URL改变时重置状态
   useEffect(() => {
     console.log(`🔄 URL changed for image ${index + 1}:`, {
-      oldUrl: currentUrl.substring(0, 50) + '...',
       newUrl: url.substring(0, 50) + '...'
     })
     setCurrentUrl(url)
@@ -145,7 +134,7 @@ export function SmartImagePreview({ url, alt, index, onRemove }: SmartImagePrevi
       }
       img.src = currentUrl
     }
-  }, [currentUrl, index])
+  }, [currentUrl, index, handleImageError])
 
   // 🔧 检查blob URL是否仍然有效
   useEffect(() => {

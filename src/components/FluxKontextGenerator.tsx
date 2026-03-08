@@ -37,6 +37,18 @@ import {
 import Image from "next/image"
 import { useSession } from "next-auth/react"
 import { useRouter } from "next/navigation"
+import {
+  buildContextModels,
+  getActionForModel,
+  getEstimatedGenerationTime,
+  getRecommendedModelValue,
+} from "@/components/flux-kontext/model-config"
+import type {
+  FluxKontextAction,
+  GeneratedImage,
+  GenerationRequest,
+  GeneratorModelValue,
+} from "@/components/flux-kontext/types"
 // İģ
 import { generator, common } from "@/lib/content"
 
@@ -51,42 +63,6 @@ import {
   hasFeature,
   needsUpgrade
 } from "@/lib/user-tiers"
-
-// Fx KontextĲ
-type FluxKontextAction = 
-  | 'text-to-image-pro'
-  | 'text-to-image-max'
-  | 'text-to-image-schnell'
-  | 'text-to-image-dev'
-  | 'text-to-image-realism'
-  | 'text-to-image-anime'
-  | 'edit-image-pro'
-  | 'edit-image-max'
-  | 'edit-multi-image-pro'
-  | 'edit-multi-image-max'
-
-interface GeneratedImage {
-  url: string
-  width?: number
-  height?: number
-  prompt: string
-  action: FluxKontextAction
-  timestamp: number
-}
-
-interface GenerationRequest {
-  action: FluxKontextAction
-  prompt: string
-  image_url?: string
-  image_urls?: string[]
-  aspect_ratio?: string
-  guidance_scale?: number
-  num_images?: number
-  safety_tolerance?: string
-  output_format?: string
-  seed?: number
-  turnstile_token?: string
-}
 
 export function FluxKontextGenerator() {
   const router = useRouter()
@@ -111,7 +87,7 @@ export function FluxKontextGenerator() {
 
   // 文本生成图像状态
   const [textPrompt, setTextPrompt] = useState("")
-  const [selectedModel, setSelectedModel] = useState<'pro' | 'max' | 'schnell' | 'dev' | 'realism' | 'anime'>('pro')
+  const [selectedModel, setSelectedModel] = useState<GeneratorModelValue>('pro')
   const [aspectRatio, setAspectRatio] = useState("1:1")
   const [guidanceScale, setGuidanceScale] = useState(3.5)
   const [numImages, setNumImages] = useState(1)
@@ -225,7 +201,7 @@ export function FluxKontextGenerator() {
         session: !!session
       })
     }
-  }, [userType]) // ?? 仅依赖userType
+  }, [availableModels.length, session, userLimits.maxImages, userType]) // ?? 仅依赖用户态摘要
 
   // ?? 删除重复请求的useEffect
   // useEffect(() => {
@@ -257,7 +233,7 @@ export function FluxKontextGenerator() {
         uploadedFilesCount: uploadedFiles.length
       })
     }
-  }, [userType, userLimits.maxImages, imageCountOptions.length, aspectRatioOptions.length, availableModels.length, session?.user?.email, uploadedImages.length, uploadedFiles.length]) // ?? 仅依赖用户类型和图像变化
+  }, [userType, userLimits.maxImages, imageCountOptions.length, aspectRatioOptions.length, availableModels.length, session, uploadedImages.length, uploadedFiles.length]) // ?? 仅依赖用户类型和图像变化
 
   // 全量选择 - 使用generator模型
   const safetyOptions = [
@@ -914,30 +890,7 @@ export function FluxKontextGenerator() {
         }
       })
 
-      // 🔧 倒计时逻辑 - 根据不同模型预估时间
-      const getEstimatedTime = (action: FluxKontextAction) => {
-        switch (action) {
-          case 'text-to-image-schnell':
-            return 7 // Schnell模型较快 (3+4秒缓冲)
-          case 'text-to-image-pro':
-          case 'edit-image-pro':
-          case 'edit-multi-image-pro':
-            return 10 // Pro模型中等速度 (6+4秒缓冲)
-          case 'text-to-image-max':
-          case 'edit-image-max':
-          case 'edit-multi-image-max':
-            return 14 // Max模型较慢 (10+4秒缓冲)
-          case 'text-to-image-dev':
-            return 12 // Dev模型中等偏慢 (8+4秒缓冲)
-          case 'text-to-image-realism':
-          case 'text-to-image-anime':
-            return 16 // LoRA模型需要更多时间 (12+4秒缓冲)
-          default:
-            return 10 // 默认10秒+4秒缓冲
-        }
-      }
-      
-      const currentEstimatedTime = getEstimatedTime(request.action)
+      const currentEstimatedTime = getEstimatedGenerationTime(request.action)
       setCountdown(currentEstimatedTime)
       
       console.log(`⏱️ 预估生成时间: ${currentEstimatedTime}秒`)
@@ -1379,7 +1332,7 @@ export function FluxKontextGenerator() {
       }
       console.log('🏁 图像生成流程结束')
     }
-  }, [validateTurnstile, checkTurnstileRequired, turnstileToken, batchGenerate, userType, userLimits.maxImages, userLimits.requiresTurnstile, retryCount])
+  }, [validateTurnstile, checkTurnstileRequired, turnstileToken, isTurnstileVerified, batchGenerate, userType, userLimits.maxImages, retryCount])
 
   // 🔧 处理重试
   const handleRetry = useCallback(async () => {
@@ -1387,51 +1340,6 @@ export function FluxKontextGenerator() {
       await generateImage(lastRequest)
     }
   }, [lastRequest, generateImage])
-
-  // ?? ����ģ�͵�API������ӳ��
-  const getActionForModel = useCallback((model: string, hasImages: boolean, isMultiImage: boolean): FluxKontextAction => {
-    if (hasImages) {
-      // ͼ��ͼģʽ
-      if (isMultiImage) {
-        // ��ͼ�༭
-        switch (model) {
-          case 'max':
-          case 'max-multi':
-            return 'edit-multi-image-max'
-          case 'pro':
-          default:
-            return 'edit-multi-image-pro'
-        }
-      } else {
-        // ��ͼ�༭
-        switch (model) {
-          case 'max':
-            return 'edit-image-max'
-      case 'pro':
-          default:
-            return 'edit-image-pro'
-        }
-      }
-    } else {
-      // ����ͼģʽ
-      switch (model) {
-      case 'max':
-          return 'text-to-image-max'
-        case 'pro':
-          return 'text-to-image-pro'
-      case 'schnell':
-          return 'text-to-image-schnell'
-      case 'dev':
-          return 'text-to-image-dev'
-      case 'realism':
-          return 'text-to-image-realism'
-      case 'anime':
-          return 'text-to-image-anime'
-      default:
-          return 'text-to-image-pro'
-      }
-    }
-  }, [])
 
   // 🔧 处理文本生成图像
   const handleTextToImage = useCallback(async () => {
@@ -1452,7 +1360,7 @@ export function FluxKontextGenerator() {
       output_format: outputFormat,
       seed: seed
     })
-  }, [textPrompt, selectedModel, aspectRatio, guidanceScale, numImages, safetyTolerance, outputFormat, seed, generateImage, getActionForModel])
+  }, [textPrompt, selectedModel, aspectRatio, guidanceScale, numImages, safetyTolerance, outputFormat, seed, generateImage])
 
   // ?? 🔧 处理图像编辑
   const handleImageEdit = useCallback(async () => {
@@ -1506,7 +1414,7 @@ export function FluxKontextGenerator() {
       output_format: outputFormat,
       seed: seed
     })
-  }, [editPrompt, uploadedImages, selectedModel, guidanceScale, numImages, safetyTolerance, outputFormat, seed, generateImage, getActionForModel]) // ?? 🔧 处理图像编辑
+  }, [editPrompt, uploadedImages, selectedModel, guidanceScale, numImages, safetyTolerance, outputFormat, seed, generateImage]) // ?? 🔧 处理图像编辑
 
   // 🔧 移除上传的图像
   const removeUploadedImage = useCallback((index: number) => {
@@ -1646,7 +1554,7 @@ export function FluxKontextGenerator() {
         // 🔧 处理随机种子
       })
     }, 500) // 500msӳȷ״̬
-  }, [selectedModel, guidanceScale, safetyTolerance, outputFormat, generateImage, getActionForModel]) // 🔧 处理图像编辑
+  }, [selectedModel, guidanceScale, safetyTolerance, outputFormat, generateImage]) // 🔧 处理图像编辑
 
   // 🔧 处理图像预览
 
@@ -1669,130 +1577,17 @@ export function FluxKontextGenerator() {
 
   // 🔧 处理模型选择
   const getAvailableModelsForContext = useCallback(() => {
-    const hasImages = uploadedImages.length > 0
-    const isMultiImage = uploadedImages.length > 1
-    
-    if (hasImages) {
-      // ͼ��ͼģʽ
-      const editingModels = [
-        {
-          value: 'pro',
-          label: '⚡ Kontext [pro] -- Editing',
-          description: 'Fast iterative editing, maintains character consistency',
-          credits: 16, // 🔧 ¼ƷѣPROϵ16
-          speed: 'Fast (6-10s)',
-          quality: 'Good',
-          features: ['Character consistency', 'Fast iteration', 'Style preservation'],
-          available: availableModels.includes('pro'),
-          recommended: true // 🔧 PROΪĬƼ
-        },
-        {
-          value: 'max',
-          label: '🚀 Kontext [max] -- Editing',
-          description: 'Maximum performance with improved prompt adherence',
-          credits: 32, // 🔧 ¼ƷѣMAXϵ32
-          speed: 'Slower (10-15s)',
-          quality: 'Excellent',
-          features: ['Best quality', 'Enhanced prompt adherence', 'Typography support'],
-          available: availableModels.includes('max'),
-          recommended: false // 🔧 MAXĬƼ
-        }
-      ]
-      
-      // 🔧 添加多图像编辑选项
-      if (isMultiImage) {
-        editingModels.push({
-          value: 'max-multi',
-          label: '🔥 Kontext [max] -- Multi-Image Editing (Experimental)',
-          description: 'Experimental multi-image editing with character consistency',
-          credits: 48, // 🔧 ͼ༭48֣32+16⣩
-          speed: 'Slow (15-25s)',
-          quality: 'Experimental',
-          features: ['Multi-image support', 'Character consistency', 'Experimental'],
-          available: availableModels.includes('max'),
-          recommended: false
-        })
-      }
-      
-      return editingModels
-    } else {
-      // 🔧 返回文本生成模型
-      return [
-        {
-          value: 'pro',
-          label: '⚡ Kontext [pro] -- Text to Image',
-          description: 'Fast generation with good quality',
-          credits: 16, // 🔧 ¼ƷѣPROϵ16
-          speed: 'Fast (6-10s)',
-          quality: 'Good',
-          features: ['Fast generation', 'Good quality', 'Cost effective'],
-          available: availableModels.includes('pro'),
-          recommended: true // 🔧 PROΪĬƼ
-        },
-        {
-          value: 'max',
-          label: '🚀 Kontext [max] -- Text to Image',
-          description: 'Best quality with enhanced prompt adherence and typography',
-          credits: 32, // 🔧 ¼ƷѣMAXϵ32
-          speed: 'Slower (10-15s)',
-          quality: 'Excellent',
-          features: ['Best quality', 'Typography support', 'Enhanced prompt adherence'],
-          available: availableModels.includes('max'),
-          recommended: false // 🔧 MAXΪĬƼ
-        },
-        {
-          value: 'schnell',
-          label: '⚡ Flux Schnell -- Ultra Fast',
-          description: 'Ultra-fast generation in 1-4 steps',
-          credits: 8,
-          speed: 'Ultra Fast (2-4s)',
-          quality: 'Basic',
-          features: ['Ultra fast', 'Low cost', 'Basic quality'],
-          available: true,
-          recommended: false
-        },
-        {
-          value: 'dev',
-          label: '🔧 Flux Dev -- Development',
-          description: 'Balanced quality and speed for development',
-          credits: 12,
-          speed: 'Medium (5-8s)',
-          quality: 'Good',
-          features: ['Balanced performance', 'Development friendly', 'Good quality'],
-          available: true,
-          recommended: false
-        },
-        {
-          value: 'realism',
-          label: '📸 Flux Realism -- Photorealistic',
-          description: 'Photorealistic image generation with LoRA',
-          credits: 20,
-          speed: 'Medium (8-12s)',
-          quality: 'Excellent',
-          features: ['Photorealistic', 'LoRA enhanced', 'Natural lighting'],
-          available: true,
-          recommended: false
-        },
-        {
-          value: 'anime',
-          label: '🎨 Flux Anime -- Anime Style',
-          description: 'Anime-style generation with LoRA',
-          credits: 20,
-          speed: 'Medium (8-12s)',
-          quality: 'Excellent',
-          features: ['Anime style', 'LoRA enhanced', 'Character design'],
-          available: true,
-          recommended: false
-        }
-      ]
-    }
+    return buildContextModels({
+      availableModels,
+      hasImages: uploadedImages.length > 0,
+      isMultiImage: uploadedImages.length > 1,
+    })
   }, [uploadedImages.length, availableModels])
 
   // 🔧 获取推荐模型
   const getRecommendedModel = useCallback(() => {
     const models = getAvailableModelsForContext()
-    const recommended = models.find(m => m.recommended && m.available)
-    return recommended?.value || models.find(m => m.available)?.value || 'pro'
+    return getRecommendedModelValue(models)
   }, [getAvailableModelsForContext])
 
   // 🔧 处理模型选择变化
@@ -1801,7 +1596,7 @@ export function FluxKontextGenerator() {
     if (recommendedModel !== selectedModel) {
       setSelectedModel(recommendedModel as any)
     }
-  }, [uploadedImages.length]) // 仅在图像变化时触发
+  }, [getRecommendedModel, selectedModel]) // 仅在模型上下文变化时触发
 
   // 🔧 获取当前模型信息
   const getCurrentModelInfo = useCallback(() => {
