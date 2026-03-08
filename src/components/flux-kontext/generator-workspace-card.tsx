@@ -221,8 +221,8 @@ export function GeneratorWorkspaceCard({
                 </div>
               ) : (
                 <div>
-                  <div className="generator-icon-orb mx-auto mb-4 flex h-16 w-16 items-center justify-center bg-[rgba(103,177,199,0.12)]">
-                    <ImageIcon className="h-8 w-8 text-[rgba(191,229,242,0.92)]" />
+                  <div className="generator-icon-orb generator-icon-orb--cool mx-auto mb-4 flex h-16 w-16 items-center justify-center">
+                    <ImageIcon className="generator-icon h-8 w-8" />
                   </div>
                   <p className="generator-copy mb-1 text-sm font-medium">
                     Click, drag & drop, or paste images
@@ -312,8 +312,8 @@ export function GeneratorWorkspaceCard({
 
             {isEditMode ? (
               <div className="generator-note generator-note--info mt-2 text-xs">
-                <div className="flex items-center gap-1">
-                  <Info className="h-3 w-3 text-[rgba(191,229,242,0.92)]" />
+                <div className="generator-status-inline generator-status-inline--info">
+                  <Info className="h-3 w-3" />
                   <span>
                     Image editing may preserve original proportions. Output
                     ratio provides guidance but final size depends on input
@@ -340,7 +340,7 @@ export function GeneratorWorkspaceCard({
                   ref={turnstileRef}
                 >
                   {isTurnstileVerified ? (
-                    <div className="flex items-center gap-2 py-2 text-center text-sm text-[rgba(210,235,221,0.96)]">
+                    <div className="generator-status-inline generator-status-inline--success py-2 text-center text-sm">
                       <Shield className="h-4 w-4" />
                       Verified
                     </div>

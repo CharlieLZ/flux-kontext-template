@@ -146,8 +146,8 @@ export function GeneratorMarketingSections({
                   className="generator-marketing-card p-5 text-left"
                 >
                   <div className="mb-4 flex items-center gap-3">
-                    <div className="generator-icon-orb flex h-12 w-12 items-center justify-center">
-                      <Icon className="h-5 w-5 text-[rgba(245,234,214,0.9)]" />
+                    <div className="generator-icon-orb generator-icon-orb--warm flex h-12 w-12 items-center justify-center">
+                      <Icon className="generator-icon--warm h-5 w-5" />
                     </div>
                     <Badge
                       variant="outline"
@@ -187,8 +187,8 @@ export function GeneratorMarketingSections({
                   key={feature.title}
                   className="generator-marketing-card p-6 text-left"
                 >
-                  <div className="generator-icon-orb mb-4 flex h-12 w-12 items-center justify-center">
-                    <Icon className="h-5 w-5 text-[rgba(111,203,228,0.92)]" />
+                  <div className="generator-icon-orb generator-icon-orb--cool mb-4 flex h-12 w-12 items-center justify-center">
+                    <Icon className="generator-icon h-5 w-5" />
                   </div>
                   <h3 className="generator-heading text-xl font-semibold">
                     {feature.title}
@@ -272,7 +272,7 @@ export function GeneratorMarketingSections({
                   <ul className="mb-6 flex-1 space-y-3">
                     {model.points.map((point) => (
                       <li key={point} className="flex items-start gap-3">
-                        <span className="mt-2 h-2 w-2 rounded-full bg-[rgba(111,203,228,0.8)]" />
+                        <span className="generator-status-dot mt-2" />
                         <span className="generator-copy text-sm">{point}</span>
                       </li>
                     ))}
