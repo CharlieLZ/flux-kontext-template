@@ -5,155 +5,12 @@ import { authOptions } from '@/lib/auth';
 import { consumeCreditsForImageGeneration, checkUserCredits } from '@/lib/services/credits';
 import { prisma } from '@/lib/database';
 import { checkPromptSafety, checkImageSafety } from '@/lib/content-safety/safe-mode';
-
-const verboseLogging =
-  process.env.ENABLE_VERBOSE_LOGS === 'true' &&
-  process.env.NODE_ENV !== 'production';
-
-function verboseLog(message: string, payload?: unknown) {
-  if (!verboseLogging) {
-    return;
-  }
-
-  if (typeof payload === 'undefined') {
-    console.log(message);
-    return;
-  }
-
-  console.log(message, payload);
-}
-
-// Turnstile验证函数 - 优化版本
-async function verifyTurnstileToken(token: string, clientIP: string): Promise<boolean> {
-  const secretKey = process.env.TURNSTILE_SECRET_KEY;
-  if (!secretKey) {
-    console.error("❌ Turnstile secret key not configured");
-    return false;
-  }
-
-  verboseLog('🔑 Starting Turnstile token verification');
-
-  // 添加重试机制和更宽松的验证
-  const maxRetries = 3; // 增加重试次数
-  let lastError: any = null;
-
-  for (let attempt = 1; attempt <= maxRetries; attempt++) {
-    try {
-      const formData = new FormData();
-      formData.append("secret", secretKey);
-      formData.append("response", token);
-      
-      // 只有在IP不是unknown时才添加
-      if (clientIP && clientIP !== "unknown" && clientIP !== "127.0.0.1") {
-        formData.append("remoteip", clientIP);
-        verboseLog(`🌐 Adding client IP to Turnstile verification (attempt ${attempt}/${maxRetries})`);
-      } else {
-        verboseLog(`🌐 Skipping IP verification (attempt ${attempt}/${maxRetries})`);
-      }
-
-      console.log(`🚀 Sending Turnstile verification request... (attempt ${attempt}/${maxRetries})`);
-      const verifyResponse = await fetch(
-        "https://challenges.cloudflare.com/turnstile/v0/siteverify",
-        {
-          method: "POST",
-          body: formData,
-          headers: {
-            'User-Agent': 'FluxKontext/1.0'
-          },
-          // 增加超时时间
-          signal: AbortSignal.timeout(15000) // 15秒超时
-        }
-      );
-
-      if (!verifyResponse.ok) {
-        const errorMsg = `❌ Turnstile API response error: ${verifyResponse.status} ${verifyResponse.statusText}`;
-        console.error(errorMsg);
-        lastError = new Error(errorMsg);
-        
-        // 如果是服务器错误，尝试重试
-        if (verifyResponse.status >= 500 && attempt < maxRetries) {
-          console.log(`⏳ Server error, retrying after ${2000 * attempt}ms...`);
-          await new Promise(resolve => setTimeout(resolve, 2000 * attempt));
-          continue;
-        }
-        
-        // 如果是客户端错误，可能是token问题，但仍然重试一次
-        if (verifyResponse.status >= 400 && verifyResponse.status < 500 && attempt < maxRetries) {
-          console.log(`⏳ Client error, retrying after ${1000 * attempt}ms...`);
-          await new Promise(resolve => setTimeout(resolve, 1000 * attempt));
-          continue;
-        }
-        
-        return false;
-      }
-
-      const result = await verifyResponse.json();
-      console.log(`📋 Turnstile verification response (attempt ${attempt}):`, {
-        success: result.success,
-        'error-codes': result['error-codes'],
-        challenge_ts: result.challenge_ts,
-        hostname: result.hostname,
-        action: result.action
-      });
-
-      // 成功验证
-      if (result.success === true) {
-        console.log(`✅ Turnstile verification successful (attempt ${attempt})`);
-        return true;
-      }
-
-      // 处理验证失败
-      if (result['error-codes']) {
-        const errorCodes = result['error-codes'];
-        console.warn(`⚠️ Turnstile verification failed, error codes:`, errorCodes);
-        
-        // 检查是否是可重试的错误
-        const retryableErrors = [
-          'timeout-or-duplicate', 
-          'internal-error',
-          'invalid-input-response', // 有时token格式问题可以重试
-          'bad-request'
-        ];
-        const hasRetryableError = errorCodes.some((code: string) => retryableErrors.includes(code));
-        
-        // 特殊处理：如果是hostname不匹配但其他都正常，可能是开发环境问题
-        const hasHostnameError = errorCodes.includes('hostname-mismatch');
-        const isDevelopment = process.env.NODE_ENV === 'development';
-        
-        if (hasHostnameError && isDevelopment) {
-          console.log(`🔧 Development environment detected hostname mismatch, but allowing pass`);
-          return true;
-        }
-        
-        if (hasRetryableError && attempt < maxRetries) {
-          console.log(`⏳ Detected retryable error, retrying after ${2000 * attempt}ms...`);
-          await new Promise(resolve => setTimeout(resolve, 2000 * attempt));
-          continue;
-        }
-        
-        // 记录具体的错误信息
-        lastError = new Error(`Turnstile verification failed: ${errorCodes.join(', ')}`);
-      }
-
-      // 如果到这里说明验证失败且不可重试
-      break;
-
-    } catch (error) {
-      console.error(`❌ Turnstile verification network error (attempt ${attempt}):`, error);
-      lastError = error;
-      
-      // 如果不是最后一次尝试，等待后重试
-      if (attempt < maxRetries) {
-        console.log(`⏳ Network error, retrying after ${2000 * attempt}ms...`);
-        await new Promise(resolve => setTimeout(resolve, 2000 * attempt));
-        continue;
-      }
-    }
-  }
-
-  console.error(`❌ Turnstile verification final failure, attempted ${maxRetries} times:`, lastError);
-  return false;
-}
+import {
+  getClientIpFromHeaders,
+  getRequiredCredits,
+  verifyTurnstileToken,
+  verboseLog,
+} from '@/lib/flux-kontext-request';
 
 export async function POST(request: NextRequest) {
   const startTime = Date.now();
@@ -248,39 +105,6 @@ export async function POST(request: NextRequest) {
         console.log('ℹ️ Content safety check disabled, relying on FAL API basic filtering');
       }
 
-      // 💰 检查积分余额 - 🔧 根据操作类型计算所需积分
-      const getRequiredCredits = (action: string): number => {
-        switch (action) {
-          // PRO系列：15积分
-          case 'text-to-image-pro':
-          case 'edit-image-pro':
-          case 'edit-multi-image-pro':
-            return 15
-          
-          // MAX系列：30积分
-          case 'text-to-image-max':
-          case 'edit-image-max':
-            return 30
-          
-          // 多图编辑MAX：45积分（30基础+15额外）
-          case 'edit-multi-image-max':
-            return 45
-          
-          // 其他模型
-          case 'text-to-image-schnell':
-            return 8
-          case 'text-to-image-dev':
-            return 12
-          case 'text-to-image-realism':
-          case 'text-to-image-anime':
-            return 20
-          
-          // 默认PRO积分
-          default:
-            return 15
-        }
-      }
-
       const requiredCredits = getRequiredCredits(body.action)
       console.log(`💰 Action ${body.action} requires ${requiredCredits} credits`)
       
@@ -340,11 +164,7 @@ export async function POST(request: NextRequest) {
             );
           }
 
-          // 获取客户端IP地址
-          const clientIP = request.headers.get("cf-connecting-ip") || 
-                          request.headers.get("x-forwarded-for") || 
-                          request.headers.get("x-real-ip") || 
-                          "unknown";
+          const clientIP = getClientIpFromHeaders(request.headers)
 
           verboseLog(`🌐 Turnstile verification IP detected: ${clientIP !== 'unknown'}`);
 
@@ -661,7 +481,7 @@ export async function POST(request: NextRequest) {
         console.log(`✅ FAL API调用成功: ${result.images.length} 张图像生成完成`);
         
         // 🔧 详细检查生成的图片信息
-        if (verboseLogging) {
+        if (process.env.ENABLE_VERBOSE_LOGS === 'true' && process.env.NODE_ENV !== 'production') {
           result.images.forEach((img: any, index: number) => {
             console.log(`🖼️ 图像 ${index + 1} 详情:`, {
               hasUrl: !!img.url,
