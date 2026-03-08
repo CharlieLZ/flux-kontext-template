@@ -42,11 +42,12 @@ export function GoogleOneTapTrigger() {
       <button 
         onClick={handleManualTrigger}
         disabled={isTriggering}
-        className="w-12 h-12 bg-white border border-gray-300 rounded-full shadow-lg hover:shadow-xl transition-all duration-200 flex items-center justify-center disabled:opacity-50 hover:scale-105 active:scale-95"
+        className="flex h-12 w-12 items-center justify-center rounded-full border border-border/80 bg-card/95 text-foreground shadow-lg backdrop-blur-md transition-all duration-200 hover:scale-105 hover:border-primary/30 hover:shadow-xl active:scale-95 disabled:opacity-50"
         title="Quick Google Sign In"
+        aria-label="Quick Google Sign In"
       >
         {isTriggering ? (
-          <div className="w-5 h-5 border-2 border-blue-600 border-t-transparent rounded-full animate-spin"></div>
+          <div className="h-5 w-5 animate-spin rounded-full border-2 border-primary border-t-transparent"></div>
         ) : (
           <svg className="w-6 h-6" viewBox="0 0 24 24">
             <path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/>

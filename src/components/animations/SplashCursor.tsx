@@ -19,16 +19,20 @@ export function SplashCursor() {
   const animationRef = useRef<number>()
 
   useEffect(() => {
-    // 颜色数组 - 更丰富的渐变色彩
+    const theme = getComputedStyle(document.documentElement)
+    const token = (name: string, fallback: string, alpha = 0.9) => {
+      const value = theme.getPropertyValue(name).trim()
+      const rgbTriplet = value || fallback
+      return `rgba(${rgbTriplet.replace(/\s+/g, ", ")}, ${alpha})`
+    }
     const colors = [
-      '#8b5cf6', // 紫色
-      '#06b6d4', // 青色
-      '#10b981', // 绿色
-      '#f59e0b', // 橙色
-      '#ef4444', // 红色
-      '#ec4899', // 粉色
-      '#6366f1', // 靛蓝
+      token('--primary', '10 132 255', 0.92),
+      token('--accent', '94 211 255', 0.88),
+      token('--success', '52 199 89', 0.84),
+      token('--warning', '255 159 10', 0.82),
+      token('--destructive', '255 69 58', 0.8),
     ]
+    const trailFill = token('--background', '9 13 18', 0.05)
     const canvas = canvasRef.current
     if (!canvas) return
 
@@ -81,7 +85,7 @@ export function SplashCursor() {
     // 动画循环
     const animate = () => {
       // 半透明清除，创建拖尾效果
-      ctx.fillStyle = 'rgba(0, 0, 0, 0.05)'
+      ctx.fillStyle = trailFill
       ctx.fillRect(0, 0, canvas.width, canvas.height)
       
       // 更新和绘制粒子
