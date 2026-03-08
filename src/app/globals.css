@@ -4,25 +4,25 @@
 
 @layer base {
   :root {
-    --background: 11 16 19; /* #0b1013 */
-    --foreground: 250 250 250; /* #fafafa */
-    --card: 11 16 19;
-    --card-foreground: 250 250 250;
-    --popover: 11 16 19;
-    --popover-foreground: 250 250 250;
-    --primary: 204 175 133; /* #ccaf85 - orange accent */
-    --primary-foreground: 11 16 19;
-    --secondary: 53 61 81; /* #353d51 */
-    --secondary-foreground: 250 250 250;
-    --muted: 52 48 46; /* #34302e */
-    --muted-foreground: 161 161 170;
-    --accent: 78 154 203; /* #4e9acb - blue accent */
-    --accent-foreground: 11 16 19;
-    --destructive: 193 43 51; /* #c12b33 */
-    --destructive-foreground: 250 250 250;
-    --border: 39 39 42;
-    --input: 39 39 42;
-    --ring: 204 175 133;
+    --background: 9 13 18;
+    --foreground: 245 247 250;
+    --card: 12 17 23;
+    --card-foreground: 245 247 250;
+    --popover: 12 17 23;
+    --popover-foreground: 245 247 250;
+    --primary: 10 132 255;
+    --primary-foreground: 245 247 250;
+    --secondary: 44 52 66;
+    --secondary-foreground: 245 247 250;
+    --muted: 26 32 40;
+    --muted-foreground: 152 163 178;
+    --accent: 94 211 255;
+    --accent-foreground: 9 13 18;
+    --destructive: 255 69 58;
+    --destructive-foreground: 245 247 250;
+    --border: 52 63 78;
+    --input: 52 63 78;
+    --ring: 10 132 255;
     --radius: 0.5rem;
   }
 }
@@ -33,7 +33,7 @@
   }
   body {
     @apply bg-background text-foreground font-sans;
-    background: linear-gradient(180deg, #0b1013 0%, #000 100%);
+    background: linear-gradient(180deg, rgb(9 13 18) 0%, rgb(0 0 0) 100%);
     min-height: 100vh;
   }
 
@@ -42,11 +42,11 @@
   }
 
   .gradient-text {
-    @apply bg-gradient-to-r from-primary via-yellow-400 to-accent bg-clip-text text-transparent;
+    @apply bg-gradient-to-r from-primary via-sky-300 to-accent bg-clip-text text-transparent;
     background-size: 200% 200%;
     animation: gradient-shift 4s ease-in-out infinite;
     font-weight: 700;
-    text-shadow: 0 0 30px rgba(139, 92, 246, 0.3);
+    text-shadow: 0 0 30px rgb(10 132 255 / 0.26);
     filter: brightness(1.2) contrast(1.1);
   }
 
@@ -58,7 +58,11 @@
   }
 
   .hero-gradient {
-    background: radial-gradient(ellipse at center, rgba(204, 175, 133, 0.1) 0%, rgba(11, 16, 19, 0.8) 70%);
+    background: radial-gradient(
+      ellipse at center,
+      rgb(10 132 255 / 0.12) 0%,
+      rgb(9 13 18 / 0.82) 70%
+    );
   }
 
   /* Hide scrollbars */
@@ -88,21 +92,21 @@
   .twitter-content blockquote.twitter-tweet:not(.twitter-tweet-rendered) {
     margin: 0;
     padding: 16px;
-    border-left: 4px solid #1da1f2;
-    background: rgba(29, 161, 242, 0.1);
+    border-left: 4px solid rgb(10 132 255);
+    background: rgb(10 132 255 / 0.1);
     border-radius: 8px;
     font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
   }
 
   .twitter-content blockquote.twitter-tweet:not(.twitter-tweet-rendered) p {
     margin: 0 0 8px 0;
-    color: #ffffff;
+    color: rgb(255 255 255);
     line-height: 1.4;
     font-size: 14px;
   }
 
   .twitter-content blockquote.twitter-tweet:not(.twitter-tweet-rendered) a {
-    color: #1da1f2;
+    color: rgb(94 211 255);
     text-decoration: none;
   }
 
@@ -119,7 +123,11 @@
   /* Mobile optimizations */
   @media (max-width: 768px) {
     .hero-gradient {
-      background: radial-gradient(ellipse at center, rgba(204, 175, 133, 0.05) 0%, rgba(11, 16, 19, 0.9) 50%);
+      background: radial-gradient(
+        ellipse at center,
+        rgb(10 132 255 / 0.08) 0%,
+        rgb(9 13 18 / 0.92) 50%
+      );
     }
   }
 
@@ -286,12 +294,12 @@
     overflow: hidden;
     transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
     backdrop-filter: blur(10px);
-    border: 1px solid rgba(255, 255, 255, 0.1);
+    border: 1px solid rgb(255 255 255 / 0.1);
   }
 
   .btn-feedback:hover {
     transform: translateY(-2px);
-    box-shadow: 0 12px 35px rgba(0, 0, 0, 0.2);
+    box-shadow: 0 12px 35px rgb(0 0 0 / 0.2);
   }
 
   .btn-feedback:active {
@@ -300,23 +308,27 @@
 
   /* 增强主要按钮的效果 */
   .btn-feedback.btn-primary {
-    background: linear-gradient(135deg, 
-      rgba(204, 175, 133, 0.9) 0%, 
-      rgba(204, 175, 133, 0.7) 50%, 
-      rgba(204, 175, 133, 0.9) 100%);
-    box-shadow: 
-      0 8px 32px rgba(204, 175, 133, 0.3),
-      inset 0 1px 0 rgba(255, 255, 255, 0.2);
+    background: linear-gradient(
+      135deg,
+      rgb(10 132 255 / 0.92) 0%,
+      rgb(94 211 255 / 0.76) 50%,
+      rgb(10 132 255 / 0.92) 100%
+    );
+    box-shadow:
+      0 8px 32px rgb(10 132 255 / 0.28),
+      inset 0 1px 0 rgb(255 255 255 / 0.2);
   }
 
   .btn-feedback.btn-primary:hover {
-    background: linear-gradient(135deg, 
-      rgba(204, 175, 133, 1) 0%, 
-      rgba(204, 175, 133, 0.8) 50%, 
-      rgba(204, 175, 133, 1) 100%);
-    box-shadow: 
-      0 12px 40px rgba(204, 175, 133, 0.4),
-      inset 0 1px 0 rgba(255, 255, 255, 0.3);
+    background: linear-gradient(
+      135deg,
+      rgb(10 132 255) 0%,
+      rgb(94 211 255 / 0.84) 50%,
+      rgb(10 132 255) 100%
+    );
+    box-shadow:
+      0 12px 40px rgb(10 132 255 / 0.34),
+      inset 0 1px 0 rgb(255 255 255 / 0.28);
   }
 
   /* 按钮加载状态 */
@@ -352,12 +364,16 @@
   }
 
   .text-shadow {
-    text-shadow: 0 2px 4px rgba(0, 0, 0, 0.5);
+    text-shadow: 0 2px 4px rgb(0 0 0 / 0.5);
   }
 
   .border-gradient {
     border: 1px solid;
-    border-image: linear-gradient(45deg, rgba(204, 175, 133, 0.3), rgba(78, 154, 203, 0.3)) 1;
+    border-image: linear-gradient(
+      45deg,
+      rgb(10 132 255 / 0.3),
+      rgb(94 211 255 / 0.3)
+    ) 1;
   }
 }
 
@@ -370,13 +386,13 @@
     --generator-surface-raised-rgb: 22 29 36;
     --generator-outline-rgb: 112 128 142;
     --generator-outline-strong-rgb: 150 170 186;
-    --generator-primary-rgb: 210 185 144;
-    --generator-primary-strong-rgb: 232 207 168;
-    --generator-secondary-rgb: 116 187 212;
-    --generator-secondary-strong-rgb: 194 231 243;
-    --generator-success-rgb: 111 170 135;
-    --generator-danger-rgb: 214 116 116;
-    --generator-warning-rgb: 198 170 121;
+    --generator-primary-rgb: 88 150 255;
+    --generator-primary-strong-rgb: 221 235 255;
+    --generator-secondary-rgb: 104 210 193;
+    --generator-secondary-strong-rgb: 204 248 240;
+    --generator-success-rgb: 102 204 143;
+    --generator-danger-rgb: 255 120 113;
+    --generator-warning-rgb: 255 183 77;
     --generator-text-primary-rgb: 244 247 250;
     --generator-text-secondary-rgb: 217 226 232;
     --generator-text-tertiary-rgb: 168 180 190;
