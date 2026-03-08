@@ -1,15 +1,16 @@
 import Script from 'next/script'
+import { siteConfig, withSiteUrl } from '@/lib/site-config'
 
 // 组织信息Schema
 export function OrganizationSchema() {
   const organizationData = {
     "@context": "https://schema.org",
     "@type": "Organization",
-    "name": "Flux Kontext",
-    "url": process.env.NEXT_PUBLIC_SITE_URL || "https://fluxkontext.space",
+    "name": siteConfig.projectName,
+    "url": siteConfig.siteUrl,
     "logo": {
       "@type": "ImageObject",
-      "url": `${process.env.NEXT_PUBLIC_SITE_URL || "https://fluxkontext.space"}/logo.png`,
+      "url": withSiteUrl('/logo.png'),
       "width": 256,
       "height": 256
     },
@@ -18,12 +19,12 @@ export function OrganizationSchema() {
     "contactPoint": {
       "@type": "ContactPoint",
       "contactType": "customer service",
-      "email": "support@fluxkontext.space",
+      "email": siteConfig.supportEmail,
       "availableLanguage": ["English"]
     },
     "sameAs": [
-      "https://twitter.com/fluxkontext",
-      "https://github.com/fluxkontext/fluxkontext.space"
+      siteConfig.socialLinks.twitter,
+      siteConfig.githubRepoUrl
     ],
     "address": {
       "@type": "PostalAddress",
@@ -45,14 +46,14 @@ export function WebSiteSchema() {
   const websiteData = {
     "@context": "https://schema.org",
     "@type": "WebSite",
-    "name": "Flux Kontext",
-    "url": process.env.NEXT_PUBLIC_SITE_URL || "https://fluxkontext.space",
+    "name": siteConfig.projectName,
+    "url": siteConfig.siteUrl,
     "description": "Professional AI image generation platform powered by Flux Kontext. Create stunning images from text descriptions with advanced AI technology.",
     "potentialAction": {
       "@type": "SearchAction",
       "target": {
         "@type": "EntryPoint",
-        "urlTemplate": `${process.env.NEXT_PUBLIC_SITE_URL || "https://fluxkontext.space"}/search?q={search_term_string}`
+        "urlTemplate": withSiteUrl('/search?q={search_term_string}')
       },
       "query-input": "required name=search_term_string"
     },
@@ -78,7 +79,7 @@ export function SoftwareApplicationSchema() {
     "@type": "SoftwareApplication",
     "name": "Flux Kontext AI Image Generator",
     "description": "Professional AI image generation platform. Create stunning images from text descriptions with advanced Flux Kontext AI technology.",
-    "url": process.env.NEXT_PUBLIC_SITE_URL || "https://fluxkontext.space",
+    "url": siteConfig.siteUrl,
     "applicationCategory": "ImageEditingApplication",
     "operatingSystem": "Web Browser",
     "offers": {
@@ -100,7 +101,7 @@ export function SoftwareApplicationSchema() {
       "Flux Kontext Pro and Max models",
       "AI-powered image creation"
     ],
-    "screenshot": `${process.env.NEXT_PUBLIC_SITE_URL || "https://fluxkontext.space"}/screenshot.png`,
+    "screenshot": withSiteUrl('/screenshot.png'),
     "aggregateRating": {
       "@type": "AggregateRating",
       "ratingValue": "4.9",
@@ -257,14 +258,14 @@ export function VideoObjectSchema({
     "thumbnailUrl": thumbnailUrl,
     "uploadDate": uploadDate,
     "duration": duration,
-    "contentUrl": `${process.env.NEXT_PUBLIC_SITE_URL || "https://fluxkontext.space"}/videos/sample.mp4`,
-    "embedUrl": `${process.env.NEXT_PUBLIC_SITE_URL || "https://fluxkontext.space"}/embed/sample`,
+    "contentUrl": withSiteUrl('/videos/sample.mp4'),
+    "embedUrl": withSiteUrl('/embed/sample'),
     "publisher": {
       "@type": "Organization",
-      "name": "Flux Kontext",
+      "name": siteConfig.projectName,
       "logo": {
         "@type": "ImageObject",
-        "url": `${process.env.NEXT_PUBLIC_SITE_URL || "https://fluxkontext.space"}/logo.png`
+        "url": withSiteUrl('/logo.png')
       }
     }
   }
@@ -315,17 +316,17 @@ export function StructuredData() {
   const organizationSchema = {
     "@context": "https://schema.org",
     "@type": "Organization",
-    "name": "Flux Kontext",
-    "url": "https://fluxkontext.space",
-    "logo": "https://fluxkontext.space/logo.png",
+    "name": siteConfig.projectName,
+    "url": siteConfig.siteUrl,
+    "logo": withSiteUrl('/logo.png'),
     "description": "Professional AI image generation platform powered by Flux Kontext. Create stunning images from text descriptions with advanced AI technology.",
     "sameAs": [
-      "https://twitter.com/fluxkontext",
-      "https://github.com/fluxkontext"
+      siteConfig.socialLinks.twitter,
+      siteConfig.githubRepoUrl
     ],
     "contactPoint": {
       "@type": "ContactPoint",
-      "email": "support@fluxkontext.space",
+      "email": siteConfig.supportEmail,
       "contactType": "customer service"
     }
   }
@@ -333,12 +334,12 @@ export function StructuredData() {
   const websiteSchema = {
     "@context": "https://schema.org",
     "@type": "WebSite",
-    "name": "Flux Kontext",
-    "url": "https://fluxkontext.space",
+    "name": siteConfig.projectName,
+    "url": siteConfig.siteUrl,
     "description": "Professional AI image generation platform",
     "potentialAction": {
       "@type": "SearchAction",
-      "target": "https://fluxkontext.space/search?q={search_term_string}",
+      "target": withSiteUrl('/search?q={search_term_string}'),
       "query-input": "required name=search_term_string"
     }
   }
@@ -350,10 +351,10 @@ export function StructuredData() {
     "applicationCategory": "MultimediaApplication",
     "operatingSystem": "Web Browser",
     "description": "AI-powered image generation platform for creating professional images from text descriptions",
-    "url": "https://fluxkontext.space",
+    "url": siteConfig.siteUrl,
     "author": {
       "@type": "Organization",
-      "name": "Flux Kontext"
+      "name": siteConfig.projectName
     },
     "offers": {
       "@type": "Offer",

@@ -1,16 +1,12 @@
 import type { Metadata } from 'next'
 import { HomeContentSimple } from '@/components/HomeContentSimple'
+import { generateLocalizedHomeMetadata } from '@/lib/seo/metadata-generator'
 
-export const metadata: Metadata = {
+export const metadata: Metadata = generateLocalizedHomeMetadata({
+  locale: 'ar',
   title: 'Flux Kontext AI - منصة احترافية لتوليد الصور بالذكاء الاصطناعي | إنشاء صور مذهلة',
   description: 'حول أفكارك إلى صور احترافية باستخدام تقنية الذكاء الاصطناعي المتطورة. أنشئ صورًا من النص، وحرر الصور الموجودة، ومعالج صور متعددة بقوة Flux Kontext AI.',
-  openGraph: {
-    title: 'Flux Kontext AI - منصة احترافية لتوليد الصور بالذكاء الاصطناعي',
-    url: 'https://fluxkontext.space/ar',
-    locale: 'ar_SA',
-    type: 'website',
-  }
-}
+})
 
 const arDictionary = {
   hero: {
@@ -64,7 +60,7 @@ const arDictionary = {
     },
     contact: {
       title: "اتصل بنا",
-      email: "support@fluxkontext.space"
+      email: "{{supportEmail}}"
     },
     legal: {
       title: "قانوني",

@@ -1,8 +1,8 @@
 import { MetadataRoute } from 'next'
+import { siteConfig } from '@/lib/site-config'
 
 export default function sitemap(): MetadataRoute.Sitemap {
-  // 强制使用HTTPS协议，确保SEO和安全性
-  const baseUrl = process.env.NEXT_PUBLIC_SITE_URL?.replace('http://', 'https://') || 'https://fluxkontext.space'
+  const baseUrl = siteConfig.siteUrl
   
   // 支持的语言列表
   const languages = ['en', 'de', 'es', 'zh', 'fr', 'it', 'ja', 'ko', 'nl', 'pl', 'pt', 'ru', 'tr', 'ar', 'hi', 'bn']

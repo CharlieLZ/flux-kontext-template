@@ -7,6 +7,7 @@ import SessionProvider from "@/components/providers/SessionProvider";
 import { GoogleOneTap } from "@/components/GoogleOneTap";
 import { GoogleOneTapTrigger } from "@/components/GoogleOneTapTrigger";
 import { StructuredData } from "@/components/StructuredData";
+import { siteConfig } from "@/lib/site-config";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -46,7 +47,7 @@ export const metadata: Metadata = {
     address: false,
     telephone: false,
   },
-  metadataBase: new URL(process.env.NEXT_PUBLIC_SITE_URL || 'https://fluxkontext.space'),
+  metadataBase: new URL(siteConfig.siteUrl),
   robots: {
     index: true,
     follow: true,
@@ -86,4 +87,3 @@ export default function RootLayout({
     </html>
   );
 }
-

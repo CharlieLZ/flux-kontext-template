@@ -108,7 +108,7 @@
     },
     "contact": {
       "title": "Contact",
-      "email": "support@fluxkontext.space"
+      "email": "{{supportEmail}}"
     },
     "legal": {
       "title": "Legal",

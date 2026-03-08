@@ -1,42 +1,14 @@
 import type { Metadata } from 'next'
 import { HomeContentSimple } from '@/components/HomeContentSimple'
-import { getDictionary } from '@/lib/i18n/home-config'
+import { generateLocalizedHomeMetadata } from '@/lib/seo/metadata-generator'
 
 // 德语页面SEO元数据
-export const metadata: Metadata = {
+export const metadata: Metadata = generateLocalizedHomeMetadata({
+  locale: 'de',
   title: 'Flux Kontext AI - Professionelle KI-Bildgenerierung | Erstelle beeindruckende Bilder',
   description: 'Verwandle deine Ideen in professionelle Bilder mit unserer hochmodernen KI-Technologie. Generiere Bilder aus Text, bearbeite vorhandene Bilder und verarbeite mehrere Bilder mit der Kraft von Flux Kontext AI.',
-  keywords: 'KI Bildgenerierung, Text zu Bild, Bildbearbeitung, Flux Kontext, künstliche Intelligenz, professionelle Bilder',
-  openGraph: {
-    title: 'Flux Kontext AI - Professionelle KI-Bildgenerierung',
-    description: 'Verwandle deine Ideen in professionelle Bilder mit unserer hochmodernen KI-Technologie.',
-    url: 'https://fluxkontext.space/de',
-    siteName: 'Flux Kontext',
-    locale: 'de_DE',
-    type: 'website',
-  },
-  alternates: {
-    canonical: 'https://fluxkontext.space/de',
-    languages: {
-      'en': 'https://fluxkontext.space',
-      'de': 'https://fluxkontext.space/de',
-      'es': 'https://fluxkontext.space/es',
-      'fr': 'https://fluxkontext.space/fr',
-      'it': 'https://fluxkontext.space/it',
-      'ja': 'https://fluxkontext.space/ja',
-      'ko': 'https://fluxkontext.space/ko',
-      'nl': 'https://fluxkontext.space/nl',
-      'pl': 'https://fluxkontext.space/pl',
-      'pt': 'https://fluxkontext.space/pt',
-      'ru': 'https://fluxkontext.space/ru',
-      'tr': 'https://fluxkontext.space/tr',
-      'ar': 'https://fluxkontext.space/ar',
-      'hi': 'https://fluxkontext.space/hi',
-      'bn': 'https://fluxkontext.space/bn',
-      'zh': 'https://fluxkontext.space/zh'
-    }
-  }
-}
+  keywords: ['KI Bildgenerierung', 'Text zu Bild', 'Bildbearbeitung', 'Flux Kontext', 'künstliche Intelligenz', 'professionelle Bilder'],
+})
 
 // 德语内容字典
 const deDictionary = {
@@ -95,7 +67,7 @@ const deDictionary = {
     },
     contact: {
       title: "Kontakt",
-      email: "support@fluxkontext.space"
+      email: "{{supportEmail}}"
     },
     legal: {
       title: "Rechtliches",

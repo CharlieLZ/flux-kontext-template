@@ -3,11 +3,12 @@
 
 import { Metadata } from 'next'
 import { SUPPORTED_LOCALES, DEFAULT_LOCALE, LOCALE_NAMES } from '@/lib/content/locale'
+import { siteConfig } from '@/lib/site-config'
 
 interface MetadataConfig {
   title: string
   description: string
-  keywords: string[]
+  keywords?: string[]
   path: string
   locale?: string
   images?: string[]
@@ -24,7 +25,7 @@ export function generateMultilingualMetadata(config: MetadataConfig): Metadata {
   const { 
     title, 
     description, 
-    keywords, 
+    keywords = [], 
     path, 
     locale = DEFAULT_LOCALE, 
     images = [],
@@ -32,7 +33,7 @@ export function generateMultilingualMetadata(config: MetadataConfig): Metadata {
   } = config
   
   // 强制使用HTTPS协议，确保SEO和安全性
-  const baseUrl = process.env.NEXT_PUBLIC_SITE_URL?.replace('http://', 'https://') || 'https://fluxkontext.space'
+  const baseUrl = siteConfig.siteUrl
   
   // 生成当前页面的canonical URL
   const canonicalPath = locale === DEFAULT_LOCALE ? path : `/${locale}${path}`
@@ -139,7 +140,7 @@ export function generateMultilingualMetadata(config: MetadataConfig): Metadata {
  */
 export function generateMultilingualSitemap(pages: Array<{path: string, priority?: number, changeFreq?: string}>) {
   // 强制使用HTTPS协议，确保SEO和安全性
-  const baseUrl = process.env.NEXT_PUBLIC_SITE_URL?.replace('http://', 'https://') || 'https://fluxkontext.space'
+  const baseUrl = siteConfig.siteUrl
   const urls: Array<{
     url: string
     lastModified: Date
@@ -177,6 +178,13 @@ export function generateMultilingualSitemap(pages: Array<{path: string, priority
   })
   
   return urls
+}
+
+export function generateLocalizedHomeMetadata(config: Omit<MetadataConfig, 'path'>) {
+  return generateMultilingualMetadata({
+    ...config,
+    path: '/',
+  })
 }
 
 /**

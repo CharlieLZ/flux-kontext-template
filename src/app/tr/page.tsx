@@ -1,16 +1,12 @@
 import type { Metadata } from 'next'
 import { HomeContentSimple } from '@/components/HomeContentSimple'
+import { generateLocalizedHomeMetadata } from '@/lib/seo/metadata-generator'
 
-export const metadata: Metadata = {
+export const metadata: Metadata = generateLocalizedHomeMetadata({
+  locale: 'tr',
   title: 'Flux Kontext AI - Profesyonel AI Görüntü Üretim Platformu | Çarpıcı Görüntüler Oluşturun',
   description: 'Fikirlerinizi son teknoloji AI teknolojimizle profesyonel görüntülere dönüştürün. Metinden görüntü üretin, mevcut görüntüleri düzenleyin ve Flux Kontext AI\'nin gücüyle birden fazla görüntüyü işleyin.',
-  openGraph: {
-    title: 'Flux Kontext AI - Profesyonel AI Görüntü Üretim Platformu',
-    url: 'https://fluxkontext.space/tr',
-    locale: 'tr_TR',
-    type: 'website',
-  }
-}
+})
 
 const trDictionary = {
   hero: {
@@ -64,7 +60,7 @@ const trDictionary = {
     },
     contact: {
       title: "İletişim",
-      email: "support@fluxkontext.space"
+      email: "{{supportEmail}}"
     },
     legal: {
       title: "Yasal",

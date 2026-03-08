@@ -1,41 +1,14 @@
 import type { Metadata } from 'next'
 import { HomeContentSimple } from '@/components/HomeContentSimple'
+import { generateLocalizedHomeMetadata } from '@/lib/seo/metadata-generator'
 
 // 中文页面SEO元数据
-export const metadata: Metadata = {
+export const metadata: Metadata = generateLocalizedHomeMetadata({
+  locale: 'zh',
   title: 'Flux Kontext AI - 专业AI图像生成平台 | 创建令人惊艳的图像',
   description: '使用我们尖端的AI技术将您的想法转化为专业图像。从文本生成图像，编辑现有图像，并使用Flux Kontext AI的强大功能处理多张图像。',
-  keywords: 'AI图像生成, 文本转图像, 图像编辑, Flux Kontext, 人工智能, 专业图像',
-  openGraph: {
-    title: 'Flux Kontext AI - 专业AI图像生成平台',
-    description: '使用我们尖端的AI技术将您的想法转化为专业图像。',
-    url: 'https://fluxkontext.space/zh',
-    siteName: 'Flux Kontext',
-    locale: 'zh_CN',
-    type: 'website',
-  },
-  alternates: {
-    canonical: 'https://fluxkontext.space/zh',
-    languages: {
-      'en': 'https://fluxkontext.space',
-      'de': 'https://fluxkontext.space/de',
-      'es': 'https://fluxkontext.space/es',
-      'fr': 'https://fluxkontext.space/fr',
-      'it': 'https://fluxkontext.space/it',
-      'ja': 'https://fluxkontext.space/ja',
-      'ko': 'https://fluxkontext.space/ko',
-      'nl': 'https://fluxkontext.space/nl',
-      'pl': 'https://fluxkontext.space/pl',
-      'pt': 'https://fluxkontext.space/pt',
-      'ru': 'https://fluxkontext.space/ru',
-      'tr': 'https://fluxkontext.space/tr',
-      'ar': 'https://fluxkontext.space/ar',
-      'hi': 'https://fluxkontext.space/hi',
-      'bn': 'https://fluxkontext.space/bn',
-      'zh': 'https://fluxkontext.space/zh'
-    }
-  }
-}
+  keywords: ['AI图像生成', '文本转图像', '图像编辑', 'Flux Kontext', '人工智能', '专业图像'],
+})
 
 // 中文内容字典
 const zhDictionary = {
@@ -94,7 +67,7 @@ const zhDictionary = {
     },
     contact: {
       title: "联系我们",
-      email: "support@fluxkontext.space"
+      email: "{{supportEmail}}"
     },
     legal: {
       title: "法律条款",

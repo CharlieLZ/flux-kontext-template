@@ -1,22 +1,13 @@
 import type { Metadata } from 'next'
 import { HomeContentSimple } from '@/components/HomeContentSimple'
+import { generateLocalizedHomeMetadata } from '@/lib/seo/metadata-generator'
 
-export const metadata: Metadata = {
+export const metadata: Metadata = generateLocalizedHomeMetadata({
+  locale: 'fr',
   title: 'Flux Kontext AI - Génération Professionnelle d\'Images IA | Créez des Images Époustouflantes',
   description: 'Transformez vos idées en images professionnelles avec notre technologie IA de pointe. Générez des images à partir de texte, éditez des images existantes et traitez plusieurs images avec la puissance de Flux Kontext AI.',
-  keywords: 'génération d\'images IA, texte vers image, édition d\'images, Flux Kontext, intelligence artificielle, images professionnelles',
-  openGraph: {
-    title: 'Flux Kontext AI - Génération Professionnelle d\'Images IA',
-    description: 'Transformez vos idées en images professionnelles avec notre technologie IA de pointe.',
-    url: 'https://fluxkontext.space/fr',
-    siteName: 'Flux Kontext',
-    locale: 'fr_FR',
-    type: 'website',
-  },
-  alternates: {
-    canonical: 'https://fluxkontext.space/fr'
-  }
-}
+  keywords: ['génération d\'images IA', 'texte vers image', 'édition d\'images', 'Flux Kontext', 'intelligence artificielle', 'images professionnelles'],
+})
 
 const frDictionary = {
   hero: {
@@ -74,7 +65,7 @@ const frDictionary = {
     },
     contact: {
       title: "Contact",
-      email: "support@fluxkontext.space"
+      email: "{{supportEmail}}"
     },
     legal: {
       title: "Légal",

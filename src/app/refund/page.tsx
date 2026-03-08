@@ -1,5 +1,6 @@
 import type { Metadata } from 'next'
 import Link from 'next/link'
+import { mailtoSupport, siteConfig } from '@/lib/site-config'
 
 export const metadata: Metadata = {
   title: 'Refund Policy | Flux Kontext',
@@ -126,7 +127,7 @@ export default function RefundPage() {
               <section className="mb-8">
                 <h2 className="text-2xl font-semibold mb-4">Contact Us</h2>
                 <p className="mb-4">
-                  If you have any questions about our refund policy or need to request a refund for our AI image generation services, please contact our support team at support@fluxkontext.space.
+                  If you have any questions about our refund policy or need to request a refund for our AI image generation services, please contact our support team at <a href={mailtoSupport()} className="text-primary hover:underline">{siteConfig.supportEmail}</a>.
                 </p>
                 <p className="mb-4">
                   By using our AI image generation services, you acknowledge that you have read and understand this Refund Policy.

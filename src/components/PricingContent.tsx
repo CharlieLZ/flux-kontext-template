@@ -20,6 +20,7 @@ import {
   Loader2
 } from "lucide-react"
 import { pricing, common } from "@/lib/content"
+import { replaceSiteTokens } from "@/lib/site-config"
 
 interface PricingPlan {
   id: string
@@ -365,7 +366,7 @@ function PricingMainContent() {
                     {faq.question}
                   </h3>
                   <p className="text-muted-foreground">
-                    {faq.answer}
+                    {replaceSiteTokens(faq.answer)}
                   </p>
                 </div>
               ))}

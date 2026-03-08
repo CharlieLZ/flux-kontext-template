@@ -1,17 +1,12 @@
 import type { Metadata } from 'next'
 import { HomeContentSimple } from '@/components/HomeContentSimple'
+import { generateLocalizedHomeMetadata } from '@/lib/seo/metadata-generator'
 
-export const metadata: Metadata = {
+export const metadata: Metadata = generateLocalizedHomeMetadata({
+  locale: 'ko',
   title: 'Flux Kontext AI - 전문 AI 이미지 생성 플랫폼 | 놀라운 이미지 만들기',
   description: '최첨단 AI 기술로 아이디어를 전문적인 이미지로 변환하세요. 텍스트에서 이미지를 생성하고, 기존 이미지를 편집하며, Flux Kontext AI의 힘으로 여러 이미지를 처리하세요.',
-  openGraph: {
-    title: 'Flux Kontext AI - 전문 AI 이미지 생성 플랫폼',
-    description: '최첨단 AI 기술로 아이디어를 전문적인 이미지로 변환하세요.',
-    url: 'https://fluxkontext.space/ko',
-    locale: 'ko_KR',
-    type: 'website',
-  }
-}
+})
 
 const koDictionary = {
   hero: {
@@ -65,7 +60,7 @@ const koDictionary = {
     },
     contact: {
       title: "연락처",
-      email: "support@fluxkontext.space"
+      email: "{{supportEmail}}"
     },
     legal: {
       title: "법적 고지",

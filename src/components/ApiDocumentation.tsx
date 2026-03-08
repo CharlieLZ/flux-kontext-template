@@ -20,6 +20,7 @@ import {
   Key,
   Globe
 } from "lucide-react"
+import { siteConfig, withApiUrl, withAssetUrl } from "@/lib/site-config"
 
 const apiEndpoints = [
   {
@@ -60,8 +61,11 @@ const apiEndpoints = [
   }
 ]
 
+const textToImageProUrl = withApiUrl('/api/v1/flux/text-to-image/pro')
+const exampleGeneratedImageUrl = withAssetUrl('/generated/image_123.jpg')
+
 const codeExamples = {
-  curl: `curl -X POST "https://api.fluxkontext.space/api/v1/flux/text-to-image/pro" \\
+  curl: `curl -X POST "${textToImageProUrl}" \\
   -H "Authorization: Bearer YOUR_API_KEY" \\
   -H "Content-Type: application/json" \\
   -d '{
@@ -72,7 +76,7 @@ const codeExamples = {
     "safety_tolerance": 3
   }'`,
   
-  javascript: `const response = await fetch('https://api.fluxkontext.space/api/v1/flux/text-to-image/pro', {
+  javascript: `const response = await fetch('${textToImageProUrl}', {
   method: 'POST',
   headers: {
     'Authorization': 'Bearer YOUR_API_KEY',
@@ -92,7 +96,7 @@ console.log(result);`,
 
   python: `import requests
 
-url = "https://api.fluxkontext.space/api/v1/flux/text-to-image/pro"
+url = "${textToImageProUrl}"
 headers = {
     "Authorization": "Bearer YOUR_API_KEY",
     "Content-Type": "application/json"
@@ -113,7 +117,7 @@ print(result)`,
 
 const config = {
   method: 'post',
-  url: 'https://api.fluxkontext.space/api/v1/flux/text-to-image/pro',
+  url: '${textToImageProUrl}',
   headers: {
     'Authorization': 'Bearer YOUR_API_KEY',
     'Content-Type': 'application/json'
@@ -298,7 +302,7 @@ export function ApiDocumentation() {
               <div className="app-surface-card rounded-lg p-6">
                 <h3 className="font-semibold mb-3">Base URL</h3>
                 <code className="bg-muted px-3 py-1 rounded text-sm">
-                  https://api.fluxkontext.space
+                  {siteConfig.apiBaseUrl}
                 </code>
               </div>
             </div>
@@ -399,7 +403,7 @@ export function ApiDocumentation() {
   "data": {
     "images": [
       {
-        "url": "https://cdn.fluxkontext.space/generated/image_123.jpg",
+        "url": "${exampleGeneratedImageUrl}",
         "width": 1024,
         "height": 576,
         "seed": 42,

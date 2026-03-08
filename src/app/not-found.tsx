@@ -2,6 +2,7 @@ import Link from 'next/link'
 import { Button } from '@/components/ui/button'
 // 导入文案系统 - 修复导入错误
 import { common } from '@/lib/content'
+import { mailtoSupport, siteConfig } from '@/lib/site-config'
 
 export default function NotFound() {
   return (
@@ -29,7 +30,7 @@ export default function NotFound() {
         </div>
         
         <div className="text-sm text-muted-foreground">
-          <p>Need help? <a href="mailto:support@fluxkontext.space" className="text-primary hover:underline">support@fluxkontext.space</a></p>
+          <p>Need help? <a href={mailtoSupport()} className="text-primary hover:underline">{siteConfig.supportEmail}</a></p>
         </div>
       </div>
     </div>

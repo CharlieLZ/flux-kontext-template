@@ -1,5 +1,6 @@
 // 导入文案系统
 import { footer } from "@/lib/content"
+import { mailtoSupport, siteConfig } from "@/lib/site-config"
 
 export function Footer() {
 
@@ -49,10 +50,10 @@ export function Footer() {
           <div className="space-y-4">
             <h3 className="font-semibold text-foreground">{footer.contact.title}</h3>
             <a
-              href={`mailto:${footer.contact.email}`}
+              href={mailtoSupport()}
               className="block text-muted-foreground hover:text-primary hover:font-semibold active:scale-95 transition-all duration-200 text-sm"
             >
-              {footer.contact.email}
+              {siteConfig.supportEmail}
             </a>
 
             <div className="pt-4">
@@ -101,7 +102,7 @@ export function Footer() {
             </div>
             <div className="flex space-x-6">
               <a 
-                href="https://x.com/fluxkontext" 
+                href={siteConfig.socialLinks.x}
                 className="text-muted-foreground hover:text-primary hover:scale-110 active:scale-95 transition-all duration-200" 
                 aria-label="Follow us on X (Twitter)"
               >
@@ -110,7 +111,7 @@ export function Footer() {
                 </svg>
               </a>
               <a 
-                href="https://twitter.com/fluxkontext" 
+                href={siteConfig.socialLinks.twitter}
                 className="text-muted-foreground hover:text-primary hover:scale-110 active:scale-95 transition-all duration-200" 
                 aria-label="Follow us on Twitter"
               >
@@ -119,7 +120,7 @@ export function Footer() {
                 </svg>
               </a>
               <a 
-                href="https://pinterest.com/fluxkontext" 
+                href={siteConfig.socialLinks.pinterest}
                 className="text-muted-foreground hover:text-primary hover:scale-110 active:scale-95 transition-all duration-200" 
                 aria-label="Follow us on Pinterest"
               >

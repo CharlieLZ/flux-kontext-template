@@ -1,16 +1,12 @@
 import type { Metadata } from 'next'
 import { HomeContentSimple } from '@/components/HomeContentSimple'
+import { generateLocalizedHomeMetadata } from '@/lib/seo/metadata-generator'
 
-export const metadata: Metadata = {
+export const metadata: Metadata = generateLocalizedHomeMetadata({
+  locale: 'hi',
   title: 'Flux Kontext AI - पेशेवर AI इमेज जेनरेशन प्लेटफॉर्म | शानदार इमेज बनाएं',
   description: 'हमारी अत्याधुनिक AI तकनीक के साथ अपने विचारों को पेशेवर इमेज में बदलें। टेक्स्ट से इमेज जेनरेट करें, मौजूदा इमेज को एडिट करें, और Flux Kontext AI की शक्ति के साथ कई इमेज को प्रोसेस करें।',
-  openGraph: {
-    title: 'Flux Kontext AI - पेशेवर AI इमेज जेनरेशन प्लेटफॉर्म',
-    url: 'https://fluxkontext.space/hi',
-    locale: 'hi_IN',
-    type: 'website',
-  }
-}
+})
 
 const hiDictionary = {
   hero: {
@@ -64,7 +60,7 @@ const hiDictionary = {
     },
     contact: {
       title: "संपर्क",
-      email: "support@fluxkontext.space"
+      email: "{{supportEmail}}"
     },
     legal: {
       title: "कानूनी",

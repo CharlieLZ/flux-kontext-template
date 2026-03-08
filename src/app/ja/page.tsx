@@ -1,17 +1,12 @@
 import type { Metadata } from 'next'
 import { HomeContentSimple } from '@/components/HomeContentSimple'
+import { generateLocalizedHomeMetadata } from '@/lib/seo/metadata-generator'
 
-export const metadata: Metadata = {
+export const metadata: Metadata = generateLocalizedHomeMetadata({
+  locale: 'ja',
   title: 'Flux Kontext AI - プロフェッショナルAI画像生成プラットフォーム | 素晴らしい画像を作成',
   description: '最先端のAI技術でアイデアをプロフェッショナルな画像に変換します。テキストから画像を生成し、既存の画像を編集し、Flux Kontext AIの力で複数の画像を処理します。',
-  openGraph: {
-    title: 'Flux Kontext AI - プロフェッショナルAI画像生成プラットフォーム',
-    description: '最先端のAI技術でアイデアをプロフェッショナルな画像に変換します。',
-    url: 'https://fluxkontext.space/ja',
-    locale: 'ja_JP',
-    type: 'website',
-  }
-}
+})
 
 const jaDictionary = {
   hero: {
@@ -65,7 +60,7 @@ const jaDictionary = {
     },
     contact: {
       title: "お問い合わせ",
-      email: "support@fluxkontext.space"
+      email: "{{supportEmail}}"
     },
     legal: {
       title: "法的事項",

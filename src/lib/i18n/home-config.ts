@@ -179,7 +179,7 @@ export const EN_DICTIONARY: HomeDictionary = {
     },
     contact: {
       title: "Contact",
-      email: "support@fluxkontext.space"
+      email: "{{supportEmail}}"
     },
     legal: {
       title: "Legal",

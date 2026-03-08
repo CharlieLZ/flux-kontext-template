@@ -1,41 +1,14 @@
 import type { Metadata } from 'next'
 import { HomeContentSimple } from '@/components/HomeContentSimple'
+import { generateLocalizedHomeMetadata } from '@/lib/seo/metadata-generator'
 
 // 西班牙语页面SEO元数据
-export const metadata: Metadata = {
+export const metadata: Metadata = generateLocalizedHomeMetadata({
+  locale: 'es',
   title: 'Flux Kontext AI - Generación Profesional de Imágenes IA | Crea Imágenes Impresionantes',
   description: 'Transforma tus ideas en imágenes profesionales con nuestra tecnología de IA de vanguardia. Genera imágenes desde texto, edita imágenes existentes y procesa múltiples imágenes con el poder de Flux Kontext AI.',
-  keywords: 'generación de imágenes IA, texto a imagen, edición de imágenes, Flux Kontext, inteligencia artificial, imágenes profesionales',
-  openGraph: {
-    title: 'Flux Kontext AI - Generación Profesional de Imágenes IA',
-    description: 'Transforma tus ideas en imágenes profesionales con nuestra tecnología de IA de vanguardia.',
-    url: 'https://fluxkontext.space/es',
-    siteName: 'Flux Kontext',
-    locale: 'es_ES',
-    type: 'website',
-  },
-  alternates: {
-    canonical: 'https://fluxkontext.space/es',
-    languages: {
-      'en': 'https://fluxkontext.space',
-      'de': 'https://fluxkontext.space/de',
-      'es': 'https://fluxkontext.space/es',
-      'fr': 'https://fluxkontext.space/fr',
-      'it': 'https://fluxkontext.space/it',
-      'ja': 'https://fluxkontext.space/ja',
-      'ko': 'https://fluxkontext.space/ko',
-      'nl': 'https://fluxkontext.space/nl',
-      'pl': 'https://fluxkontext.space/pl',
-      'pt': 'https://fluxkontext.space/pt',
-      'ru': 'https://fluxkontext.space/ru',
-      'tr': 'https://fluxkontext.space/tr',
-      'ar': 'https://fluxkontext.space/ar',
-      'hi': 'https://fluxkontext.space/hi',
-      'bn': 'https://fluxkontext.space/bn',
-      'zh': 'https://fluxkontext.space/zh'
-    }
-  }
-}
+  keywords: ['generación de imágenes IA', 'texto a imagen', 'edición de imágenes', 'Flux Kontext', 'inteligencia artificial', 'imágenes profesionales'],
+})
 
 // 西班牙语内容字典
 const esDictionary = {
@@ -94,7 +67,7 @@ const esDictionary = {
     },
     contact: {
       title: "Contacto",
-      email: "support@fluxkontext.space"
+      email: "{{supportEmail}}"
     },
     legal: {
       title: "Legal",

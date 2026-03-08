@@ -134,7 +134,7 @@
     },
     {
       "question": "How can I get technical support?",
-      "answer": "Get help through our customer service center by emailing support@fluxkontext.space. Our team will respond to your inquiries as soon as possible."
+      "answer": "Get help through our customer service center by emailing {{supportEmail}}. Our team will respond to your inquiries as soon as possible."
     },
     {
       "question": "What should I do if I run out of my credits mid-month?",

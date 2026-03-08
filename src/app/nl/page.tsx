@@ -1,16 +1,12 @@
 import type { Metadata } from 'next'
 import { HomeContentSimple } from '@/components/HomeContentSimple'
+import { generateLocalizedHomeMetadata } from '@/lib/seo/metadata-generator'
 
-export const metadata: Metadata = {
+export const metadata: Metadata = generateLocalizedHomeMetadata({
+  locale: 'nl',
   title: 'Flux Kontext AI - Professioneel AI Beeldgeneratie Platform | Maak Verbluffende Beelden',
   description: 'Transformeer je ideeën in professionele beelden met onze geavanceerde AI-technologie. Genereer beelden uit tekst, bewerk bestaande beelden en verwerk meerdere beelden met de kracht van Flux Kontext AI.',
-  openGraph: {
-    title: 'Flux Kontext AI - Professioneel AI Beeldgeneratie Platform',
-    url: 'https://fluxkontext.space/nl',
-    locale: 'nl_NL',
-    type: 'website',
-  }
-}
+})
 
 const nlDictionary = {
   hero: {
@@ -64,7 +60,7 @@ const nlDictionary = {
     },
     contact: {
       title: "Contact",
-      email: "support@fluxkontext.space"
+      email: "{{supportEmail}}"
     },
     legal: {
       title: "Juridisch",

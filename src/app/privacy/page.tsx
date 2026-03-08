@@ -1,5 +1,6 @@
 import type { Metadata } from 'next'
 import Link from 'next/link'
+import { mailtoSupport, siteConfig } from '@/lib/site-config'
 
 export const metadata: Metadata = {
   title: 'Privacy Policy | Flux Kontext',
@@ -123,7 +124,7 @@ export default function PrivacyPage() {
 
               <section className="mb-8">
                 <p className="mb-4">
-                  By using our AI image generation website, you acknowledge that you have read and understand this Privacy Policy. For any questions or concerns regarding this policy or your personal data, please contact us directly at support@fluxkontext.space.
+                  By using our AI image generation website, you acknowledge that you have read and understand this Privacy Policy. For any questions or concerns regarding this policy or your personal data, please contact us directly at <a href={mailtoSupport()} className="text-primary hover:underline">{siteConfig.supportEmail}</a>.
                 </p>
               </section>
             </div>

@@ -11,6 +11,7 @@ import { FAQ } from "@/components/FAQ"
 import { Footer } from "@/components/Footer"
 import { OrganizationSchema, WebSiteSchema, SoftwareApplicationSchema } from "@/components/StructuredData"
 import { home, common, seo } from "@/lib/content"
+import { siteConfig } from "@/lib/site-config"
 
 export function HomeContent() {
   return (
@@ -33,7 +34,7 @@ export function HomeContent() {
             "@type": "WebApplication",
             "name": "Flux Kontext AI",
             "description": seo.meta.description,
-            "url": "https://fluxkontext.space",
+            "url": siteConfig.siteUrl,
             "applicationCategory": "ImageEditingApplication",
             "operatingSystem": "Web Browser",
             "offers": {
