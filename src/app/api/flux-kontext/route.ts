@@ -998,6 +998,10 @@ export async function POST(request: NextRequest) {
       timeoutPromise
     ]);
 
+    if (result instanceof Response) {
+      return result;
+    }
+
     return NextResponse.json(result);
 
   } catch (error) {
