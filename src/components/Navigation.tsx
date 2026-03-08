@@ -302,7 +302,7 @@ export function Navigation() {
                     variant="ghost" 
                     size="sm" 
                     onClick={handleSignOut}
-                    className="w-full justify-start hover:font-semibold active:scale-95 transition-all duration-200 text-red-600 hover:text-red-700"
+                    className="w-full justify-start hover:font-semibold active:scale-95 transition-all duration-200 text-destructive hover:text-destructive/80"
                   >
                     <LogOut className="w-4 h-4 mr-2" />
                     {common.buttons.signOut}

@@ -144,7 +144,7 @@ export function ResourcesContent() {
       {/* Hero Section */}
       <section className="pt-24 pb-16 px-4">
         <div className="container mx-auto max-w-6xl text-center">
-          <div className="inline-block px-4 py-2 bg-blue-500/10 border border-blue-500/20 rounded-full text-blue-600 text-sm mb-6">
+          <div className="app-tint-badge inline-block mb-6 rounded-full px-4 py-2 text-sm">
             Free AI Image Generation Resources
           </div>
           <h1 className="text-4xl md:text-5xl font-bold mb-6 gradient-text">
@@ -352,26 +352,28 @@ export function ResourcesContent() {
       </section>
 
       {/* CTA Section */}
-      <section className="py-16 px-4 bg-gradient-to-r from-primary/10 to-purple-500/10">
-        <div className="container mx-auto max-w-4xl text-center">
-          <h2 className="text-3xl md:text-4xl font-bold mb-6">
-            Ready to Start Creating?
-          </h2>
-          <p className="text-lg text-muted-foreground mb-8">
-            Join thousands of creators using Flux Kontext to bring their imagination to life.
-          </p>
-          <div className="flex flex-col sm:flex-row gap-4 justify-center">
-            <Link href="/generate">
-              <Button size="lg" className="bg-primary text-primary-foreground hover:bg-primary/90">
-                <Palette className="w-5 h-5 mr-2" />
-                Start Creating Now
-              </Button>
-            </Link>
-            <Link href="/pricing">
-              <Button variant="outline" size="lg">
-                View Pricing Plans
-              </Button>
-            </Link>
+      <section className="px-4 py-16">
+        <div className="container mx-auto max-w-4xl">
+          <div className="app-cta-panel rounded-3xl px-6 py-12 text-center md:px-10">
+            <h2 className="mb-6 text-3xl font-bold md:text-4xl">
+              Ready to Start Creating?
+            </h2>
+            <p className="mb-8 text-lg text-muted-foreground">
+              Join thousands of creators using Flux Kontext to bring their imagination to life.
+            </p>
+            <div className="flex flex-col justify-center gap-4 sm:flex-row">
+              <Link href="/generate">
+                <Button size="lg" className="bg-primary text-primary-foreground hover:bg-primary/90">
+                  <Palette className="mr-2 h-5 w-5" />
+                  Start Creating Now
+                </Button>
+              </Link>
+              <Link href="/pricing">
+                <Button variant="outline" size="lg" className="border-primary/20 bg-background/60 backdrop-blur-sm">
+                  View Pricing Plans
+                </Button>
+              </Link>
+            </div>
           </div>
         </div>
       </section>

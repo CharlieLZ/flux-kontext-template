@@ -20,6 +20,10 @@
     --accent-foreground: 9 13 18;
     --destructive: 255 69 58;
     --destructive-foreground: 245 247 250;
+    --success: 52 199 89;
+    --success-foreground: 9 13 18;
+    --warning: 255 159 10;
+    --warning-foreground: 9 13 18;
     --border: 52 63 78;
     --input: 52 63 78;
     --ring: 10 132 255;
@@ -33,7 +37,11 @@
   }
   body {
     @apply bg-background text-foreground font-sans;
-    background: linear-gradient(180deg, rgb(9 13 18) 0%, rgb(0 0 0) 100%);
+    background: linear-gradient(
+      180deg,
+      rgb(var(--background)) 0%,
+      rgb(0 0 0) 100%
+    );
     min-height: 100vh;
   }
 
@@ -42,11 +50,19 @@
   }
 
   .gradient-text {
-    @apply bg-gradient-to-r from-primary via-sky-300 to-accent bg-clip-text text-transparent;
+    background-image: linear-gradient(
+      90deg,
+      rgb(var(--primary)) 0%,
+      rgb(var(--accent) / 0.86) 48%,
+      rgb(var(--primary) / 0.94) 100%
+    );
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
     background-size: 200% 200%;
     animation: gradient-shift 4s ease-in-out infinite;
     font-weight: 700;
-    text-shadow: 0 0 30px rgb(10 132 255 / 0.26);
+    text-shadow: 0 0 30px rgb(var(--primary) / 0.26);
     filter: brightness(1.2) contrast(1.1);
   }
 
@@ -60,8 +76,8 @@
   .hero-gradient {
     background: radial-gradient(
       ellipse at center,
-      rgb(10 132 255 / 0.12) 0%,
-      rgb(9 13 18 / 0.82) 70%
+      rgb(var(--primary) / 0.12) 0%,
+      rgb(var(--background) / 0.82) 70%
     );
   }
 
@@ -92,21 +108,21 @@
   .twitter-content blockquote.twitter-tweet:not(.twitter-tweet-rendered) {
     margin: 0;
     padding: 16px;
-    border-left: 4px solid rgb(10 132 255);
-    background: rgb(10 132 255 / 0.1);
+    border-left: 4px solid rgb(var(--primary));
+    background: rgb(var(--primary) / 0.1);
     border-radius: 8px;
     font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
   }
 
   .twitter-content blockquote.twitter-tweet:not(.twitter-tweet-rendered) p {
     margin: 0 0 8px 0;
-    color: rgb(255 255 255);
+    color: rgb(var(--foreground));
     line-height: 1.4;
     font-size: 14px;
   }
 
   .twitter-content blockquote.twitter-tweet:not(.twitter-tweet-rendered) a {
-    color: rgb(94 211 255);
+    color: rgb(var(--accent));
     text-decoration: none;
   }
 
@@ -125,8 +141,8 @@
     .hero-gradient {
       background: radial-gradient(
         ellipse at center,
-        rgb(10 132 255 / 0.08) 0%,
-        rgb(9 13 18 / 0.92) 50%
+        rgb(var(--primary) / 0.08) 0%,
+        rgb(var(--background) / 0.92) 50%
       );
     }
   }
@@ -294,7 +310,7 @@
     overflow: hidden;
     transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
     backdrop-filter: blur(10px);
-    border: 1px solid rgb(255 255 255 / 0.1);
+    border: 1px solid rgb(var(--foreground) / 0.1);
   }
 
   .btn-feedback:hover {
@@ -310,25 +326,25 @@
   .btn-feedback.btn-primary {
     background: linear-gradient(
       135deg,
-      rgb(10 132 255 / 0.92) 0%,
-      rgb(94 211 255 / 0.76) 50%,
-      rgb(10 132 255 / 0.92) 100%
+      rgb(var(--primary) / 0.92) 0%,
+      rgb(var(--accent) / 0.76) 50%,
+      rgb(var(--primary) / 0.92) 100%
     );
     box-shadow:
-      0 8px 32px rgb(10 132 255 / 0.28),
-      inset 0 1px 0 rgb(255 255 255 / 0.2);
+      0 8px 32px rgb(var(--primary) / 0.28),
+      inset 0 1px 0 rgb(var(--foreground) / 0.2);
   }
 
   .btn-feedback.btn-primary:hover {
     background: linear-gradient(
       135deg,
-      rgb(10 132 255) 0%,
-      rgb(94 211 255 / 0.84) 50%,
-      rgb(10 132 255) 100%
+      rgb(var(--primary)) 0%,
+      rgb(var(--accent) / 0.84) 50%,
+      rgb(var(--primary)) 100%
     );
     box-shadow:
-      0 12px 40px rgb(10 132 255 / 0.34),
-      inset 0 1px 0 rgb(255 255 255 / 0.28);
+      0 12px 40px rgb(var(--primary) / 0.34),
+      inset 0 1px 0 rgb(var(--foreground) / 0.28);
   }
 
   /* 按钮加载状态 */
@@ -374,6 +390,115 @@
       rgb(10 132 255 / 0.3),
       rgb(94 211 255 / 0.3)
     ) 1;
+  }
+
+  .app-surface-card {
+    border: 1px solid rgb(var(--border) / 0.7);
+    background: linear-gradient(
+      180deg,
+      rgb(var(--card) / 0.96) 0%,
+      rgb(var(--background) / 0.92) 100%
+    );
+    box-shadow:
+      0 20px 48px rgb(0 0 0 / 0.18),
+      inset 0 1px 0 rgb(255 255 255 / 0.04);
+  }
+
+  .app-surface-card--interactive {
+    transition:
+      border-color 0.2s ease,
+      box-shadow 0.2s ease,
+      transform 0.2s ease;
+  }
+
+  .app-surface-card--interactive:hover {
+    border-color: rgb(var(--primary) / 0.28);
+    box-shadow:
+      0 28px 56px rgb(0 0 0 / 0.22),
+      inset 0 1px 0 rgb(255 255 255 / 0.05);
+    transform: translateY(-2px);
+  }
+
+  .app-code-surface {
+    border: 1px solid rgb(var(--border) / 0.8);
+    background: linear-gradient(
+      180deg,
+      rgb(8 12 16 / 0.96) 0%,
+      rgb(3 6 9 / 0.94) 100%
+    );
+    color: rgb(226 232 240);
+  }
+
+  .app-tint-panel {
+    border: 1px solid rgb(var(--primary) / 0.18);
+    background: linear-gradient(
+      135deg,
+      rgb(var(--primary) / 0.12) 0%,
+      rgb(var(--accent) / 0.08) 100%
+    );
+  }
+
+  .app-tint-badge {
+    border: 1px solid rgb(var(--primary) / 0.2);
+    background: rgb(var(--primary) / 0.1);
+    color: rgb(var(--foreground) / 0.96);
+  }
+
+  .app-tint-badge--accent {
+    border-color: rgb(var(--accent) / 0.24);
+    background: rgb(var(--accent) / 0.14);
+    color: rgb(var(--accent-foreground) / 0.98);
+  }
+
+  .app-tint-badge--success {
+    border-color: rgb(var(--success) / 0.24);
+    background: rgb(var(--success) / 0.14);
+    color: rgb(var(--foreground) / 0.96);
+  }
+
+  .app-tint-badge--warning {
+    border-color: rgb(var(--warning) / 0.24);
+    background: rgb(var(--warning) / 0.14);
+    color: rgb(var(--foreground) / 0.96);
+  }
+
+  .app-tint-badge--danger {
+    border-color: rgb(var(--destructive) / 0.24);
+    background: rgb(var(--destructive) / 0.12);
+    color: rgb(var(--foreground) / 0.96);
+  }
+
+  .app-icon-token {
+    color: rgb(var(--primary) / 0.98);
+  }
+
+  .app-icon-token--accent {
+    color: rgb(var(--accent) / 0.98);
+  }
+
+  .app-icon-token--success {
+    color: rgb(var(--success) / 0.98);
+  }
+
+  .app-icon-token--warning {
+    color: rgb(var(--warning) / 0.98);
+  }
+
+  .app-icon-token--danger {
+    color: rgb(var(--destructive) / 0.98);
+  }
+
+  .app-cta-panel {
+    border: 1px solid rgb(var(--primary) / 0.2);
+    background: linear-gradient(
+      135deg,
+      rgb(var(--primary) / 0.14) 0%,
+      rgb(var(--accent) / 0.1) 50%,
+      rgb(var(--background) / 0.86) 100%
+    );
+    box-shadow:
+      0 24px 56px rgb(0 0 0 / 0.18),
+      inset 0 1px 0 rgb(255 255 255 / 0.04);
   }
 }
 

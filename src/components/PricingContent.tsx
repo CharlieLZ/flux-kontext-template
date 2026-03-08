@@ -181,15 +181,15 @@ function PricingMainContent() {
           {activeTab === "subscription" && (
             <div className="flex items-center justify-center mb-8">
               <div className="flex items-center gap-3">
-                <span className={`text-sm font-medium transition-all duration-300 ${!isYearly ? 'text-purple-600 dark:text-purple-400 font-semibold' : 'text-gray-600 dark:text-gray-400'}`}>
+                <span className={`text-sm font-medium transition-all duration-300 ${!isYearly ? 'text-primary font-semibold' : 'text-muted-foreground'}`}>
                   {pricing.billing.monthly}
                 </span>
                 <button
                   onClick={() => setIsYearly(!isYearly)}
                   className={`relative inline-flex h-6 w-12 items-center rounded-full transition-all duration-300 focus:outline-none focus:ring-2 focus:ring-offset-2 shadow-sm hover:shadow-md transform hover:scale-105 active:scale-95 ${
                     isYearly 
-                      ? 'bg-gradient-to-r from-indigo-400 via-purple-400 to-pink-400 focus:ring-indigo-300 dark:focus:ring-indigo-500' 
-                      : 'bg-gradient-to-r from-slate-300 via-slate-350 to-slate-400 dark:from-slate-600 dark:via-slate-650 dark:to-slate-700 focus:ring-slate-300 dark:focus:ring-slate-500'
+                      ? 'bg-gradient-to-r from-primary via-accent to-primary focus:ring-primary/40' 
+                      : 'bg-gradient-to-r from-muted via-secondary to-muted-foreground/50 focus:ring-primary/20'
                   }`}
                 >
                   <span
@@ -198,11 +198,11 @@ function PricingMainContent() {
                     }`}
                   />
                 </button>
-                <span className={`text-sm font-medium transition-all duration-300 ${isYearly ? 'text-purple-600 dark:text-purple-400 font-semibold' : 'text-gray-600 dark:text-gray-400'}`}>
+                <span className={`text-sm font-medium transition-all duration-300 ${isYearly ? 'text-primary font-semibold' : 'text-muted-foreground'}`}>
                   {pricing.billing.yearly}
                 </span>
                 {isYearly && (
-                  <Badge variant="secondary" className="bg-green-100 text-green-700 dark:bg-green-900 dark:text-green-300 ml-2 animate-pulse">
+                  <Badge variant="outline" className="app-tint-badge app-tint-badge--success ml-2 animate-pulse">
                     {pricing.billing.savePercent}
                   </Badge>
                 )}
@@ -246,7 +246,7 @@ function PricingMainContent() {
                   <div className="space-y-3 mb-6">
                     {plan.features.map((feature, index) => (
                       <div key={`${plan.id}-feature-${index}`} className="flex items-center space-x-3">
-                        <Check className="h-4 w-4 text-green-500 flex-shrink-0" />
+                        <Check className="h-4 w-4 text-[hsl(var(--success))] flex-shrink-0" />
                         <span className="text-sm text-muted-foreground">{feature}</span>
                       </div>
                     ))}
@@ -323,7 +323,7 @@ function PricingMainContent() {
                   <div className="space-y-3 mb-6">
                     {pack.features.map((feature, index) => (
                       <div key={`${pack.id}-feature-${index}`} className="flex items-center space-x-3">
-                        <Check className="h-4 w-4 text-green-500 flex-shrink-0" />
+                        <Check className="h-4 w-4 text-[hsl(var(--success))] flex-shrink-0" />
                         <span className="text-sm text-muted-foreground">{feature}</span>
                       </div>
                     ))}

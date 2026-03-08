@@ -20,13 +20,13 @@ export function UpgradePrompt({ userType, feature, className = "", compact = fal
 
   if (compact) {
     return (
-      <div className={`bg-gradient-to-r from-purple-500 to-pink-500 p-3 rounded-lg text-white ${className}`}>
+      <div className={`app-cta-panel rounded-lg p-3 text-foreground ${className}`}>
         <div className="flex items-center justify-between">
           <div className="flex items-center gap-2">
-            <Crown className="h-4 w-4" />
+            <Crown className="app-icon-token h-4 w-4" />
             <span className="text-sm font-medium">{suggestion.title}</span>
           </div>
-          <Button variant="secondary" size="sm" className="text-purple-600">
+          <Button variant="secondary" size="sm" className="text-primary">
             {suggestion.action}
           </Button>
         </div>
@@ -35,48 +35,48 @@ export function UpgradePrompt({ userType, feature, className = "", compact = fal
   }
 
   return (
-    <Card className={`border-2 border-purple-200 bg-gradient-to-br from-purple-50 to-pink-50 ${className}`}>
+    <Card className={`app-surface-card ${className}`}>
       <CardContent className="p-6">
         <div className="flex items-start gap-4">
-          <div className="bg-gradient-to-r from-purple-500 to-pink-500 p-3 rounded-full">
-            <Crown className="h-6 w-6 text-white" />
+          <div className="app-cta-panel rounded-full p-3">
+            <Crown className="app-icon-token h-6 w-6" />
           </div>
           
           <div className="flex-1">
             <div className="flex items-center gap-2 mb-2">
-              <h3 className="text-lg font-semibold text-gray-900">{suggestion.title}</h3>
+              <h3 className="text-lg font-semibold text-foreground">{suggestion.title}</h3>
               {userType === UserType.ANONYMOUS && (
-                <Badge variant="secondary" className="bg-green-100 text-green-700">
+                <Badge variant="outline" className="app-tint-badge app-tint-badge--success">
                   免费
                 </Badge>
               )}
               {suggestion.nextTier === UserType.PREMIUM && (
-                <Badge variant="secondary" className="bg-purple-100 text-purple-700">
+                <Badge variant="outline" className="app-tint-badge">
                   $29/月
                 </Badge>
               )}
             </div>
             
-            <p className="text-gray-600 mb-4">{suggestion.description}</p>
+            <p className="mb-4 text-muted-foreground">{suggestion.description}</p>
             
             {/* 功能列表 */}
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 mb-4">
               {userType === UserType.ANONYMOUS && (
                 <>
-                  <div className="flex items-center gap-2 text-sm text-gray-700">
-                    <Zap className="h-4 w-4 text-purple-500" />
+                  <div className="flex items-center gap-2 text-sm text-foreground/80">
+                    <Zap className="app-icon-token h-4 w-4" />
                     <span>Flux Kontext Max模型</span>
                   </div>
-                  <div className="flex items-center gap-2 text-sm text-gray-700">
-                    <Star className="h-4 w-4 text-purple-500" />
+                  <div className="flex items-center gap-2 text-sm text-foreground/80">
+                    <Star className="app-icon-token h-4 w-4" />
                     <span>生成1-4张图片</span>
                   </div>
-                  <div className="flex items-center gap-2 text-sm text-gray-700">
-                    <Crown className="h-4 w-4 text-purple-500" />
+                  <div className="flex items-center gap-2 text-sm text-foreground/80">
+                    <Crown className="app-icon-token h-4 w-4" />
                     <span>历史记录同步</span>
                   </div>
-                  <div className="flex items-center gap-2 text-sm text-gray-700">
-                    <ArrowRight className="h-4 w-4 text-purple-500" />
+                  <div className="flex items-center gap-2 text-sm text-foreground/80">
+                    <ArrowRight className="app-icon-token h-4 w-4" />
                     <span>更多宽高比选项</span>
                   </div>
                 </>
@@ -84,20 +84,20 @@ export function UpgradePrompt({ userType, feature, className = "", compact = fal
               
               {userType === UserType.REGISTERED && (
                 <>
-                  <div className="flex items-center gap-2 text-sm text-gray-700">
-                    <Crown className="h-4 w-4 text-purple-500" />
+                  <div className="flex items-center gap-2 text-sm text-foreground/80">
+                    <Crown className="app-icon-token h-4 w-4" />
                     <span>批量生成1-12张</span>
                   </div>
-                  <div className="flex items-center gap-2 text-sm text-gray-700">
-                    <Zap className="h-4 w-4 text-purple-500" />
+                  <div className="flex items-center gap-2 text-sm text-foreground/80">
+                    <Zap className="app-icon-token h-4 w-4" />
                     <span>Private Mode私人模式</span>
                   </div>
-                  <div className="flex items-center gap-2 text-sm text-gray-700">
-                    <Star className="h-4 w-4 text-purple-500" />
+                  <div className="flex items-center gap-2 text-sm text-foreground/80">
+                    <Star className="app-icon-token h-4 w-4" />
                     <span>优先队列快速生成</span>
                   </div>
-                  <div className="flex items-center gap-2 text-sm text-gray-700">
-                    <ArrowRight className="h-4 w-4 text-purple-500" />
+                  <div className="flex items-center gap-2 text-sm text-foreground/80">
+                    <ArrowRight className="app-icon-token h-4 w-4" />
                     <span>无限制使用频率</span>
                   </div>
                 </>
@@ -106,9 +106,9 @@ export function UpgradePrompt({ userType, feature, className = "", compact = fal
             
             {/* 特殊优惠 */}
             {suggestion.nextTier === UserType.PREMIUM && (
-              <div className="bg-yellow-50 border border-yellow-200 rounded-lg p-3 mb-4">
-                <div className="flex items-center gap-2 text-yellow-800">
-                  <Star className="h-4 w-4" />
+              <div className="app-tint-badge app-tint-badge--warning mb-4 rounded-lg p-3">
+                <div className="flex items-center gap-2">
+                  <Star className="app-icon-token--warning h-4 w-4" />
                   <span className="text-sm font-medium">
                     年付方案节省20% - 仅需$290/年
                   </span>
@@ -123,7 +123,7 @@ export function UpgradePrompt({ userType, feature, className = "", compact = fal
                 </Button>
               )}
               <Button 
-                className="flex-1 bg-gradient-to-r from-purple-500 to-pink-500 hover:from-purple-600 hover:to-pink-600"
+                className="flex-1"
               >
                 {suggestion.action}
                 <ArrowRight className="ml-2 h-4 w-4" />
@@ -152,10 +152,10 @@ export function FeatureLocked({ userType, feature, requiredTier, className = "" 
   }
   
   return (
-    <div className={`bg-gray-50 border-2 border-dashed border-gray-300 rounded-lg p-4 text-center ${className}`}>
-      <Crown className="h-8 w-8 text-gray-400 mx-auto mb-2" />
-      <h4 className="font-medium text-gray-700 mb-1">{feature}</h4>
-      <p className="text-sm text-gray-500 mb-3">
+    <div className={`app-surface-card rounded-lg border-2 border-dashed p-4 text-center ${className}`}>
+      <Crown className="mx-auto mb-2 h-8 w-8 text-primary/70" />
+      <h4 className="mb-1 font-medium text-foreground">{feature}</h4>
+      <p className="mb-3 text-sm text-muted-foreground">
         此功能需要{tierNames[requiredTier]}权限
       </p>
       <UpgradePrompt userType={userType} feature={feature} compact />
@@ -177,23 +177,23 @@ export function UsageLimit({ current, limit, period, userType }: UsageLimitProps
   const isOverLimit = current >= limit
   
   return (
-    <div className="bg-white border rounded-lg p-4">
+    <div className="app-surface-card rounded-lg p-4">
       <div className="flex items-center justify-between mb-2">
-        <span className="text-sm font-medium text-gray-700">
+        <span className="text-sm font-medium text-foreground/80">
           使用量 ({period})
         </span>
-        <span className="text-sm text-gray-500">
+        <span className="text-sm text-muted-foreground">
           {current} / {limit === Infinity ? '∞' : limit}
         </span>
       </div>
       
       {limit !== Infinity && (
-        <div className="w-full bg-gray-200 rounded-full h-2 mb-3">
+        <div className="mb-3 h-2 w-full rounded-full bg-muted">
           <div 
             className={`h-2 rounded-full transition-all ${
-              isOverLimit ? 'bg-red-500' : 
-              isNearLimit ? 'bg-yellow-500' : 
-              'bg-green-500'
+              isOverLimit ? 'bg-destructive' : 
+              isNearLimit ? 'bg-[hsl(var(--warning))]' : 
+              'bg-[hsl(var(--success))]'
             }`}
             style={{ width: `${Math.min(percentage, 100)}%` }}
           />
@@ -201,13 +201,13 @@ export function UsageLimit({ current, limit, period, userType }: UsageLimitProps
       )}
       
       {isOverLimit && (
-        <div className="text-sm text-red-600 mb-2">
+        <div className="mb-2 text-sm text-destructive">
           已达到使用限制，请升级账户继续使用
         </div>
       )}
       
       {isNearLimit && !isOverLimit && (
-        <div className="text-sm text-yellow-600 mb-2">
+        <div className="mb-2 text-sm text-[hsl(var(--warning))]">
           即将达到使用限制，建议升级账户
         </div>
       )}

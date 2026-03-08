@@ -182,28 +182,28 @@ export function ApiDocumentation() {
             <div className="grid grid-cols-2 md:grid-cols-4 gap-4 max-w-2xl mx-auto">
               <div className="bg-card border rounded-lg p-4">
                 <div className="flex items-center justify-center mb-2">
-                  <DollarSign className="w-5 h-5 text-green-500" />
+                  <DollarSign className="app-icon-token--success w-5 h-5" />
                 </div>
                 <div className="text-sm font-medium">$0.05</div>
                 <div className="text-xs text-muted-foreground">Starting Price</div>
               </div>
               <div className="bg-card border rounded-lg p-4">
                 <div className="flex items-center justify-center mb-2">
-                  <Clock className="w-5 h-5 text-blue-500" />
+                  <Clock className="app-icon-token w-5 h-5" />
                 </div>
                 <div className="text-sm font-medium">~10s</div>
                 <div className="text-xs text-muted-foreground">Avg Response</div>
               </div>
               <div className="bg-card border rounded-lg p-4">
                 <div className="flex items-center justify-center mb-2">
-                  <Shield className="w-5 h-5 text-purple-500" />
+                  <Shield className="app-icon-token--accent w-5 h-5" />
                 </div>
                 <div className="text-sm font-medium">99.9%</div>
                 <div className="text-xs text-muted-foreground">Uptime</div>
               </div>
               <div className="bg-card border rounded-lg p-4">
                 <div className="flex items-center justify-center mb-2">
-                  <Globe className="w-5 h-5 text-orange-500" />
+                  <Globe className="app-icon-token--warning w-5 h-5" />
                 </div>
                 <div className="text-sm font-medium">Global</div>
                 <div className="text-xs text-muted-foreground">CDN</div>
@@ -262,9 +262,9 @@ export function ApiDocumentation() {
               </p>
 
               <div className="grid md:grid-cols-2 gap-6 mb-8">
-                <div className="bg-card border rounded-lg p-6">
+                <div className="app-surface-card rounded-lg p-6">
                   <h3 className="font-semibold mb-3 flex items-center">
-                    <CheckCircle className="w-5 h-5 text-green-500 mr-2" />
+                    <CheckCircle className="app-icon-token--success mr-2 w-5 h-5" />
                     Why Choose Our API?
                   </h3>
                   <ul className="space-y-2 text-sm text-muted-foreground">
@@ -277,9 +277,9 @@ export function ApiDocumentation() {
                   </ul>
                 </div>
 
-                <div className="bg-card border rounded-lg p-6">
+                <div className="app-surface-card rounded-lg p-6">
                   <h3 className="font-semibold mb-3 flex items-center">
-                    <AlertCircle className="w-5 h-5 text-blue-500 mr-2" />
+                    <AlertCircle className="app-icon-token mr-2 w-5 h-5" />
                     Quick Start
                   </h3>
                   <ol className="space-y-2 text-sm text-muted-foreground">
@@ -295,7 +295,7 @@ export function ApiDocumentation() {
                 </div>
               </div>
 
-              <div className="bg-muted/20 border border-border rounded-lg p-6">
+              <div className="app-surface-card rounded-lg p-6">
                 <h3 className="font-semibold mb-3">Base URL</h3>
                 <code className="bg-muted px-3 py-1 rounded text-sm">
                   https://api.fluxkontext.space
@@ -309,7 +309,7 @@ export function ApiDocumentation() {
             <h2 className="text-2xl font-bold mb-6">API Endpoints</h2>
             
             {apiEndpoints.map((endpoint) => (
-              <div key={endpoint.id} className="bg-card border rounded-lg p-6">
+              <div key={endpoint.id} className="app-surface-card rounded-lg p-6">
                 <div className="flex items-start justify-between mb-4">
                   <div>
                     <div className="flex items-center mb-2">
@@ -326,7 +326,7 @@ export function ApiDocumentation() {
                     </p>
                   </div>
                   <div className="text-right">
-                    <div className="text-sm font-medium text-green-600">
+                    <div className="text-sm font-medium text-[hsl(var(--success))]">
                       {endpoint.pricing}
                     </div>
                   </div>
@@ -364,16 +364,16 @@ export function ApiDocumentation() {
 
             {/* Code Block */}
             <div className="relative">
-              <div className="bg-gray-900 rounded-lg p-6 overflow-x-auto">
+              <div className="app-code-surface rounded-lg p-6 overflow-x-auto">
                 <div className="flex items-center justify-between mb-4">
-                  <span className="text-gray-400 text-sm">
+                  <span className="text-sm text-slate-400">
                     {activeCode.charAt(0).toUpperCase() + activeCode.slice(1)} Example
                   </span>
                   <Button
                     size="sm"
                     variant="ghost"
                     onClick={() => copyToClipboard(codeExamples[activeCode as keyof typeof codeExamples], activeCode)}
-                    className="text-gray-400 hover:text-white"
+                    className="text-slate-400 hover:text-white"
                   >
                     {copiedCode === activeCode ? (
                       <CheckCircle className="w-4 h-4" />
@@ -382,17 +382,17 @@ export function ApiDocumentation() {
                     )}
                   </Button>
                 </div>
-                <pre className="text-gray-300 text-sm overflow-x-auto">
+                <pre className="overflow-x-auto text-sm text-slate-200">
                   <code>{codeExamples[activeCode as keyof typeof codeExamples]}</code>
                 </pre>
               </div>
             </div>
 
             {/* Response Example */}
-            <div className="bg-card border rounded-lg p-6">
+            <div className="app-surface-card rounded-lg p-6">
               <h3 className="font-semibold mb-4">Response Example</h3>
-              <div className="bg-gray-900 rounded-lg p-4 overflow-x-auto">
-                <pre className="text-gray-300 text-sm">
+              <div className="app-code-surface rounded-lg p-4 overflow-x-auto">
+                <pre className="text-sm text-slate-200">
                   <code>{`{
   "status": "success",
   "request_id": "req_123456789",
@@ -424,30 +424,30 @@ export function ApiDocumentation() {
           <div id="pricing" className="space-y-6 mb-16">
             <h2 className="text-2xl font-bold mb-6">API Pricing</h2>
             
-            <div className="bg-gradient-to-r from-blue-50 to-indigo-50 dark:from-blue-950/30 dark:to-indigo-950/30 border border-blue-200 dark:border-blue-700 rounded-lg p-6 mb-8">
-              <h3 className="font-semibold text-lg mb-3 text-blue-900 dark:text-blue-100">Simple & Transparent Pricing</h3>
-              <p className="text-blue-800 dark:text-blue-200 mb-4">
+            <div className="app-tint-panel rounded-lg p-6 mb-8">
+              <h3 className="font-semibold text-lg mb-3 text-foreground">Simple & Transparent Pricing</h3>
+              <p className="text-muted-foreground mb-4">
                 Our API offers straightforward pricing with no hidden fees. Pay only for what you use with competitive rates for professional AI image generation.
               </p>
               
               <div className="grid md:grid-cols-2 gap-6">
-                <div className="bg-white/70 dark:bg-gray-800/70 border border-blue-200 dark:border-blue-600 rounded-lg p-4">
-                  <h4 className="font-medium mb-3 text-blue-900 dark:text-blue-100">Model Pricing</h4>
+                <div className="app-surface-card rounded-lg p-4">
+                  <h4 className="font-medium mb-3 text-foreground">Model Pricing</h4>
                   <div className="space-y-2 text-sm">
-                    <div className="flex justify-between text-gray-700 dark:text-gray-300">
+                    <div className="flex justify-between text-foreground/80">
                       <span>Flux Kontext Pro</span>
                       <span className="font-mono font-medium">$0.05</span>
                     </div>
-                    <div className="flex justify-between text-gray-700 dark:text-gray-300">
+                    <div className="flex justify-between text-foreground/80">
                       <span>Flux Kontext Max</span>
                       <span className="font-mono font-medium">$0.08</span>
                     </div>
                   </div>
                 </div>
 
-                <div className="bg-white/70 dark:bg-gray-800/70 border border-blue-200 dark:border-blue-600 rounded-lg p-4">
-                  <h4 className="font-medium mb-3 text-blue-900 dark:text-blue-100">What You Get</h4>
-                  <ul className="space-y-1 text-sm text-gray-700 dark:text-gray-300">
+                <div className="app-surface-card rounded-lg p-4">
+                  <h4 className="font-medium mb-3 text-foreground">What You Get</h4>
+                  <ul className="space-y-1 text-sm text-foreground/80">
                     <li>• Professional API service</li>
                     <li>• Simple account management</li>
                     <li>• Streamlined authentication</li>
@@ -477,13 +477,13 @@ export function ApiDocumentation() {
                   <tbody>
                     <tr className="border-t border-border">
                       <td className="p-4 font-medium">Flux Kontext Pro</td>
-                      <td className="p-4 font-mono font-medium text-green-600">$0.05</td>
+                      <td className="p-4 font-mono font-medium text-[hsl(var(--success))]">$0.05</td>
                       <td className="p-4">High Quality</td>
                       <td className="p-4 text-muted-foreground">General purpose, fast generation</td>
                     </tr>
                     <tr className="border-t border-border">
                       <td className="p-4 font-medium">Flux Kontext Max</td>
-                      <td className="p-4 font-mono font-medium text-green-600">$0.08</td>
+                      <td className="p-4 font-mono font-medium text-[hsl(var(--success))]">$0.08</td>
                       <td className="p-4">Ultra High Quality</td>
                       <td className="p-4 text-muted-foreground">Professional, detailed images</td>
                     </tr>
@@ -534,14 +534,14 @@ export function ApiDocumentation() {
               </div>
             </div>
 
-            <div className="bg-yellow-50 dark:bg-yellow-950/20 border border-yellow-200 dark:border-yellow-800 rounded-lg p-6">
+            <div className="app-tint-badge app-tint-badge--warning rounded-lg p-6">
               <div className="flex items-start">
-                <AlertCircle className="w-5 h-5 text-yellow-600 dark:text-yellow-400 mr-3 mt-0.5" />
+                <AlertCircle className="app-icon-token--warning mr-3 mt-0.5 w-5 h-5" />
                 <div>
-                  <h4 className="font-medium text-yellow-800 dark:text-yellow-200 mb-2">
+                  <h4 className="mb-2 font-medium text-foreground">
                     Keep Your API Key Secure
                   </h4>
-                  <p className="text-yellow-700 dark:text-yellow-300 text-sm">
+                  <p className="text-sm text-foreground/80">
                     Your API key provides access to your account and will be charged for usage. 
                     Never share it publicly or include it in client-side code.
                   </p>
@@ -551,7 +551,7 @@ export function ApiDocumentation() {
           </div>
 
           {/* CTA Section */}
-          <div className="mt-16 bg-gradient-to-r from-primary/10 to-purple-500/10 border border-primary/20 rounded-lg p-8 text-center">
+          <div className="app-cta-panel mt-16 rounded-lg p-8 text-center">
             <h3 className="text-2xl font-bold mb-4">Ready to Get Started?</h3>
             <p className="text-muted-foreground mb-6 max-w-2xl mx-auto">
               Join thousands of developers using our reliable API for AI image generation. 
