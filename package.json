@@ -33,7 +33,7 @@
     "@radix-ui/react-progress": "^1.1.7",
     "@radix-ui/react-slot": "^1.2.3",
     "@supabase/ssr": "^0.5.2",
-    "@supabase/supabase-js": "^2.47.10",
+    "@supabase/supabase-js": "^2.105.0",
     "@types/bcryptjs": "^2.4.6",
     "@types/uuid": "^9.0.8",
     "bcryptjs": "^3.0.2",
