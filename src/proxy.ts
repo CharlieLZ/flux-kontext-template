@@ -22,7 +22,7 @@ function rateLimit(ip: string, limit: number = 10, windowMs: number = 60000): bo
   return true
 }
 
-export function middleware(request: NextRequest) {
+export function proxy(request: NextRequest) {
   const { pathname } = request.nextUrl
   const hostname = request.nextUrl.hostname
   const debugRoutesEnabled =

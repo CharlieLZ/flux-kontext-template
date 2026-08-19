@@ -42,7 +42,7 @@ interface GeneratorWorkspaceCardProps {
   onPromptChange: (value: string) => void;
   onEnhancePrompt: () => void;
   uploadedImages: string[];
-  multiFileInputRef: RefObject<HTMLInputElement>;
+  multiFileInputRef: RefObject<HTMLInputElement | null>;
   onMultiImageUpload: (event: ChangeEvent<HTMLInputElement>) => void;
   onRemoveUploadedImage: (index: number) => void;
   onUploadZonePaste: (event: ClipboardEvent<any>) => void;
@@ -62,7 +62,7 @@ interface GeneratorWorkspaceCardProps {
   isTurnstileEnabled: boolean;
   shouldShowTurnstile: boolean;
   isTurnstileVerified: boolean;
-  turnstileRef: RefObject<HTMLDivElement>;
+  turnstileRef: RefObject<HTMLDivElement | null>;
   onTurnstileVerify: (token: string) => void;
   onTurnstileError: (error: string) => void;
   onTurnstileExpire: () => void;

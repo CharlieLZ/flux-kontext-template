@@ -51,15 +51,6 @@ const nextConfig = {
   
   // 图片配置
   images: {
-    domains: [
-      "source.unsplash.com",
-      "images.unsplash.com",
-      "ext.same-assets.com",
-      "ugc.same-assets.com",
-      // R2存储域名
-      process.env.NEXT_PUBLIC_DEMO_VIDEOS_URL?.replace('https://', '') || 
-      "pub-49364ecf52e344d3a722a3c5bca11271.r2.dev",
-    ],
     remotePatterns: [
       {
         protocol: "https",

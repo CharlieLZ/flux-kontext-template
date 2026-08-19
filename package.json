@@ -14,7 +14,8 @@
     "kill:3000": "node scripts/kill-ports.js 3000",
     "build": "next build",
     "start": "next start",
-    "lint": "next lint && tsc --noEmit",
+    "lint": "eslint . && tsc --noEmit",
+    "check:image": "node scripts/check-image-optimization.js",
     "format": "npx @biomejs/biome format --write .",
     "setup": "node scripts/quick-setup.js",
     "check": "node scripts/check-config.js",
@@ -46,10 +47,11 @@
     "framer-motion": "^12.14.0",
     "google-auth-library": "^10.6.2",
     "lucide-react": "^0.475.0",
-    "next": "^15.5.23",
+    "next": "^16.3.1",
     "next-auth": "^4.24.15",
-    "react": "^18.3.1",
-    "react-dom": "^18.3.1",
+    "react": "^19.2.8",
+    "react-dom": "^19.2.8",
+    "sharp": "^0.35.3",
     "stripe": "^17.5.0",
     "tailwind-merge": "^3.3.0",
     "tailwindcss-animate": "^1.0.7",
@@ -60,19 +62,19 @@
     "@biomejs/biome": "1.9.4",
     "@eslint/eslintrc": "^3.3.1",
     "@types/node": "^20.17.50",
-    "@types/react": "^18.3.22",
-    "@types/react-dom": "^18.3.7",
+    "@types/react": "^19.2.8",
+    "@types/react-dom": "^19.2.3",
     "eslint": "^9.39.1",
-    "eslint-config-next": "^15.5.15",
-    "postcss": "^8.5.13",
+    "eslint-config-next": "^16.3.1",
+    "postcss": "^8.5.26",
     "tailwindcss": "^3.4.17",
     "typescript": "^5.8.3"
   },
   "overrides": {
-    "minimatch@3.1.5": {
-      "brace-expansion": "1.1.13"
-    },
+    "brace-expansion@1": "1.1.16",
+    "brace-expansion@2": "2.1.4",
     "postcss": "$postcss",
+    "sharp": "$sharp",
     "uuid": "$uuid"
   }
 }

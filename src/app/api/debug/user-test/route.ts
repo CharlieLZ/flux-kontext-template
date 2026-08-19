@@ -1,7 +1,12 @@
+import { randomBytes } from 'crypto'
 import { NextRequest, NextResponse } from 'next/server'
 import { getServerSession } from 'next-auth'
 import { authOptions } from '@/lib/auth'
 import { createAdminClient } from '@/lib/supabase/server'
+
+function createDebugId(prefix: string): string {
+  return `${prefix}_${Date.now()}_${randomBytes(6).toString('hex')}`
+}
 
 // 🔍 用户测试API - 测试完整的用户操作流程
 export async function GET(request: NextRequest) {
@@ -53,7 +58,7 @@ export async function GET(request: NextRequest) {
       console.log('🔍 用户不存在，测试创建用户...')
       
       try {
-        const testUserId = `user_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`
+        const testUserId = createDebugId('user')
         const now = new Date().toISOString()
         
         const newUserData = {
@@ -93,7 +98,7 @@ export async function GET(request: NextRequest) {
           // 创建积分记录
           try {
             const creditData = {
-              id: `credit_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`,
+              id: createDebugId('credit'),
               user_id: newUser.id,
               amount: 100,
               type: 'gift',

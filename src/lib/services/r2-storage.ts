@@ -1,3 +1,4 @@
+import { randomBytes } from 'crypto'
 import { S3Client, PutObjectCommand, GetObjectCommand } from '@aws-sdk/client-s3'
 
 // R2存储配置接口
@@ -331,7 +332,7 @@ class R2StorageService {
 
     // 生成文件名
     const timestamp = Date.now();
-    const randomString = Math.random().toString(36).substring(2, 15);
+    const randomString = randomBytes(8).toString('hex');
     const extension = this.getExtensionFromContentType(finalContentType);
     const fileName = `ai-generated-${timestamp}-${randomString}.${extension}`;
     
