@@ -7,6 +7,17 @@ Versioning once tagged releases begin.
 
 ## [Unreleased]
 
+### Changed
+
+- Upgrade the application from Next.js 15.5 / React 18 to Next.js 16.3 / React 19
+- Move request middleware to the Next.js 16 `proxy` convention
+- Raise Sharp to the 0.35 security line and pin patched PostCSS / brace-expansion versions
+
+### Fixed
+
+- Replace insecure `Math.random()` IDs in debug and order-generation paths
+- Complete HTML tag stripping in the architecture diagram
+
 ### Added
 
 - Governance and community health files

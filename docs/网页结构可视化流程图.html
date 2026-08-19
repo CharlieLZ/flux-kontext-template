@@ -706,7 +706,13 @@
             };
 
             if (details[pageName]) {
-                alert(details[pageName].title + '\n\n' + details[pageName].content.replace(/<[^>]*>/g, '').replace(/&nbsp;/g, ' '));
+                let plainText = String(details[pageName].content);
+                let previous;
+                do {
+                    previous = plainText;
+                    plainText = plainText.replace(/<[^>]*>/g, '');
+                } while (plainText !== previous);
+                alert(details[pageName].title + '\n\n' + plainText.replace(/&nbsp;/g, ' '));
             }
         }
 

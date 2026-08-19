@@ -156,7 +156,8 @@ async function determinePaymentProvider(
 async function createPaymentOrder(params: PaymentParams, provider: PaymentProvider) {
   const { createPaymentOrder: createOrder } = await import("@/lib/services/payment-database")
   
-  const orderNumber = `ORDER_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`
+  const { generateOrderNo } = await import("@/lib/utils/hash")
+  const orderNumber = `ORDER_${generateOrderNo()}`
   
   return await createOrder({
     userId: params.userId,

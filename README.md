@@ -37,7 +37,7 @@ An open-source Next.js starter for AI image-generation products.
 ## 2. 你能得到什么
 
 开箱就有：
-- `Next.js 15 + React 18 + TypeScript`
+- `Next.js 16 + React 19 + TypeScript`
 - Google 登录
 - 积分系统
 - AI 图像生成 / 编辑入口

@@ -36,7 +36,7 @@ export async function createClient() {
               cookieStore.set(name, value, options)
             )
           } catch (error) {
-            // 在中间件中调用时可能会失败，这是正常的
+            // 在 Next.js proxy 中调用时可能会失败，这是正常的
             if (process.env.NODE_ENV !== 'production') {
               console.warn('Failed to set Supabase auth cookies:', error)
             }
