@@ -12,6 +12,7 @@ Versioning once tagged releases begin.
 - Upgrade the application from Next.js 15.5 / React 18 to Next.js 16.3 / React 19
 - Move request middleware to the Next.js 16 `proxy` convention
 - Raise Sharp to the 0.35 security line and pin patched PostCSS / brace-expansion versions
+- Re-enable GitHub Actions so CodeQL can rescan the default branch after the Next 16 merge
 
 ### Fixed
 
