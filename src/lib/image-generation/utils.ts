@@ -12,6 +12,7 @@ const VALID_PROVIDERS: ImageGenerationProviderName[] = [
   'fal',
   'kie',
   'wavespeed',
+  'atlascloud',
 ]
 
 let invalidProviderWarned = false

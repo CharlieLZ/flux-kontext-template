@@ -1,3 +1,4 @@
+import { AtlasCloudImageGenerationProvider } from '@/lib/image-generation/providers/atlascloud-provider'
 import { FalImageGenerationProvider } from '@/lib/image-generation/providers/fal-provider'
 import { KieImageGenerationProvider } from '@/lib/image-generation/providers/kie-provider'
 import { WaveSpeedImageGenerationProvider } from '@/lib/image-generation/providers/wavespeed-provider'
@@ -9,6 +10,7 @@ import { getConfiguredImageProvider } from '@/lib/image-generation/utils'
 
 const providerRegistry: Record<ImageGenerationProviderName, FluxKontextProvider> =
   {
+    atlascloud: new AtlasCloudImageGenerationProvider(),
     fal: new FalImageGenerationProvider(),
     kie: new KieImageGenerationProvider(),
     wavespeed: new WaveSpeedImageGenerationProvider(),
