@@ -1,14 +1,9 @@
 name: CodeQL
 
+# Manual trigger only (workflow_dispatch) — Charlie's policy: all CI runs locally, not on GitHub.
+# Public repo: Actions minutes are free, so this is policy consistency, not cost savings.
 on:
-  push:
-    branches:
-      - master
-  pull_request:
-    branches:
-      - master
-  schedule:
-    - cron: '23 2 * * 1'
+  workflow_dispatch:
 
 permissions:
   contents: read
