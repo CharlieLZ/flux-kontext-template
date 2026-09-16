@@ -1,9 +1,18 @@
 name: Dependency Review
 
+# Manual trigger only (workflow_dispatch) — Charlie's policy: all CI runs locally, not on GitHub.
+# Public repo: Actions minutes are free, so this is policy consistency, not cost savings.
 on:
-  pull_request:
-    branches:
-      - master
+  workflow_dispatch:
+    inputs:
+      base-ref:
+        description: 'Base git ref to compare against'
+        required: true
+        default: master
+      head-ref:
+        description: 'Head git ref to review'
+        required: true
+        default: master
 
 permissions:
   contents: read
@@ -27,3 +36,5 @@ jobs:
         uses: actions/dependency-review-action@a1d282b36b6f3519aa1f3fc636f609c47dddb294 # v5.0.0
         with:
           fail-on-severity: high
+          base-ref: ${{ github.event.inputs.base-ref }}
+          head-ref: ${{ github.event.inputs.head-ref }}
