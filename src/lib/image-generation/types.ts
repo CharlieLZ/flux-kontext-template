@@ -77,7 +77,11 @@ export interface FluxKontextResult {
   raw?: unknown
 }
 
-export type ImageGenerationProviderName = 'fal' | 'kie' | 'wavespeed'
+export type ImageGenerationProviderName =
+  | 'fal'
+  | 'kie'
+  | 'wavespeed'
+  | 'atlascloud'
 export type FluxKontextTaskState =
   | 'queued'
   | 'processing'

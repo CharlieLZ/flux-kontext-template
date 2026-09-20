@@ -473,7 +473,22 @@ IMAGE_GENERATION_PROVIDER="kie"
 IMAGE_GENERATION_PROVIDER="wavespeed"
 ```
 
-### 9.6 支付怎么配
+### 9.6 Atlas Cloud
+
+一个 key 直接调 Black Forest Labs 官方的 FLUX 全系（FLUX.2 Pro / FLUX.2 Flex / FLUX Dev / FLUX Schnell），同样是任务式接口。
+
+除了另外三家都支持的 6 个 action，它还多支持 `text-to-image-schnell` 和 `text-to-image-dev` 两档（更快/更便宜）。
+
+步骤：
+1. 拿 `ATLASCLOUD_API_KEY`
+2. 把 provider 改成：
+
+```env
+ATLASCLOUD_API_KEY=""
+IMAGE_GENERATION_PROVIDER="atlascloud"
+```
+
+### 9.7 支付怎么配
 
 当前真实已支持支付：
 - `Stripe`
